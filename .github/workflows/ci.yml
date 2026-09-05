@@ -1,14 +1,34 @@
 name: CI
 on:
   push:
-    branches: [main]
+    branches: [development, preprod, main]
   pull_request:
+    branches: [development, preprod, main]
 permissions:
   contents: read
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  promotion:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify promotion order
+        env:
+          BASE_BRANCH: ${{ github.base_ref }}
+          HEAD_BRANCH: ${{ github.head_ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.repository }}
+        run: |
+          if [ "$BASE_BRANCH" = "preprod" ] && { [ "$HEAD_BRANCH" != "development" ] || [ "$HEAD_REPO" != "$BASE_REPO" ]; }; then
+            echo "Promote development to preprod from this repository."
+            exit 1
+          fi
+          if [ "$BASE_BRANCH" = "main" ] && { [ "$HEAD_BRANCH" != "preprod" ] || [ "$HEAD_REPO" != "$BASE_REPO" ]; }; then
+            echo "Promote preprod to main after validating the Vercel preview."
+            exit 1
+          fi
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 15

@@ -12,8 +12,8 @@
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-    "utils": "@devtoolbox/ui/utils",
-    "ui": "@devtoolbox/ui",
+    "utils": "@atlas/ui/utils",
+    "ui": "@atlas/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
   }

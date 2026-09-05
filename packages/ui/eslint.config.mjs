@@ -1,4 +1,4 @@
-import config from "@devtoolbox/config/eslint";
+import config from "@atlas/config/eslint";
 const uiConfig = [
   ...config,
   {

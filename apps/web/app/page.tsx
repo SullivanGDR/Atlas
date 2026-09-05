@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight, Database } from "lucide-react";
-import { Button, Card } from "@devtoolbox/ui";
+import { Button, Card } from "@atlas/ui";
 import { tools } from "@/lib/tools";
 export default function Home() {
   return (

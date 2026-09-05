@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@devtoolbox/config/theme.css";
+@import "@atlas/config/theme.css";
 @source "../../../packages/ui/src";
 body {
   margin: 0;

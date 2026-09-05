@@ -1,5 +1,5 @@
 {
-  "name": "@devtoolbox/web",
+  "name": "@atlas/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,24 +7,26 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "next typegen && tsc --noEmit"
+    "typecheck": "next typegen && tsc --noEmit",
+    "icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
-    "@devtoolbox/ui": "workspace:*",
-    "@devtoolbox/shared": "workspace:*",
+    "@atlas/shared": "workspace:*",
+    "@atlas/ui": "workspace:*",
+    "lucide-react": "^0.468.0",
     "next": "16.3.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "lucide-react": "^0.468.0"
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@devtoolbox/config": "workspace:*",
+    "@atlas/config": "workspace:*",
     "@tailwindcss/postcss": "4.3.3",
-    "tailwindcss": "4.3.3",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.39.0",
+    "sharp": "0.34.5",
+    "tailwindcss": "4.3.3",
     "typescript": "^5.9.3"
   }
 }

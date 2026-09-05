@@ -1,4 +1,4 @@
-import type { ToolDefinition } from "@devtoolbox/shared";
+import type { ToolDefinition } from "@atlas/shared";
 /** Add public tool metadata here. The shell renders this registry automatically. */
 export const tools = [
   {

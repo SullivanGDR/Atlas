@@ -1,4 +1,6 @@
-# Roadmap — DevToolbox
+# Roadmap — Atlas
+
+> Mise à jour utilisateur du 2026-09-05 : nom définitif Atlas. Développement local et pushes sur development ; promotion volontaire en preprod pour Vercel ; production sur main en fin de grosse fonctionnalité validée. Cette règle remplace toute mention ci-dessous d’un déploiement à chaque push.
 ### Feuille de route technique pour agent IA (Claude Code / Codex / Cursor)
 
 > Ce document est une spécification d'exécution. Toute IA qui reprend ce fichier doit suivre les décisions techniques prises ici **sans les remettre en question**, sauf contrainte technique bloquante rencontrée en cours de route (auquel cas : documenter l'écart dans `DECISIONS.md` à la racine du repo).
@@ -7,7 +9,7 @@
 
 ## 0. Vision du projet
 
-**DevToolbox** est une application web unique (un "hub") qui regroupe une collection d'outils sur-mesure destinés à accélérer des projets d'études et personnels : conception de bases de données, générateurs de code, utilitaires divers. Chaque outil est un module indépendant à l'intérieur d'un même site, avec une navigation commune, un thème commun, et une DA cohérente.
+**Atlas** est une application web unique (un "hub") qui regroupe une collection d'outils sur-mesure destinés à accélérer des projets d'études et personnels : conception de bases de données, générateurs de code, utilitaires divers. Chaque outil est un module indépendant à l'intérieur d'un même site, avec une navigation commune, un thème commun, et une DA cohérente.
 
 Le premier outil (`db-designer`) est un concepteur de bases de données visuel :
 - construction d'un **MCD** (Modèle Conceptuel de Données) puis d'un **MLD** (Modèle Logique de Données),
@@ -58,7 +60,7 @@ Contrainte forte : **hébergement gratuit**, donc toutes les décisions de stack
 ## 3. Architecture du dépôt (monorepo)
 
 ```
-devtoolbox/
+atlas/
 ├── apps/
 │   └── web/                      # L'application Next.js principale (le site)
 │       ├── app/
@@ -130,7 +132,7 @@ Objectif explicite : **ne pas ressembler à un site "vibecodé"** (dégradés vi
 - Init monorepo Turborepo + pnpm.
 - Config Tailwind + shadcn/ui + tokens de thème clair/sombre.
 - Mise en place `packages/ui` avec les 5-6 composants de base (Button, Card, Input, Dialog, ThemeToggle, Sidebar).
-- Déploiement Vercel initial (page "Hello DevToolbox") pour valider la chaîne de bout en bout.
+- Déploiement Vercel initial (page "Hello Atlas") pour valider la chaîne de bout en bout.
 
 ### Phase 1 — Shell applicatif du toolbox (1 session)
 - Layout principal : sidebar de navigation entre les outils, header avec bascule de thème.

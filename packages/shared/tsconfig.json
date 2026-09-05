@@ -1,1 +1,1 @@
-{ "extends": "@devtoolbox/config/typescript", "include": ["src"] }
+{ "extends": "@atlas/config/typescript", "include": ["src"] }

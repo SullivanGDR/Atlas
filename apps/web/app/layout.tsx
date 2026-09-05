@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Terminal } from "lucide-react";
-import { Sidebar, ThemeRoot, ThemeToggle } from "@devtoolbox/ui";
+import { AtlasLogo } from "@/components/atlas-logo";
+import { Sidebar, ThemeRoot, ThemeToggle } from "@atlas/ui";
 import { Navigation } from "@/components/navigation";
 import "./globals.css";
 export const metadata: Metadata = {
   title: {
-    default: "DevToolbox — Outils de développement",
-    template: "%s · DevToolbox",
+    default: "Atlas — Outils de développement",
+    template: "%s · Atlas",
   },
   description:
     "Un espace commun pour vos outils de conception et de développement.",
@@ -29,8 +29,7 @@ export default function RootLayout({
             <Sidebar
               brand={
                 <Link href="/" className="flex items-center gap-2">
-                  <Terminal size={20} />
-                  DevToolbox
+                  <AtlasLogo />
                 </Link>
               }
               footer={

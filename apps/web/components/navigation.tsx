@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutGrid, Wrench } from "lucide-react";
-import { cn } from "@devtoolbox/ui";
+import { cn } from "@atlas/ui";
 import { tools } from "@/lib/tools";
 export function Navigation() {
   const pathname = usePathname();

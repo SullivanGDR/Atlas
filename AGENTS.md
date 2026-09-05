@@ -1,13 +1,24 @@
-# DevToolbox
+# Atlas
 
 Lire ROADMAP.md, DECISIONS.md et STATUS.md avant de reprendre le travail.
-La roadmap utilisateur fait autorité : ne pas changer la stack sans contrainte documentée.
+Le nom définitif est Atlas. Les instructions utilisateur récentes font autorité.
 
-- Monorepo pnpm / Turborepo, application Next.js App Router dans apps/web.
+## Workflow demandé par l’utilisateur
+
+- Développer et tester en local sur `development`. Pousser uniquement sur `development` pendant le travail courant.
+- `preprod` sert à voir le rendu sur Vercel après une promotion volontaire de `development`.
+- `main` reste la production : y promouvoir `preprod` à la fin d’une grosse fonctionnalité validée.
+- Ne jamais inclure implicitement une promotion préproduction/production dans une simple tâche de développement.
+- Ne pas lancer de déploiement Vercel ni pousser sur `main` pour montrer une modification ordinaire.
+- La configuration Vercel désactive les déploiements automatiques de `development` et des branches hors `preprod`/`main`.
+
+## Architecture et validation
+
+- Monorepo pnpm/Turborepo, application Next.js App Router dans apps/web.
 - Un outil par apps/web/features/<id>. Aucun import des internals d’un autre outil.
-- packages/shared contient uniquement les contrats transverses ; packages/ui les composants génériques.
-- Les packages partagés ne connaissent aucun outil. Le registre apps/web/lib/tools.ts alimente la navigation.
+- packages/shared contient les contrats transverses ; packages/ui les composants génériques, indépendants de la marque.
+- Le registre apps/web/lib/tools.ts alimente la navigation.
 - Tokens de couleur dans packages/config/theme.css ; interface française, neutre, compacte et accessible.
 - Aucun secret dans Git. Services gratuits uniquement ; aucun abonnement payant automatique.
-- Mettre à jour STATUS.md et la checklist ROADMAP.md selon les résultats réellement vérifiés.
-- Exécuter pnpm check avant de livrer. Documenter les vérifications externes restant à faire.
+- Mettre à jour STATUS.md et ROADMAP.md selon les résultats réellement vérifiés.
+- Exécuter pnpm check avant livraison. Ne jamais promettre l’absence absolue de bugs ; préciser les contrôles réellement passés.

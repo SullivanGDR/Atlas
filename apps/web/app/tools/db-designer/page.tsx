@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Database } from "lucide-react";
-import { Button, Card, Dialog } from "@devtoolbox/ui";
+import { Button, Card, Dialog } from "@atlas/ui";
 export const metadata: Metadata = { title: "DB Designer" };
 export default function DesignerPage() {
   return (

@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
-  transpilePackages: ["@devtoolbox/ui", "@devtoolbox/shared"],
+  transpilePackages: ["@atlas/ui", "@atlas/shared"],
 };
 export default config;

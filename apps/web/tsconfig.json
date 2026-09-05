@@ -1,5 +1,5 @@
 {
-  "extends": "@devtoolbox/config/typescript",
+  "extends": "@atlas/config/typescript",
   "compilerOptions": {
     "plugins": [{ "name": "next" }],
     "incremental": true,

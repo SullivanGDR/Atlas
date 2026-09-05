@@ -1,26 +1,28 @@
 # État du projet
 
-## 2026-09-05 — Phase 0 terminée
+## 2026-09-05 — Identité Atlas et workflow local
 
-- Monorepo pnpm/Turborepo, Next.js App Router et TypeScript strict.
-- Tailwind et tokens clair/sombre partagés ; six composants UI de base.
-- Shell et registre extensible ; accueil et page de périmètre DB Designer.
-- Roadmap conservée, décisions et consignes de reprise documentées.
-- Dépôt GitHub public : https://github.com/SullivanGDR/Atlas (créé par l’utilisateur, nom de l’application : DevToolbox).
-- Production Vercel Hobby : https://atlas-ten-cyan.vercel.app
-- Dashboard Vercel : https://vercel.com/sullivangdrs-projects/atlas
-- Import GitHub connecté à main, preset Next.js, racine apps/web ; aucune variable secrète déployée.
+- Nom définitif Atlas : interface, métadonnées, documentation et packages @atlas/*.
+- Identité : monogramme géométrique sobre, sans référence spatiale ; voir BRAND.md.
+- Branche de travail : development. preprod préparée localement depuis main.
+- Travail courant et pushes sur development uniquement. Aucune promotion préproduction/production dans cette intervention.
+- Vercel : déploiements Git désactivés pour development, autorisés pour preprod et main.
+- CI : vérifications sur les trois branches ; contrôle du sens des PR de promotion.
+- Validation locale réussie : formatage, lint sans avertissement, TypeScript strict, 2 tests Vitest et build de production.
+- Les deux pages, le manifeste et les six fichiers d’icônes répondent en HTTP 200. Aperçu local ouvert sur http://localhost:3000.
+- Favicon ICO corrigé en RGBA pour la compatibilité du décodeur Next.js.
+- Aucun déploiement Vercel lancé pour cette modification. CI distante à vérifier après le push development.
 
-## Vérifications
+## Socle disponible
 
-- Formatage, lint sans avertissement, TypeScript strict, 2 tests Vitest et build de production réussis localement.
-- CI distante du commit initial ca044fd verte : https://github.com/SullivanGDR/Atlas/actions/runs/33952596842
-- Premier déploiement Vercel réussi ; réponses HTTP 200 et contenu DevToolbox vérifiés sur / et /tools/db-designer en production.
-- Aucun test navigateur interactif exécuté dans cette session.
+Next.js App Router, pnpm/Turborepo, TypeScript strict, Tailwind, composants partagés, thèmes et registre des outils.
+
+Dépôt : https://github.com/SullivanGDR/Atlas
+La production https://atlas-ten-cyan.vercel.app reste sur main et peut afficher l’ancienne identité jusqu’à une prochaine promotion.
 
 ## Suite
 
-Phase 1 : Prisma + Neon, Auth.js avec GitHub, modèles User/Project et tableau de bord. Le shell est déjà amorcé.
+Phase 1 : Prisma + Neon, Auth.js GitHub, modèles User/Project et tableau de bord.
 Phase 2 : modèle métier et store Zustand, puis canvas React Flow.
 
-DB Designer, la connexion, la persistance et l’export FastAPI ne sont pas encore implémentés. Ne pas présenter ces fonctionnalités comme disponibles.
+DB Designer, la connexion, la persistance et l’export FastAPI ne sont pas encore implémentés.
