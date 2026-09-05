@@ -19,9 +19,10 @@ import {
   Check,
   FilePlus2,
   KeyRound,
-  Layers2,
   Link2,
   MousePointer2,
+  PanelLeftClose,
+  PanelLeftOpen,
   Plus,
   Table2,
   Trash2,
@@ -60,6 +61,7 @@ function Editor() {
   const fileInput = useRef<HTMLInputElement>(null);
   const [selectedTable, selectTable] = useState<string | null>(null);
   const [selectedRelation, selectRelation] = useState<string | null>(null);
+  const [explorerOpen, setExplorerOpen] = useState(false);
   const [menu, setMenu] = useState<{
     x: number;
     y: number;
@@ -148,7 +150,10 @@ function Editor() {
         event.preventDefault();
         download();
       }
-      if (event.key === "Escape") setMenu(null);
+      if (event.key === "Escape") {
+        setMenu(null);
+        setExplorerOpen(false);
+      }
     };
     const close = () => setMenu(null);
     window.addEventListener("beforeunload", unload);
@@ -209,6 +214,25 @@ function Editor() {
   return (
     <div className="schematic">
       <div className="schematic-toolbar">
+        <Button
+          variant="ghost"
+          className="explorer-toggle"
+          aria-label={
+            explorerOpen
+              ? "Fermer la liste des tables"
+              : "Ouvrir la liste des tables"
+          }
+          aria-expanded={explorerOpen}
+          onClick={() => setExplorerOpen((open) => !open)}
+        >
+          {explorerOpen ? (
+            <PanelLeftClose size={17} />
+          ) : (
+            <PanelLeftOpen size={17} />
+          )}
+          <span>Tables</span>
+          <small>{schema.entities.length}</small>
+        </Button>
         <div className="schematic-identity">
           <div className="tool-symbol">
             <Braces size={21} />
@@ -260,18 +284,25 @@ function Editor() {
           <Button
             variant="ghost"
             disabled={loading}
+            aria-label="Importer un projet"
+            title="Importer un projet"
             onClick={() => fileInput.current?.click()}
           >
             <ArrowUpFromLine size={15} />
             <span>Importer</span>
           </Button>
-          <Button variant="outline" onClick={download}>
+          <Button
+            variant="outline"
+            onClick={download}
+            aria-label="Exporter le projet"
+            title="Exporter le projet"
+          >
             <ArrowDownToLine size={15} />
             <span>Exporter</span>
           </Button>
-          <Button onClick={() => addTable()}>
+          <Button onClick={() => addTable()} aria-label="Ajouter une table">
             <Plus size={16} />
-            Table
+            <span>Table</span>
           </Button>
         </div>
         <input
@@ -283,10 +314,28 @@ function Editor() {
         />
       </div>
       <div className="schematic-body">
-        <aside className="schema-explorer" aria-label="Tables du schéma">
+        {explorerOpen && (
+          <button
+            className="explorer-scrim"
+            aria-label="Fermer la liste des tables"
+            onClick={() => setExplorerOpen(false)}
+          />
+        )}
+        <aside
+          className={`schema-explorer ${explorerOpen ? "is-open" : ""}`}
+          aria-label="Tables du schéma"
+          aria-hidden={!explorerOpen}
+          inert={!explorerOpen}
+        >
           <div className="explorer-heading">
             <span>EXPLORATEUR</span>
-            <Layers2 size={14} />
+            <button
+              className="icon-action"
+              aria-label="Fermer la liste des tables"
+              onClick={() => setExplorerOpen(false)}
+            >
+              <PanelLeftClose size={14} />
+            </button>
           </div>
           <div className="explorer-section">
             Tables{" "}
@@ -300,6 +349,7 @@ function Editor() {
                 onClick={() => {
                   selectTable(e.id);
                   selectRelation(null);
+                  setExplorerOpen(false);
                   void setCenter(e.position.x + 170, e.position.y + 90, {
                     zoom: Math.max(getZoom(), 0.85),
                     duration: 300,

@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { AtlasLogo } from "@/components/atlas-logo";
-import { Sidebar, ThemeRoot, ThemeToggle } from "@atlas/ui";
-import { Navigation } from "@/components/navigation";
+import { ThemeRoot } from "@atlas/ui";
+import { AppHeader } from "@/components/app-header";
 import "./globals.css";
 import { WorkspaceContent } from "@/components/workspace-content";
 export const metadata: Metadata = {
@@ -26,28 +24,9 @@ export default function RootLayout({
           >
             Aller au contenu
           </a>
-          <div className="flex min-h-screen flex-col md:flex-row">
-            <Sidebar
-              brand={
-                <Link href="/" className="flex items-center gap-2">
-                  <AtlasLogo />
-                </Link>
-              }
-              footer={
-                <span className="font-mono text-xs">
-                  v0.1.0 · En développement
-                </span>
-              }
-            >
-              <Navigation />
-            </Sidebar>
-            <div className="min-w-0 flex-1">
-              <header className="flex h-16 items-center justify-between border-b border-border px-6">
-                <span className="text-sm text-muted">Espace de travail</span>
-                <ThemeToggle />
-              </header>
-              <WorkspaceContent>{children}</WorkspaceContent>
-            </div>
+          <div className="app-shell">
+            <AppHeader />
+            <WorkspaceContent>{children}</WorkspaceContent>
           </div>
         </ThemeRoot>
       </body>

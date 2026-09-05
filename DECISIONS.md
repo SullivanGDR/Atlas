@@ -26,3 +26,9 @@
 - Connexions de clé primaire vers colonne, type référencé propagé (SERIAL → INTEGER). Cardinalités 1:1, 1:N, N:N stockées dans le graphe ; transformation MCD/MLD et génération de tables de jointure restent une étape future.
 - Aucun enregistrement automatique : exporter les modifications pour les retrouver après fermeture. Avertissement de fermeture et confirmation avant remplacement d’un projet modifié.
 - Pas de consultation GitHub systématique ; validation locale ciblée pour cette tranche.
+
+## 2026-09-05 — Shell compact et canvas prioritaire
+
+- La navigation principale passe de la barre latérale à un bandeau horizontal de 54 px. Le canvas dispose ainsi de toute la largeur sur les écrans de portable.
+- La liste des tables de Schematic devient un panneau superposé fermé par défaut. Son ouverture ne redimensionne plus le diagramme et elle se ferme après sélection d’une table, par clic sur le fond ou avec Échap.
+- Les commandes de l’éditeur réduisent progressivement leurs libellés et se répartissent sur deux lignes sous 760 px pour conserver des cibles tactiles lisibles.

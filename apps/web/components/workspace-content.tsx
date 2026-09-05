@@ -6,9 +6,7 @@ export function WorkspaceContent({ children }: { children: ReactNode }) {
   return (
     <main
       id="main"
-      className={
-        isCanvas ? "canvas-workspace" : "mx-auto max-w-6xl p-6 lg:p-10"
-      }
+      className={isCanvas ? "canvas-workspace" : "page-workspace"}
     >
       {children}
     </main>

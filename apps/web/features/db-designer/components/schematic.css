@@ -1,6 +1,6 @@
 .canvas-workspace {
-  height: calc(100dvh - 64px);
-  min-height: 620px;
+  height: calc(100dvh - 54px);
+  min-height: 520px;
   overflow: hidden;
 }
 .schematic {
@@ -90,15 +90,42 @@
   display: flex;
   flex: 1;
   min-height: 0;
+  position: relative;
+  overflow: hidden;
 }
 .schema-explorer {
-  width: 188px;
-  flex-shrink: 0;
+  position: absolute;
+  z-index: 25;
+  inset: 10px auto 10px 10px;
+  width: 230px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
   background: var(--surface);
   padding: 22px 12px 18px;
+  box-shadow: 0 18px 60px var(--canvas-shadow);
+  transform: translateX(calc(-100% - 20px));
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 180ms ease,
+    opacity 180ms ease;
+}
+.schema-explorer.is-open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.explorer-scrim {
+  position: absolute;
+  z-index: 24;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: default;
+  background: color-mix(in srgb, var(--canvas-background) 58%, transparent);
+  backdrop-filter: blur(1px);
 }
 .explorer-heading {
   display: flex;
@@ -107,6 +134,9 @@
   font: 10px var(--font-mono);
   letter-spacing: 1.4px;
   color: var(--muted);
+}
+.explorer-heading .icon-action {
+  margin: -5px -4px -5px auto;
 }
 .explorer-section {
   display: flex;
@@ -191,6 +221,7 @@
 .schema-canvas {
   min-width: 0;
   flex: 1;
+  width: 100%;
   position: relative;
   background: var(--canvas-background);
 }
@@ -598,17 +629,11 @@
   .file-actions {
     margin-left: auto;
   }
-  .schema-explorer {
-    width: 155px;
-  }
   .canvas-help span {
     display: none;
   }
 }
 @media (max-width: 900px) {
-  .schema-explorer {
-    display: none;
-  }
   .schematic-status p {
     max-width: 35%;
   }
@@ -616,53 +641,137 @@
     display: none;
   }
 }
-@media (max-width: 600px) {
-  .canvas-workspace {
-    height: calc(100dvh - 192px);
-    min-height: 600px;
-  }
+
+/* Compact editor chrome: the canvas keeps the full viewport width. */
+.schematic-toolbar {
+  min-height: 66px;
+  padding: 10px 14px;
+  flex-wrap: nowrap;
+  gap: 10px;
+}
+.explorer-toggle {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.explorer-toggle small {
+  min-width: 17px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--muted-surface);
+  color: var(--muted);
+  font: 9px var(--font-mono);
+}
+.schematic-identity {
+  min-width: max-content;
+}
+.schematic-identity .tool-symbol {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+.schematic-identity p {
+  display: none;
+}
+.project-title {
+  order: initial;
+  flex-basis: auto;
+  min-width: 120px;
+  padding-left: 14px;
+  border-left: 1px solid var(--border);
+}
+.file-actions {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.schematic-status {
+  min-height: 34px;
+  padding: 7px 14px;
+}
+
+@media (max-width: 1100px) {
   .schematic-toolbar {
-    padding: 12px;
+    min-height: 62px;
+  }
+  .schematic-identity h1 span,
+  .file-actions button span {
+    display: none;
+  }
+  .file-actions button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+  }
+  .schema-explorer {
+    display: flex;
+  }
+}
+
+@media (max-width: 760px) {
+  .schematic-toolbar {
+    min-height: 108px;
+    padding: 9px 10px;
+    flex-wrap: wrap;
   }
   .schematic-identity {
     flex: 1;
   }
-  .file-actions {
-    order: 4;
-    width: 100%;
-    justify-content: space-between;
-  }
   .project-title {
-    order: 2;
-    flex-basis: auto;
-    min-width: 100px;
+    order: 3;
+    flex: 1 1 calc(100% - 172px);
+    padding-left: 0;
+    border-left: 0;
   }
   .project-title input {
-    max-width: 125px;
+    max-width: none;
+    padding-left: 8px;
   }
-  .schematic-identity p {
-    display: none;
+  .file-actions {
+    order: 4;
+    width: auto;
+    justify-content: flex-end;
   }
-  .schematic-status {
-    gap: 10px;
+  .canvas-workspace {
+    height: calc(100dvh - 54px);
+    min-height: 500px;
   }
-  .schematic-status p,
-  .export-status {
+  .schema-table {
+    width: 320px;
+  }
+  .schematic-status p {
     display: none !important;
   }
 }
-@media (max-width: 900px) {
-  .schematic-status {
-    flex-wrap: wrap;
+
+@media (max-width: 520px) {
+  .schematic-identity .tool-symbol,
+  .explorer-toggle span,
+  .schematic-identity h1 span {
+    display: none;
   }
-  .schematic-status p {
-    display: block !important;
-    order: 3;
-    flex-basis: 100%;
-    max-width: none;
-    margin: 0;
-    white-space: normal;
-    line-height: 1.5;
-    font-size: 11px;
+  .schematic-identity {
+    min-width: 92px;
+  }
+  .explorer-toggle {
+    width: 40px;
+    padding: 0;
+  }
+  .explorer-toggle small {
+    display: none;
+  }
+  .project-title {
+    flex-basis: calc(100% - 156px);
+  }
+  .schema-explorer {
+    inset: 8px;
+    width: min(260px, calc(100% - 16px));
+  }
+  .schematic-status {
+    gap: 12px;
+  }
+  .export-status {
+    display: none !important;
   }
 }

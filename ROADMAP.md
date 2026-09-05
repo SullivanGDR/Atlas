@@ -137,7 +137,7 @@ Objectif explicite : **ne pas ressembler à un site "vibecodé"** (dégradés vi
 - Déploiement Vercel initial (page "Hello Atlas") pour valider la chaîne de bout en bout.
 
 ### Phase 1 — Shell applicatif du toolbox (1 session)
-- Layout principal : sidebar de navigation entre les outils, header avec bascule de thème.
+- Layout principal : navigation supérieure compacte entre les outils, avec bascule de thème ; les panneaux propres aux outils sont escamotables pour préserver leur espace de travail.
 - Page d'accueil listant les outils disponibles (cards).
 - Authentification (Auth.js + provider GitHub) — permet de rattacher des projets sauvegardés à un compte.
 - Modèle Prisma minimal : `User`, `Project` (un `Project` a un `type` d'outil + un `data` JSON).

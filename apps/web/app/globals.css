@@ -5,7 +5,15 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+* {
+  box-sizing: border-box;
+}
+button,
+input,
+select {
+  font: inherit;
 }
 button,
 a,
@@ -18,6 +26,108 @@ button {
 ::selection {
   background: var(--accent);
   color: var(--accent-foreground);
+}
+.app-shell {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 54px minmax(0, 1fr);
+}
+.app-header {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(16px);
+}
+.app-brand {
+  flex-shrink: 0;
+  border-radius: 7px;
+  outline-color: var(--accent);
+}
+.atlas-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.atlas-logo-mark {
+  border-radius: 7px;
+}
+.atlas-logo > span {
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+.app-header-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: var(--border);
+}
+.app-nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 3px;
+}
+.app-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 520;
+  transition:
+    color 150ms,
+    background 150ms;
+}
+.app-nav-link:hover {
+  color: var(--foreground);
+  background: var(--muted-surface);
+}
+.app-nav-link.is-active {
+  color: var(--foreground);
+  background: var(--muted-surface);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--border) 70%, transparent);
+}
+.app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+.app-header-actions > button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+}
+.local-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 5px;
+  color: var(--muted);
+  font: 10px var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.local-badge i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #36b37e;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #36b37e 13%, transparent);
+}
+.page-workspace {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: clamp(28px, 5vw, 64px) clamp(18px, 4vw, 44px);
 }
 .atlas-home {
   padding-top: 12px;
@@ -62,9 +172,13 @@ button {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
   background: var(--surface);
   overflow: hidden;
+}
+.featured-tool:hover {
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
+  box-shadow: 0 18px 60px var(--canvas-shadow);
 }
 .featured-copy {
   padding: 30px;
@@ -243,6 +357,20 @@ button {
   }
 }
 @media (max-width: 600px) {
+  .app-header {
+    padding: 0 10px;
+  }
+  .app-header-divider,
+  .local-badge {
+    display: none;
+  }
+  .atlas-logo > span,
+  .app-header-tool .app-nav-link span {
+    display: none;
+  }
+  .app-nav-link {
+    padding: 0 9px;
+  }
   .home-eyebrow {
     font-size: 8px;
     letter-spacing: 0.5px;

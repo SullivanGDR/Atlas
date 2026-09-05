@@ -2,16 +2,16 @@ import Image from "next/image";
 /** The app owns its identity; shared UI components remain brand-agnostic. */
 export function AtlasLogo() {
   return (
-    <span className="inline-flex items-center gap-3">
+    <span className="atlas-logo">
       <Image
         src="/brand/atlas-mark.png"
         alt=""
-        width={36}
-        height={36}
+        width={30}
+        height={30}
         priority
-        className="rounded-lg"
+        className="atlas-logo-mark"
       />
-      <span className="text-lg font-semibold tracking-[0.12em]">Atlas</span>
+      <span>Atlas</span>
     </span>
   );
 }
