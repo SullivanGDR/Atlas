@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> Priorité utilisateur — Schematic : aucun compte ni base de données du site. Projets portables par import/export .atlas.json ; état navigateur en mémoire. Les étapes Prisma/Neon/Auth.js et sauvegarde distante ci-dessous sont abandonnées. Validation locale ciblée, sans vérification GitHub systématique.
+
 > Mise à jour utilisateur du 2026-09-05 : nom définitif Atlas. Développement local et pushes sur development ; promotion volontaire en preprod pour Vercel ; production sur main en fin de grosse fonctionnalité validée. Cette règle remplace toute mention ci-dessous d’un déploiement à chaque push.
 ### Feuille de route technique pour agent IA (Claude Code / Codex / Cursor)
 
@@ -279,11 +281,11 @@ export.zip
 - [x] 5. Déployer sur Vercel (page d'accueil minimale) — valider que la CI est verte.
 - [ ] 6. Ajouter Prisma + Neon (ou Supabase), modèles `User`/`Project`.
 - [ ] 7. Ajouter Auth.js (provider GitHub), page login, protection des routes `(app)`.
-- [ ] 8. Construire le layout du shell (sidebar + navigation outils).
-- [ ] 9. Créer `features/db-designer` avec le store Zustand et les types du §6.1.
-- [ ] 10. Implémenter le canvas React Flow avec `TableNode` custom (sans encore les relations).
-- [ ] 11. Implémenter le panneau d'édition d'une table (ajout/suppression de colonnes).
-- [ ] 12. Implémenter la création de relations (edges custom + choix de cardinalité).
+- [x] 8. Construire le layout du shell (sidebar + navigation outils).
+- [x] 9. Créer `features/db-designer` avec le store Zustand et les types du §6.1.
+- [x] 10. Implémenter le canvas React Flow avec `TableNode` custom (sans encore les relations).
+- [x] 11. Implémenter le panneau d'édition d'une table (ajout/suppression de colonnes).
+- [x] 12. Implémenter la création de relations (edges custom + choix de cardinalité).
 - [ ] 13. Implémenter la sauvegarde/chargement d'un `Schema` en base via Prisma.
 - [ ] 14. Implémenter l'export image (PNG/SVG) du canvas.
 - [ ] 15. Implémenter `transforms/mcdToMld.ts` avec tests unitaires sur les 3 cas de cardinalité.

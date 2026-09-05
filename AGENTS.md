@@ -22,3 +22,9 @@ Le nom définitif est Atlas. Les instructions utilisateur récentes font autorit
 - Aucun secret dans Git. Services gratuits uniquement ; aucun abonnement payant automatique.
 - Mettre à jour STATUS.md et ROADMAP.md selon les résultats réellement vérifiés.
 - Exécuter pnpm check avant livraison. Ne jamais promettre l’absence absolue de bugs ; préciser les contrôles réellement passés.
+
+## Mise à jour utilisateur — Schematic
+
+- Aucun stockage des projets en base de données et aucun compte requis. Le projet est en mémoire navigateur ; import/export de fichiers .atlas.json versionnés.
+- La nouvelle instruction remplace Prisma/Neon/Auth.js et la sauvegarde distante de la roadmap initiale.
+- Vérifications proportionnées : types, lint et tests métier utiles ; ne pas consulter systématiquement GitHub/CI après les pushes.

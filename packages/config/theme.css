@@ -8,6 +8,10 @@
   --accent: #185bc5;
   --accent-foreground: #fafcff;
   --radius: 0.5rem;
+  --canvas-background: #f2f4f7;
+  --canvas-dot: #cbd1da;
+  --canvas-shadow: #1b23300a;
+  --canvas-mask: #f2f4f7b3;
   color-scheme: light;
 }
 [data-theme="dark"] {
@@ -19,6 +23,10 @@
   --border: #393f48;
   --accent: #8bb7ff;
   --accent-foreground: #152238;
+  --canvas-background: #16181d;
+  --canvas-dot: #353a45;
+  --canvas-shadow: #0a0b1050;
+  --canvas-mask: #16181db3;
   color-scheme: dark;
 }
 @theme inline {

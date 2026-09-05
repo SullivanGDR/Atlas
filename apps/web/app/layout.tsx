@@ -4,6 +4,7 @@ import { AtlasLogo } from "@/components/atlas-logo";
 import { Sidebar, ThemeRoot, ThemeToggle } from "@atlas/ui";
 import { Navigation } from "@/components/navigation";
 import "./globals.css";
+import { WorkspaceContent } from "@/components/workspace-content";
 export const metadata: Metadata = {
   title: {
     default: "Atlas — Outils de développement",
@@ -45,9 +46,7 @@ export default function RootLayout({
                 <span className="text-sm text-muted">Espace de travail</span>
                 <ThemeToggle />
               </header>
-              <main id="main" className="mx-auto max-w-6xl p-6 lg:p-10">
-                {children}
-              </main>
+              <WorkspaceContent>{children}</WorkspaceContent>
             </div>
           </div>
         </ThemeRoot>

@@ -1,12 +1,11 @@
 import type { ToolDefinition } from "@atlas/shared";
-/** Add public tool metadata here. The shell renders this registry automatically. */
 export const tools = [
   {
-    id: "db-designer",
-    name: "DB Designer",
+    id: "schematic",
+    name: "Schematic",
     description:
-      "Concevoir un MCD, préparer son MLD et générer un backend FastAPI + PostgreSQL.",
-    href: "/tools/db-designer",
-    status: "planned",
+      "Dessinez vos données. Créez vos tables, reliez vos idées et emportez votre schéma partout.",
+    href: "/tools/schematic",
+    status: "available",
   },
 ] as const satisfies readonly ToolDefinition[];
