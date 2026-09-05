@@ -274,7 +274,7 @@ export.zip
 - [x] 2. Créer `apps/web` (Next.js 14, TS strict, Tailwind, shadcn/ui).
 - [x] 3. Définir les tokens de thème (clair/sombre) dans `packages/config` et les brancher dans `apps/web`.
 - [x] 4. Construire `packages/ui` avec les composants de base + `ThemeToggle`.
-- [ ] 5. Déployer sur Vercel (page d'accueil minimale) — valider que la CI est verte.
+- [x] 5. Déployer sur Vercel (page d'accueil minimale) — valider que la CI est verte.
 - [ ] 6. Ajouter Prisma + Neon (ou Supabase), modèles `User`/`Project`.
 - [ ] 7. Ajouter Auth.js (provider GitHub), page login, protection des routes `(app)`.
 - [ ] 8. Construire le layout du shell (sidebar + navigation outils).

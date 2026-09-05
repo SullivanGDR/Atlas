@@ -1,12 +1,26 @@
 # État du projet
 
-## 2026-09-05
+## 2026-09-05 — Phase 0 terminée
 
-Socle créé : pnpm/Turborepo, Next.js, TypeScript strict, Tailwind, six composants UI, thèmes, registre et pages initiales, CI GitHub.
+- Monorepo pnpm/Turborepo, Next.js App Router et TypeScript strict.
+- Tailwind et tokens clair/sombre partagés ; six composants UI de base.
+- Shell et registre extensible ; accueil et page de périmètre DB Designer.
+- Roadmap conservée, décisions et consignes de reprise documentées.
+- Dépôt GitHub public : https://github.com/SullivanGDR/Atlas (créé par l’utilisateur, nom de l’application : DevToolbox).
+- Production Vercel Hobby : https://atlas-ten-cyan.vercel.app
+- Dashboard Vercel : https://vercel.com/sullivangdrs-projects/atlas
+- Import GitHub connecté à main, preset Next.js, racine apps/web ; aucune variable secrète déployée.
 
-Validation locale réussie : formatage, lint sans avertissement, TypeScript strict, 2 tests Vitest, build de production et réponses HTTP 200 sur les deux routes.
+## Vérifications
 
-Dépôt cible : https://github.com/SullivanGDR/Atlas (nom de l’application : DevToolbox).
-Déploiement Vercel et exécution distante de la CI : en cours, non encore confirmés.
+- Formatage, lint sans avertissement, TypeScript strict, 2 tests Vitest et build de production réussis localement.
+- CI distante du commit initial ca044fd verte : https://github.com/SullivanGDR/Atlas/actions/runs/33952596842
+- Premier déploiement Vercel réussi ; réponses HTTP 200 et contenu DevToolbox vérifiés sur / et /tools/db-designer en production.
+- Aucun test navigateur interactif exécuté dans cette session.
 
-Prochaine étape : terminer la validation distante de la phase 0, puis Prisma/Neon et Auth.js GitHub (phase 1).
+## Suite
+
+Phase 1 : Prisma + Neon, Auth.js avec GitHub, modèles User/Project et tableau de bord. Le shell est déjà amorcé.
+Phase 2 : modèle métier et store Zustand, puis canvas React Flow.
+
+DB Designer, la connexion, la persistance et l’export FastAPI ne sont pas encore implémentés. Ne pas présenter ces fonctionnalités comme disponibles.
