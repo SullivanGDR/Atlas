@@ -5,10 +5,13 @@ import { Braces, LayoutGrid } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle, cn } from "@atlas/ui";
 import { AtlasLogo } from "@/components/atlas-logo";
+import { tools } from "@/lib/tools";
 
 const destinations = [
   { href: "/", label: "Outils", Icon: LayoutGrid },
-  { href: "/tools/athena", label: "Athena", Icon: Braces },
+  ...tools
+    .filter((tool) => tool.status === "available")
+    .map((tool) => ({ href: tool.href, label: tool.name, Icon: Braces })),
 ] as const;
 
 export function AppHeader() {

@@ -41,8 +41,7 @@ button {
   gap: 10px;
   padding: 0 14px;
   border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  backdrop-filter: blur(16px);
+  background: var(--surface);
 }
 .app-brand {
   flex-shrink: 0;

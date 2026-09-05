@@ -9,7 +9,7 @@ describe("portable projects", () => {
   });
   it("rejects unknown versions and dangling links", () => {
     const value = JSON.parse(serializeProject(exampleSchema()));
-    value.version = 2;
+    value.version = 99;
     expect(() => parseProject(value)).toThrow();
     value.version = 1;
     value.schema.entities.pop();

@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> Athena, tranche complète du 2026-09-05 : contraintes, relations réparées, MCD/MLD, exports FastAPI/SQL/PNG/SVG, import SQL, historique, versions et partage par URL sans stockage serveur implémentés. Voir STATUS.md pour les limites et validations effectives. Les noms des outils suivent la mythologie grecque.
+
 > Priorité utilisateur — Athena : aucun compte ni base de données du site. Projets portables par import/export .atlas.json ; état navigateur en mémoire. Les étapes Prisma/Neon/Auth.js et sauvegarde distante ci-dessous sont abandonnées. Validation locale ciblée, sans vérification GitHub systématique.
 
 > Mise à jour utilisateur du 2026-09-05 : nom définitif Atlas. Développement local et pushes sur development ; promotion volontaire en preprod pour Vercel ; production sur main en fin de grosse fonctionnalité validée. Cette règle remplace toute mention ci-dessous d’un déploiement à chaque push.
@@ -279,20 +281,20 @@ export.zip
 - [x] 3. Définir les tokens de thème (clair/sombre) dans `packages/config` et les brancher dans `apps/web`.
 - [x] 4. Construire `packages/ui` avec les composants de base + `ThemeToggle`.
 - [x] 5. Déployer sur Vercel (page d'accueil minimale) — valider que la CI est verte.
-- [ ] 6. Ajouter Prisma + Neon (ou Supabase), modèles `User`/`Project`.
-- [ ] 7. Ajouter Auth.js (provider GitHub), page login, protection des routes `(app)`.
+- Abandonné 6 : Prisma/Neon remplacés par les fichiers de projet portables.
+- Abandonné 7 : aucun compte ni authentification du site.
 - [x] 8. Construire le layout du shell (sidebar + navigation outils).
 - [x] 9. Créer `features/db-designer` avec le store Zustand et les types du §6.1.
 - [x] 10. Implémenter le canvas React Flow avec `TableNode` custom (sans encore les relations).
 - [x] 11. Implémenter le panneau d'édition d'une table (ajout/suppression de colonnes).
 - [x] 12. Implémenter la création de relations (edges custom + choix de cardinalité).
-- [ ] 13. Implémenter la sauvegarde/chargement d'un `Schema` en base via Prisma.
-- [ ] 14. Implémenter l'export image (PNG/SVG) du canvas.
-- [ ] 15. Implémenter `transforms/mcdToMld.ts` avec tests unitaires sur les 3 cas de cardinalité.
-- [ ] 16. Implémenter les générateurs de code (§6.4), un fichier de template à la fois, avec tests de snapshot.
-- [ ] 17. Implémenter la route d'export `.zip` (Route Handler Next.js).
-- [ ] 18. Tester l'ensemble sur un cas concret (ex: schéma "blog" avec User/Post/Comment/Tag en N-N) : générer le zip, lancer le projet FastAPI généré localement, vérifier qu'il démarre et que les migrations passent.
-- [ ] 19. Polish DA finale (§4) sur l'ensemble du parcours.
+- [x] 13. Sauvegarde/chargement par import/export JSON versionné, conformément à la nouvelle instruction utilisateur.
+- [x] 14. Implémenter l'export image (PNG/SVG) du canvas.
+- [x] 15. Implémenter `transforms/mcdToMld.ts` avec tests unitaires sur les 3 cas de cardinalité.
+- [x] 16. Implémenter les générateurs de code (§6.4), un fichier de template à la fois, avec tests de génération, archive et exécution du backend.
+- [x] 17. Implémenter la route d'export `.zip` (Route Handler Next.js).
+- [x] 18. Tester l'ensemble sur un cas concret (ex: schéma "blog" avec User/Post/Comment/Tag en N-N) : générer le zip, lancer le projet FastAPI généré localement, vérifier qu'il démarre et que les migrations passent.
+- [x] 19. Polish DA finale (§4) sur l'ensemble du parcours.
 - [x] 20. Documenter dans `README.md` comment ajouter un nouvel outil (checklist courte pour la Phase 5).
 
 ---

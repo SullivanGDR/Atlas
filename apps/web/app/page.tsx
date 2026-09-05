@@ -37,6 +37,7 @@ export default function Home() {
               <span>Tables & colonnes</span>
               <span>Relations visuelles</span>
               <span>Projets portables</span>
+              <span>FastAPI & PostgreSQL</span>
             </div>
             <Button asChild>
               <Link href={tool.href}>

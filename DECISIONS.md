@@ -32,3 +32,15 @@
 - La navigation principale passe de la barre latérale à un bandeau horizontal de 54 px. Le canvas dispose ainsi de toute la largeur sur les écrans de portable.
 - La liste des tables d’Athena devient un panneau superposé fermé par défaut. Son ouverture ne redimensionne plus le diagramme et elle se ferme après sélection d’une table, par clic sur le fond ou avec Échap.
 - Les commandes de l’éditeur réduisent progressivement leurs libellés et se répartissent sur deux lignes sous 760 px pour conserver des cibles tactiles lisibles.
+
+## 2026-09-05 — Athena : conception et génération
+
+- Noms mythologiques grecs pour les outils ; icône liée au rôle avant le nom. Athena conserve les accolades. Palette désormais strictement grise, sans pastilles d’activité décoratives.
+- Connexions React Flow en mode Loose : tous les points restent présents, le sens PK/FK est normalisé dans le store. Recalcul des poignées à chaque changement de clé/colonne ; connexion par deux clics, glissement, reconnexion ou formulaire.
+- Format atlas-athena version 2 ; format atlas-schematic version 1 toujours accepté. Ajout de contraintes de colonnes, ON DELETE et correspondances composites. Aucun stockage serveur.
+- MCD/MLD calculés sans modifier le modèle édité. Les associations N:N produisent des tables de jointure et les références composites génèrent toutes les colonnes requises.
+- Générateurs déterministes TypeScript. ZIP serveur via fflate, aperçu local des sources et export SQL. Deux phases de migration (tables, puis contraintes) pour traiter aussi les cycles.
+- Partage par fragment d’URL compressé limité en taille ; aucun service de partage ou compte. Historique et versions en mémoire ; chaque version peut être exportée.
+- Import SQL via pgsql-ast-parser ; syntaxe non représentable refusée explicitement. L’alternative SQL de la roadmap est retenue ; pas d’import Prisma.
+- Export PNG/SVG via html-to-image, cadré sur l’ensemble des nœuds. Aucune dépendance à un service d’images.
+- PostgreSQL temporaire utilisé uniquement pour vérifier le backend généré. Ce n’est pas une base du site Atlas. Docker Desktop étant indisponible sur la machine, les tests PostgreSQL ont utilisé les binaires officiels portables dans test-results.

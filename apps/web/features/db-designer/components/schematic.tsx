@@ -7,34 +7,59 @@ import {
   Controls,
   MiniMap,
   Panel,
-  MarkerType,
+  ConnectionMode,
   useReactFlow,
   useNodesInitialized,
+  getNodesBounds,
+  getViewportForBounds,
   type Edge,
+  type Connection,
 } from "@xyflow/react";
 import {
   ArrowDownToLine,
   ArrowUpFromLine,
   Braces,
-  Check,
+  Code2,
+  Copy,
   FilePlus2,
-  KeyRound,
+  FolderOpen,
+  History,
+  ImageDown,
+  LayoutGrid,
   Link2,
-  MousePointer2,
-  PanelLeftClose,
   PanelLeftOpen,
   Plus,
+  Redo2,
+  Share2,
   Table2,
-  Trash2,
-  X,
+  Undo2,
 } from "lucide-react";
-import { Button } from "@atlas/ui";
+import { Button, Modal } from "@atlas/ui";
 import { useEditor } from "../store/editor";
-import { parseProject, serializeProject, type Relation } from "../model/schema";
+import { parseProject, serializeProject, type Schema } from "../model/schema";
+import { decodeShare, encodeShare } from "../model/share";
+import { mcdToMld } from "../transforms/mcd-to-mld";
+import { downloadFile, filename } from "../generators/download";
 import { TableNode, type TableFlowNode } from "./table-node";
+import { RelationEditor } from "./relation-editor";
+import { ColumnEditor } from "./column-editor";
+import { ExportPanel } from "./export-panel";
 import "@xyflow/react/dist/style.css";
 import "./schematic.css";
+
 const nodeTypes = { table: TableNode };
+type View = "editor" | "mcd" | "mld";
+type Inspector =
+  | { kind: "table"; id: string; column?: string }
+  | { kind: "relation"; id?: string }
+  | null;
+const handleColumn = (handle: string | null | undefined) =>
+  handle?.replace(/:(left|right)$/, "") ?? "";
+const message = (error: unknown) =>
+  error instanceof Error && error.name !== "ZodError"
+    ? error.message
+    : "Fichier de projet invalide.";
+
 export function Athena() {
   return (
     <ReactFlowProvider>
@@ -43,99 +68,85 @@ export function Athena() {
   );
 }
 function Editor() {
-  const schema = useEditor((s) => s.schema);
-  const dirty = useEditor((s) => s.dirty);
-  const notice = useEditor((s) => s.notice);
   const editor = useEditor();
-  const { screenToFlowPosition, fitView, setCenter, getZoom } =
+  const { schema, dirty, readOnly, notice } = editor;
+  const { screenToFlowPosition, fitView, setCenter, getZoom, getNodes } =
     useReactFlow<TableFlowNode>();
   const initialized = useNodesInitialized();
   const initialFit = useRef(false);
+  const canvas = useRef<HTMLDivElement>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [selectedTable, selectTable] = useState<string | null>(null);
+  const [selectedRelation, selectRelation] = useState<string | null>(null);
+  const [explorerOpen, setExplorerOpen] = useState(false);
+  const [inspector, setInspector] = useState<Inspector>(null);
+  const [view, setView] = useState<View>("editor");
+  const [dialog, setDialog] = useState<"export" | "history" | "share" | null>(
+    null,
+  );
+  const [shareLink, setShareLink] = useState("");
+  const [snapshotName, setSnapshotName] = useState("");
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [menu, setMenu] = useState<{
+    x: number;
+    y: number;
+    flow: { x: number; y: number };
+  } | null>(null);
+  const locked = readOnly || view !== "editor";
   useEffect(() => {
     if (initialized && !initialFit.current) {
       initialFit.current = true;
       void fitView({ padding: 0.18, maxZoom: 1, duration: 200 });
     }
   }, [initialized, fitView]);
-  const canvas = useRef<HTMLDivElement>(null);
-  const fileInput = useRef<HTMLInputElement>(null);
-  const [selectedTable, selectTable] = useState<string | null>(null);
-  const [selectedRelation, selectRelation] = useState<string | null>(null);
-  const [explorerOpen, setExplorerOpen] = useState(false);
-  const [menu, setMenu] = useState<{
-    x: number;
-    y: number;
-    flow: { x: number; y: number };
-  } | null>(null);
-  const [loading, setLoading] = useState(false);
-  const nodes = useMemo<TableFlowNode[]>(
-    () =>
-      schema.entities.map((entity) => ({
-        id: entity.id,
-        type: "table",
-        position: entity.position,
-        dragHandle: ".table-drag",
-        selected: selectedTable === entity.id,
-        data: {
-          entity,
-          foreignColumns: schema.relations
-            .filter((r) => r.targetEntityId === entity.id)
-            .map((r) => r.targetColumnId),
-        },
-      })),
-    [schema, selectedTable],
-  );
-  const edges = useMemo<Edge[]>(
-    () =>
-      schema.relations.map((r) => ({
-        id: r.id,
-        source: r.sourceEntityId,
-        target: r.targetEntityId,
-        sourceHandle: r.sourceColumnId,
-        targetHandle: r.targetColumnId,
-        type: "smoothstep",
-        label: r.cardinality.replace("-", " : "),
-        selected: selectedRelation === r.id,
-        markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16 },
-        style: {
-          strokeWidth: selectedRelation === r.id ? 2.5 : 1.5,
-          stroke: "var(--accent)",
-        },
-        labelStyle: {
-          fill: "var(--foreground)",
-          fontSize: 11,
-          fontFamily: "var(--font-mono)",
-        },
-        labelBgStyle: { fill: "var(--surface)" },
-        labelBgPadding: [9, 5],
-        labelBgBorderRadius: 4,
-      })),
-    [schema.relations, selectedRelation],
-  );
-  const activeRelation = schema.relations.find(
-    (r) => r.id === selectedRelation,
-  );
-  const download = useCallback(() => {
-    try {
-      const current = useEditor.getState();
-      const blob = new Blob([serializeProject(current.schema)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${current.schema.name.replace(/[^\p{L}\p{N}_-]+/gu, "-").slice(0, 80) || "schema"}.atlas.json`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-      current.saved();
-    } catch {
-      useEditor
-        .getState()
-        .notify(
-          "Export impossible : vérifiez le nom du projet et les relations.",
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const load = (event?: HashChangeEvent) => {
+      if (!window.location.hash.startsWith("#athena=")) return;
+      try {
+        const shared = decodeShare(window.location.hash.slice(8));
+        if (
+          event &&
+          useEditor.getState().dirty &&
+          !window.confirm(
+            "Ouvrir ce partage sans exporter les modifications en cours ?",
+          )
+        ) {
+          window.history.replaceState(
+            null,
+            "",
+            window.location.pathname + new URL(event.oldURL).hash,
+          );
+          return;
+        }
+        useEditor.getState().replace(shared, true);
+        initialFit.current = false;
+        timer = setTimeout(
+          () => void fitView({ padding: 0.18, maxZoom: 1 }),
+          100,
         );
+      } catch (error) {
+        useEditor.getState().notify(message(error));
+      }
+    };
+    load();
+    window.addEventListener("hashchange", load);
+    return () => {
+      window.removeEventListener("hashchange", load);
+      clearTimeout(timer);
+    };
+  }, [fitView]);
+  const download = useCallback(() => {
+    const s = useEditor.getState();
+    try {
+      downloadFile(
+        new Blob([serializeProject(s.schema)], { type: "application/json" }),
+        filename(s.schema.name) + ".atlas.json",
+      );
+      s.saved();
+    } catch (error) {
+      s.notify(message(error));
     }
   }, []);
   useEffect(() => {
@@ -146,13 +157,29 @@ function Editor() {
       }
     };
     const key = (event: KeyboardEvent) => {
+      const typing =
+        event.target instanceof HTMLElement &&
+        (["INPUT", "SELECT", "TEXTAREA"].includes(event.target.tagName) ||
+          event.target.isContentEditable);
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
         event.preventDefault();
         download();
       }
+      if (!typing && !readOnly && (event.ctrlKey || event.metaKey)) {
+        if (event.key.toLowerCase() === "z") {
+          event.preventDefault();
+          if (event.shiftKey) useEditor.getState().redo();
+          else useEditor.getState().undo();
+        }
+        if (event.key.toLowerCase() === "y") {
+          event.preventDefault();
+          useEditor.getState().redo();
+        }
+      }
       if (event.key === "Escape") {
         setMenu(null);
         setExplorerOpen(false);
+        setInspector(null);
       }
     };
     const close = () => setMenu(null);
@@ -164,248 +191,482 @@ function Editor() {
       window.removeEventListener("keydown", key);
       window.removeEventListener("pointerdown", close);
     };
-  }, [download]);
+  }, [download, readOnly]);
+  const projection = useMemo(() => {
+    try {
+      if (view === "mld")
+        return { schema: mcdToMld(schema) as Schema, error: "" };
+      if (view === "mcd")
+        return {
+          schema: {
+            ...schema,
+            entities: schema.entities.map((e) => ({
+              ...e,
+              attributes: e.attributes.filter(
+                (a) =>
+                  a.isPrimaryKey ||
+                  !schema.relations.some(
+                    (r) =>
+                      r.cardinality !== "N-N" &&
+                      r.targetEntityId === e.id &&
+                      (r.targetColumnId === a.id ||
+                        r.columnPairs?.some((p) => p.targetColumnId === a.id)),
+                  ),
+              ),
+            })),
+          },
+          error: "",
+        };
+      return { schema, error: "" };
+    } catch (error) {
+      return { schema, error: message(error) };
+    }
+  }, [schema, view]);
+  const graph = projection.schema;
+  const openTable = useCallback((id: string, column?: string) => {
+    setInspector({ kind: "table", id, column });
+    selectTable(id);
+    setExplorerOpen(false);
+  }, []);
+  const nodes = useMemo<TableFlowNode[]>(
+    () =>
+      graph.entities.map((entity) => ({
+        id: entity.id,
+        type: "table",
+        position: entity.position,
+        dragHandle: ".table-drag",
+        selected: selectedTable === entity.id,
+        draggable: !locked,
+        deletable: !locked,
+        data: {
+          entity,
+          readOnly: locked,
+          conceptual: view === "mcd",
+          onEdit: openTable,
+          foreignColumns:
+            view === "mcd"
+              ? []
+              : graph.relations
+                  .filter(
+                    (r) =>
+                      r.cardinality !== "N-N" && r.targetEntityId === entity.id,
+                  )
+                  .flatMap(
+                    (r) =>
+                      r.columnPairs?.map((p) => p.targetColumnId) ?? [
+                        r.targetColumnId,
+                      ],
+                  ),
+        },
+      })),
+    [graph, locked, openTable, selectedTable, view],
+  );
+  const edges = useMemo<Edge[]>(
+    () =>
+      graph.relations.map((r) => ({
+        id: r.id,
+        source: r.sourceEntityId,
+        target: r.targetEntityId,
+        sourceHandle:
+          view === "mcd" ? "entity:right" : r.sourceColumnId + ":right",
+        targetHandle:
+          view === "mcd" ? "entity:left" : r.targetColumnId + ":left",
+        type: "smoothstep",
+        label:
+          (r.name ? r.name + " · " : "") + r.cardinality.replace("-", " : "),
+        selected: selectedRelation === r.id,
+        reconnectable: !locked,
+        deletable: !locked,
+        interactionWidth: 24,
+        style: {
+          strokeWidth: selectedRelation === r.id ? 2 : 1.4,
+          stroke: "var(--accent)",
+          strokeDasharray: r.cardinality === "N-N" ? "5 4" : undefined,
+        },
+        labelStyle: {
+          fill: "var(--foreground)",
+          fontSize: 11,
+          fontFamily: "var(--font-mono)",
+        },
+        labelBgStyle: { fill: "var(--surface)" },
+        labelBgPadding: [8, 5],
+        labelBgBorderRadius: 4,
+      })),
+    [graph.relations, locked, selectedRelation, view],
+  );
+  const connect = (c: Connection, replaceId?: string) => {
+    if (!c.sourceHandle || !c.targetHandle || locked) return;
+    const old = schema.relations.find((r) => r.id === replaceId);
+    editor.connect(
+      {
+        sourceEntityId: c.source,
+        sourceColumnId: handleColumn(c.sourceHandle),
+        targetEntityId: c.target,
+        targetColumnId: handleColumn(c.targetHandle),
+        cardinality: old?.cardinality,
+        name: old?.name,
+        onDelete: old?.onDelete,
+      },
+      replaceId,
+    );
+  };
   const addTable = (position?: { x: number; y: number }) => {
+    if (locked) return;
     const bounds = canvas.current?.getBoundingClientRect();
     const point =
       position ??
       screenToFlowPosition({
-        x: (bounds?.left ?? 0) + (bounds?.width ?? 900) / 2 - 160,
-        y: (bounds?.top ?? 0) + (bounds?.height ?? 600) / 2 - 100,
+        x: (bounds?.left ?? 0) + (bounds?.width ?? 900) / 2 - 180,
+        y: (bounds?.top ?? 0) + (bounds?.height ?? 600) / 2 - 80,
       });
     selectTable(editor.addTable(point));
     selectRelation(null);
     setMenu(null);
+    setExplorerOpen(false);
   };
   const allowReplace = () =>
     !useEditor.getState().dirty ||
     window.confirm(
-      "Ce projet contient des modifications non exportées. Les remplacer sans les exporter ?",
+      "Remplacer le projet sans exporter les modifications en cours ?",
     );
+  const openSchema = (value: Schema) => {
+    editor.replace(value);
+    setView("editor");
+    selectTable(null);
+    selectRelation(null);
+    setInspector(null);
+    setMenu(null);
+    initialFit.current = false;
+    window.history.replaceState(null, "", window.location.pathname);
+    setTimeout(
+      () => void fitView({ padding: 0.18, maxZoom: 1, duration: 250 }),
+      100,
+    );
+  };
   const importFile = async (file?: File) => {
     if (!file) return;
     setLoading(true);
     try {
       if (file.size > 5 * 1024 * 1024)
         throw new Error("Fichier trop volumineux (5 Mo maximum).");
-      const imported = parseProject(JSON.parse(await file.text()));
-      if (!allowReplace()) return;
-      editor.replace(imported);
-      selectTable(null);
-      selectRelation(null);
-      setMenu(null);
-      setTimeout(
-        () => void fitView({ padding: 0.2, duration: 350, maxZoom: 1 }),
-        80,
-      );
+      const content = await file.text();
+      const value = file.name.toLowerCase().endsWith(".sql")
+        ? (await import("../model/import-sql")).importSQL(
+            content,
+            file.name.replace(/\.sql$/i, ""),
+          )
+        : parseProject(JSON.parse(content));
+      if (allowReplace()) openSchema(value);
     } catch (error) {
-      editor.notify(
-        error instanceof SyntaxError
-          ? "Ce fichier ne contient pas un JSON valide."
-          : error instanceof Error && error.name !== "ZodError"
-            ? error.message
-            : "Format incompatible. Ouvrez un fichier .atlas.json exporté par Athena (version 1).",
-      );
+      editor.notify(message(error));
     } finally {
       setLoading(false);
       if (fileInput.current) fileInput.current.value = "";
     }
   };
+  const changeView = (value: View) => {
+    setView(value);
+    setInspector(null);
+    selectRelation(null);
+    setTimeout(
+      () => void fitView({ padding: 0.18, maxZoom: 1, duration: 250 }),
+      80,
+    );
+  };
+  const exportImage = async (format: "png" | "svg") => {
+    setLoading(true);
+    try {
+      const viewport = canvas.current?.querySelector<HTMLElement>(
+        ".react-flow__viewport",
+      );
+      if (!viewport || !getNodes().length)
+        throw new Error("Ajoutez une table avant l’export.");
+      const bounds = getNodesBounds(getNodes());
+      const width = Math.min(4096, Math.max(800, bounds.width + 120)),
+        height = Math.min(4096, Math.max(500, bounds.height + 120));
+      const transform = getViewportForBounds(
+        bounds,
+        width,
+        height,
+        0.01,
+        2,
+        0.12,
+      );
+      const { toPng, toSvg } = await import("html-to-image");
+      const backgroundColor = getComputedStyle(document.documentElement)
+        .getPropertyValue("--canvas-background")
+        .trim();
+      const url = await (format === "png" ? toPng : toSvg)(viewport, {
+        width,
+        height,
+        backgroundColor,
+        pixelRatio: 1.5,
+        style: {
+          width: width + "px",
+          height: height + "px",
+          transform:
+            "translate(" +
+            transform.x +
+            "px, " +
+            transform.y +
+            "px) scale(" +
+            transform.zoom +
+            ")",
+        },
+        filter: (node) =>
+          !(
+            node instanceof HTMLElement &&
+            (node.classList.contains("export-hidden") ||
+              node.classList.contains("react-flow__handle"))
+          ),
+      });
+      downloadFile(
+        await (await fetch(url)).blob(),
+        filename(schema.name) + "-" + view + "." + format,
+      );
+      editor.notify("Diagramme exporté.");
+    } catch (error) {
+      editor.notify(message(error));
+    } finally {
+      setLoading(false);
+    }
+  };
+  const share = () => {
+    try {
+      setShareLink(
+        window.location.origin + "/tools/athena#athena=" + encodeShare(schema),
+      );
+      setDialog("share");
+    } catch (error) {
+      editor.notify(message(error));
+    }
+  };
+  const closeProjectMenu = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button"))
+      e.currentTarget.closest("details")?.removeAttribute("open");
+  };
+  const existingRelation =
+    inspector?.kind === "relation" && inspector.id
+      ? schema.relations.find((r) => r.id === inspector.id)
+      : undefined;
   return (
     <div className="schematic">
-      <div className="schematic-toolbar">
-        <Button
-          variant="ghost"
-          className="explorer-toggle"
-          aria-label={
-            explorerOpen
-              ? "Fermer la liste des tables"
-              : "Ouvrir la liste des tables"
-          }
-          aria-expanded={explorerOpen}
-          onClick={() => setExplorerOpen((open) => !open)}
-        >
-          {explorerOpen ? (
-            <PanelLeftClose size={17} />
-          ) : (
-            <PanelLeftOpen size={17} />
-          )}
-          <span>Tables</span>
-          <small>{schema.entities.length}</small>
-        </Button>
+      <header className="schematic-toolbar">
         <div className="schematic-identity">
-          <div className="tool-symbol">
-            <Braces size={21} />
-          </div>
-          <div>
-            <h1>
-              Athena <span>V.01</span>
-            </h1>
-            <p>Vos données prennent forme.</p>
-          </div>
+          <Braces size={22} />
+          <h1>Athena</h1>
         </div>
         <div className="project-title">
           <input
             aria-label="Nom du projet"
             maxLength={100}
             value={schema.name}
-            placeholder="Nom du projet"
+            placeholder="Sans titre"
+            readOnly={readOnly}
             onChange={(e) => editor.rename(e.target.value)}
           />
         </div>
-        <div className="file-actions">
-          <Button
-            variant="ghost"
-            onClick={() => {
-              if (allowReplace()) {
-                editor.replace({
-                  id: crypto.randomUUID(),
-                  name: "Sans titre",
-                  entities: [],
-                  relations: [],
-                });
-                selectTable(null);
-                selectRelation(null);
-              }
-            }}
-            title="Nouveau projet"
-            aria-label="Nouveau projet"
+        <div className="toolbar-history">
+          <button
+            className="icon-button"
+            title="Annuler (Ctrl+Z)"
+            aria-label="Annuler"
+            disabled={readOnly || !editor.past.length}
+            onClick={editor.undo}
           >
-            <FilePlus2 size={16} />
-          </Button>
-          <Button
-            variant="ghost"
-            disabled={loading}
-            aria-label="Importer un projet"
-            title="Importer un projet"
-            onClick={() => fileInput.current?.click()}
+            <Undo2 size={17} />
+          </button>
+          <button
+            className="icon-button"
+            title="Rétablir (Ctrl+Maj+Z)"
+            aria-label="Rétablir"
+            disabled={readOnly || !editor.future.length}
+            onClick={editor.redo}
           >
-            <ArrowUpFromLine size={15} />
-            <span>Importer</span>
-          </Button>
-          <Button
-            variant="outline"
-            onClick={download}
-            aria-label="Exporter le projet"
-            title="Exporter le projet"
-          >
-            <ArrowDownToLine size={15} />
-            <span>Exporter</span>
-          </Button>
-          <Button onClick={() => addTable()} aria-label="Ajouter une table">
-            <Plus size={16} />
-            <span>Table</span>
-          </Button>
+            <Redo2 size={17} />
+          </button>
         </div>
+        <details className="toolbar-menu">
+          <summary>
+            <FolderOpen size={16} />
+            <span>Projet</span>
+          </summary>
+          <div onClick={closeProjectMenu}>
+            <button
+              onClick={() => {
+                if (allowReplace())
+                  openSchema({
+                    id: crypto.randomUUID(),
+                    name: "Sans titre",
+                    entities: [],
+                    relations: [],
+                  });
+              }}
+            >
+              <FilePlus2 size={15} />
+              Nouveau projet
+            </button>
+            <button
+              disabled={loading}
+              onClick={() => fileInput.current?.click()}
+            >
+              <ArrowUpFromLine size={15} />
+              Importer JSON / SQL
+            </button>
+            <button onClick={download}>
+              <ArrowDownToLine size={15} />
+              Enregistrer .atlas.json<kbd>Ctrl S</kbd>
+            </button>
+            <button onClick={() => setDialog("history")}>
+              <History size={15} />
+              Versions de session
+            </button>
+            <button onClick={share}>
+              <Share2 size={15} />
+              Partager en lecture seule
+            </button>
+            <hr />
+            <button disabled={loading} onClick={() => void exportImage("png")}>
+              <ImageDown size={15} />
+              Exporter en PNG
+            </button>
+            <button disabled={loading} onClick={() => void exportImage("svg")}>
+              <ImageDown size={15} />
+              Exporter en SVG
+            </button>
+          </div>
+        </details>
+        <Button className="generate-button" onClick={() => setDialog("export")}>
+          <Code2 size={16} />
+          <span>Générer</span>
+        </Button>
         <input
           ref={fileInput}
           type="file"
-          accept=".json,.atlas.json,application/json"
+          accept=".json,.atlas.json,.sql,application/json,text/plain"
           hidden
           onChange={(e) => void importFile(e.target.files?.[0])}
         />
-      </div>
-      <div className="schematic-body">
-        {explorerOpen && (
-          <button
-            className="explorer-scrim"
-            aria-label="Fermer la liste des tables"
-            onClick={() => setExplorerOpen(false)}
-          />
-        )}
-        <aside
-          className={`schema-explorer ${explorerOpen ? "is-open" : ""}`}
-          aria-label="Tables du schéma"
-          aria-hidden={!explorerOpen}
-          inert={!explorerOpen}
+      </header>
+      <div className="canvas-toolbar">
+        <button
+          className="toolbar-text-button"
+          aria-expanded={explorerOpen}
+          onClick={() => {
+            setExplorerOpen((o) => !o);
+            setInspector(null);
+          }}
         >
-          <div className="explorer-heading">
-            <span>EXPLORATEUR</span>
+          <PanelLeftOpen size={16} />
+          <span>Tables</span>
+          <small>{schema.entities.length}</small>
+        </button>
+        <div className="toolbar-divider" />
+        <button
+          className="toolbar-text-button"
+          disabled={locked}
+          onClick={() => addTable()}
+        >
+          <Plus size={16} />
+          <span>Table</span>
+        </button>
+        <button
+          className="toolbar-text-button"
+          disabled={locked || schema.entities.length < 1}
+          onClick={() => {
+            setInspector({ kind: "relation" });
+            setExplorerOpen(false);
+          }}
+        >
+          <Link2 size={16} />
+          <span>Relation</span>
+        </button>
+        <button
+          className="icon-button arrange-button"
+          disabled={locked}
+          title="Organiser les tables"
+          aria-label="Organiser les tables"
+          onClick={() => {
+            editor.arrange();
+            setTimeout(
+              () => void fitView({ padding: 0.18, maxZoom: 1, duration: 250 }),
+              80,
+            );
+          }}
+        >
+          <LayoutGrid size={16} />
+        </button>
+        <div className="view-switch" aria-label="Vue du schéma">
+          {(["editor", "mcd", "mld"] as const).map((v) => (
             <button
-              className="icon-action"
-              aria-label="Fermer la liste des tables"
-              onClick={() => setExplorerOpen(false)}
+              key={v}
+              aria-pressed={view === v}
+              onClick={() => changeView(v)}
             >
-              <PanelLeftClose size={14} />
+              {v === "editor" ? "Éditeur" : v.toUpperCase()}
             </button>
-          </div>
-          <div className="explorer-section">
-            Tables{" "}
-            <span>{schema.entities.length.toString().padStart(2, "0")}</span>
-          </div>
-          <div className="table-list">
-            {schema.entities.map((e) => (
-              <button
-                key={e.id}
-                className={selectedTable === e.id ? "active" : ""}
-                onClick={() => {
-                  selectTable(e.id);
-                  selectRelation(null);
-                  setExplorerOpen(false);
-                  void setCenter(e.position.x + 170, e.position.y + 90, {
-                    zoom: Math.max(getZoom(), 0.85),
-                    duration: 300,
-                  });
-                }}
-              >
-                <Table2 size={14} />
-                <span>{e.name || "Sans nom"}</span>
-                <small>{e.attributes.length}</small>
-              </button>
-            ))}
-          </div>
-          <button className="explorer-add" onClick={() => addTable()}>
-            <Plus size={14} /> Nouvelle table
+          ))}
+        </div>
+      </div>
+      {readOnly && (
+        <div className="readonly-banner">
+          <span>Schéma partagé en lecture seule</span>
+          <button
+            onClick={() => {
+              editor.copyShared();
+              window.history.replaceState(null, "", window.location.pathname);
+            }}
+          >
+            Créer une copie modifiable
           </button>
-          <div className="explorer-note">
-            <div className="note-icon">
-              <Braces size={18} />
-            </div>
-            <strong>
-              Votre schéma.
-              <br />
-              Votre fichier.
-            </strong>
-            <p>
-              Aucun compte, aucun serveur de stockage. Exportez votre projet
-              pour le retrouver plus tard.
-            </p>
-            <span>.atlas.json</span>
-          </div>
-        </aside>
+        </div>
+      )}
+      <div className="schematic-body">
         <div className="schema-canvas" ref={canvas}>
           <ReactFlow<TableFlowNode>
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
             fitView
-            fitViewOptions={{ padding: 0.2, maxZoom: 1 }}
-            minZoom={0.25}
-            maxZoom={1.6}
-            deleteKeyCode={["Backspace", "Delete"]}
+            fitViewOptions={{ padding: 0.18, maxZoom: 1 }}
+            minZoom={0.05}
+            maxZoom={1.8}
+            deleteKeyCode={locked ? null : ["Backspace", "Delete"]}
             snapToGrid
             snapGrid={[16, 16]}
+            connectionMode={ConnectionMode.Loose}
+            connectionRadius={36}
+            reconnectRadius={24}
+            connectOnClick
+            nodesConnectable={!locked}
+            edgesReconnectable={!locked}
             onNodesChange={(changes) => {
-              for (const change of changes) {
-                if (change.type === "position" && change.position)
-                  editor.moveTable(change.id, change.position);
-                if (change.type === "remove") editor.removeTable(change.id);
-                if (change.type === "select" && change.selected)
-                  selectTable(change.id);
+              for (const c of changes) {
+                if (c.type === "position" && c.position && !locked)
+                  editor.moveTable(c.id, c.position);
+                if (c.type === "remove" && !locked) editor.removeTable(c.id);
+                if (c.type === "select" && c.selected) selectTable(c.id);
               }
             }}
             onEdgesChange={(changes) => {
-              for (const change of changes)
-                if (change.type === "remove") editor.removeRelation(change.id);
+              for (const c of changes)
+                if (c.type === "remove" && !locked) editor.removeRelation(c.id);
             }}
-            onConnect={(c) => {
-              if (c.sourceHandle && c.targetHandle)
-                editor.connect({
-                  sourceEntityId: c.source,
-                  sourceColumnId: c.sourceHandle,
-                  targetEntityId: c.target,
-                  targetColumnId: c.targetHandle,
-                });
+            onConnect={(c) => connect(c)}
+            onReconnect={(edge, c) => connect(c, edge.id)}
+            isValidConnection={(c) => {
+              const a = schema.entities
+                .find((e) => e.id === c.source)
+                ?.attributes.find((a) => a.id === handleColumn(c.sourceHandle));
+              const b = schema.entities
+                .find((e) => e.id === c.target)
+                ?.attributes.find((a) => a.id === handleColumn(c.targetHandle));
+              return !!(
+                a &&
+                b &&
+                (a.isPrimaryKey || b.isPrimaryKey) &&
+                !(c.source === c.target && a.id === b.id)
+              );
             }}
             onNodeClick={(_, node) => {
               selectTable(node.id);
@@ -416,18 +677,25 @@ function Editor() {
               selectRelation(edge.id);
               selectTable(null);
               setMenu(null);
+              if (!locked) {
+                setInspector({ kind: "relation", id: edge.id });
+                setExplorerOpen(false);
+              }
             }}
             onPaneClick={() => {
               selectTable(null);
               selectRelation(null);
+              setInspector(null);
               setMenu(null);
+              setExplorerOpen(false);
             }}
             onPaneContextMenu={(event) => {
               event.preventDefault();
-              const bounds = canvas.current!.getBoundingClientRect();
+              if (locked) return;
+              const b = canvas.current!.getBoundingClientRect();
               setMenu({
-                x: Math.min(event.clientX - bounds.left, bounds.width - 220),
-                y: Math.min(event.clientY - bounds.top, bounds.height - 72),
+                x: Math.max(8, Math.min(event.clientX - b.left, b.width - 220)),
+                y: Math.max(8, Math.min(event.clientY - b.top, b.height - 60)),
                 flow: screenToFlowPosition({
                   x: event.clientX,
                   y: event.clientY,
@@ -435,12 +703,7 @@ function Editor() {
               });
             }}
           >
-            <Background gap={24} size={1} color="var(--canvas-dot)" />
-            <Panel position="top-left">
-              <div className="canvas-caption">
-                SCHÉMA RELATIONNEL <span>/</span> ESPACE LIBRE
-              </div>
-            </Panel>
+            <Background gap={24} size={0.8} color="var(--canvas-dot)" />
             <Controls showInteractive={false} />
             <MiniMap
               nodeColor="var(--muted-surface)"
@@ -449,19 +712,27 @@ function Editor() {
               pannable
               zoomable
             />
-            {schema.entities.length === 0 && (
+            {view !== "editor" && (
+              <Panel position="top-center">
+                <div className="view-notice">
+                  {view === "mcd"
+                    ? "Modèle conceptuel · entités et associations"
+                    : "Modèle logique · clés étrangères et jointures"}
+                  <button onClick={() => changeView("editor")}>Modifier</button>
+                </div>
+              </Panel>
+            )}
+            {!schema.entities.length && (
               <Panel position="top-center" className="empty-canvas">
-                <Table2 size={36} strokeWidth={1} />
-                <h2>Tout commence par une table.</h2>
+                <Table2 size={32} strokeWidth={1} />
+                <h2>Votre première table.</h2>
                 <p>
-                  Ajoutez votre première entité, puis donnez une structure à vos
-                  idées.
+                  Définissez ses colonnes, puis reliez les tables entre elles.
                 </p>
-                <Button onClick={() => addTable()}>
+                <Button disabled={locked} onClick={() => addTable()}>
                   <Plus size={16} />
                   Créer une table
                 </Button>
-                <small>Ou faites un clic droit sur le canvas</small>
               </Panel>
             )}
           </ReactFlow>
@@ -469,103 +740,213 @@ function Editor() {
             <div
               className="canvas-menu"
               role="menu"
-              aria-label="Actions du canvas"
-              style={{ left: Math.max(8, menu.x), top: Math.max(8, menu.y) }}
               onPointerDown={(e) => e.stopPropagation()}
+              style={{ left: menu.x, top: menu.y }}
             >
               <button
                 role="menuitem"
                 autoFocus
                 onClick={() => addTable(menu.flow)}
               >
-                <Plus size={16} /> Créer une table <span>+</span>
+                <Plus size={16} />
+                Créer une table
               </button>
             </div>
           )}
-          {activeRelation && (
-            <section className="relation-panel">
-              <div>
-                <Link2 size={16} />
-                <strong>Relation</strong>
-                <button
-                  className="icon-action"
-                  aria-label="Fermer les propriétés"
-                  onClick={() => selectRelation(null)}
-                >
-                  <X size={15} />
-                </button>
-              </div>
-              <p>
-                {
-                  schema.entities.find(
-                    (e) => e.id === activeRelation.sourceEntityId,
-                  )?.name
-                }{" "}
-                <span>→</span>{" "}
-                {
-                  schema.entities.find(
-                    (e) => e.id === activeRelation.targetEntityId,
-                  )?.name
-                }
-              </p>
-              <label>
-                Cardinalité
-                <select
-                  value={activeRelation.cardinality}
-                  onChange={(e) =>
-                    editor.cardinality(
-                      activeRelation.id,
-                      e.target.value as Relation["cardinality"],
-                    )
-                  }
-                >
-                  <option value="1-1">Un à un · 1:1</option>
-                  <option value="1-N">Un à plusieurs · 1:N</option>
-                  <option value="N-N">Plusieurs à plusieurs · N:N</option>
-                </select>
-              </label>
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  editor.removeRelation(activeRelation.id);
-                  selectRelation(null);
-                }}
-              >
-                <Trash2 size={14} />
-                Supprimer le lien
-              </Button>
-            </section>
+          {projection.error && (
+            <div role="alert" className="canvas-error">
+              {projection.error}
+            </div>
           )}
-          <div className="canvas-help">
-            <MousePointer2 size={13} />
-            <span>Glisser pour déplacer</span>
-            <span className="help-divider" />
-            <KeyRound size={13} />
-            <span>Relier une clé à une colonne</span>
-          </div>
+          {view === "editor" && !readOnly && (
+            <div className="canvas-help">
+              Relier : glisser entre deux points ou cliquer sur chacun · Ctrl Z
+              pour annuler
+            </div>
+          )}
         </div>
+        {explorerOpen && (
+          <aside
+            className="editor-panel explorer-panel"
+            aria-label="Tables du schéma"
+          >
+            <header>
+              <h2>Tables</h2>
+              <button onClick={() => setExplorerOpen(false)}>Fermer</button>
+            </header>
+            <input
+              className="table-search"
+              aria-label="Rechercher une table"
+              placeholder="Rechercher…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <div className="table-list">
+              {graph.entities
+                .filter((e) =>
+                  e.name.toLowerCase().includes(search.toLowerCase()),
+                )
+                .map((e) => (
+                  <button
+                    key={e.id}
+                    onClick={() => {
+                      selectTable(e.id);
+                      void setCenter(e.position.x + 180, e.position.y + 90, {
+                        zoom: Math.max(getZoom(), 0.8),
+                        duration: 250,
+                      });
+                      setExplorerOpen(false);
+                    }}
+                  >
+                    <Table2 size={14} />
+                    <span>{e.name || "Sans nom"}</span>
+                    <small>{e.attributes.length}</small>
+                  </button>
+                ))}
+            </div>
+          </aside>
+        )}
+        {inspector && !locked && (
+          <aside
+            className="editor-panel inspector-panel"
+            aria-label="Propriétés"
+          >
+            <header>
+              <h2>{inspector.kind === "table" ? "Propriétés" : "Relation"}</h2>
+              <button onClick={() => setInspector(null)}>Fermer</button>
+            </header>
+            {inspector.kind === "table" ? (
+              <ColumnEditor
+                tableId={inspector.id}
+                columnId={inspector.column}
+                onSelectColumn={(column) =>
+                  setInspector({ ...inspector, column })
+                }
+                onClose={() => setInspector(null)}
+              />
+            ) : (
+              <RelationEditor
+                key={inspector.id ?? "new"}
+                relation={existingRelation}
+                onClose={() => setInspector(null)}
+              />
+            )}
+          </aside>
+        )}
       </div>
       <footer className="schematic-status">
-        <span>Local uniquement</span>
         <span>
-          {schema.entities.length} tables{" "}
-          <span className="status-separator">/</span> {schema.relations.length}{" "}
-          relations
+          {graph.entities.length} tables · {graph.relations.length} relations
         </span>
         <p role="status" aria-live="polite">
           {notice}
         </p>
-        <span className="export-status">
-          {dirty ? (
-            "À exporter"
-          ) : (
-            <>
-              <Check size={12} />
-              Prêt
-            </>
-          )}
-        </span>
+        {dirty && <span>Modifications à enregistrer</span>}
       </footer>
+      <Modal
+        open={dialog === "export"}
+        onClose={() => setDialog(null)}
+        title="Générer votre backend"
+        className="export-modal"
+      >
+        {dialog === "export" && <ExportPanel schema={schema} />}
+      </Modal>
+      <Modal
+        open={dialog === "history"}
+        onClose={() => setDialog(null)}
+        title="Versions de session"
+      >
+        <div className="editor-form">
+          <p className="form-hint">
+            Ces versions restent disponibles pendant cette session. Enregistrez
+            un fichier .atlas.json pour conserver une version après fermeture.
+          </p>
+          <label>
+            Nom de version
+            <input
+              placeholder="Avant les nouvelles relations"
+              maxLength={80}
+              value={snapshotName}
+              onChange={(e) => setSnapshotName(e.target.value)}
+            />
+          </label>
+          <Button
+            disabled={readOnly}
+            onClick={() => {
+              editor.snapshot(snapshotName);
+              setSnapshotName("");
+            }}
+          >
+            Conserver cette version
+          </Button>
+          <div className="snapshot-list">
+            {editor.snapshots.map((s) => (
+              <div key={s.id}>
+                <span>{s.name}</span>
+                <button
+                  disabled={readOnly}
+                  onClick={() => editor.restore(s.id)}
+                >
+                  Restaurer
+                </button>
+                <button
+                  title="Exporter cette version"
+                  aria-label={"Exporter " + s.name}
+                  onClick={() =>
+                    downloadFile(
+                      new Blob([serializeProject(s.schema)], {
+                        type: "application/json",
+                      }),
+                      filename(s.name) + ".atlas.json",
+                    )
+                  }
+                >
+                  <ArrowDownToLine size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
+          {!editor.snapshots.length && (
+            <p className="form-hint">Aucune version conservée.</p>
+          )}
+        </div>
+      </Modal>
+      <Modal
+        open={dialog === "share"}
+        onClose={() => setDialog(null)}
+        title="Partager le schéma"
+      >
+        <div className="editor-form">
+          <p className="form-hint">
+            Le lien contient une copie du schéma. Toute personne qui le reçoit
+            peut le consulter et en créer une copie, sans compte.
+          </p>
+          <label>
+            Lien en lecture seule
+            <input
+              readOnly
+              value={shareLink}
+              onFocus={(e) => e.target.select()}
+            />
+          </label>
+          <Button
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(shareLink);
+                editor.notify("Lien copié.");
+                setDialog(null);
+              } catch {
+                editor.notify(
+                  "Sélectionnez le lien et copiez-le manuellement.",
+                );
+              }
+            }}
+          >
+            <Copy size={14} />
+            Copier le lien
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
