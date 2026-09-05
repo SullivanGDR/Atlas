@@ -192,6 +192,9 @@ button {
   letter-spacing: 1px;
 }
 .featured-copy h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   font-size: 26px;
   letter-spacing: -1px;
   font-weight: 550;

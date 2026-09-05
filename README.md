@@ -4,7 +4,7 @@ Hub d’outils pour projets d’études et personnels. Le premier outil sera un 
 
 [Dépôt GitHub](https://github.com/SullivanGDR/Atlas) · [Production stable](https://atlas-ten-cyan.vercel.app)
 
-La production peut différer de la branche de développement. Schematic est disponible en première version : tables, colonnes, relations et fichiers de projet. Aucun compte ni stockage en base de données. Voir [ROADMAP.md](ROADMAP.md) et [STATUS.md](STATUS.md).
+La production peut différer de la branche de développement. Athena est disponible en première version : tables, colonnes, relations et fichiers de projet. Aucun compte ni stockage en base de données. Voir [ROADMAP.md](ROADMAP.md) et [STATUS.md](STATUS.md).
 
 ## Développement local
 
@@ -65,6 +65,6 @@ La CI vérifie les trois branches et les PR. Le job `promotion` vérifie le sens
 
 Le projet Vercel existant reste lié à ce dépôt : preset Next.js, racine `apps/web`, packages partagés inclus, branche de production `main`, plan Hobby. Aucun déploiement n’est nécessaire pour développer localement.
 
-Les projets Schematic restent en mémoire navigateur. Exportez un fichier `.atlas.json` pour conserver votre travail, puis importez-le pour le reprendre. Aucun compte, Prisma, Neon ou Auth.js ne sera nécessaire pour ce fonctionnement.
+Les projets Athena restent en mémoire navigateur. Exportez un fichier `.atlas.json` pour conserver votre travail, puis importez-le pour le reprendre. Aucun compte, Prisma, Neon ou Auth.js ne sera nécessaire pour ce fonctionnement.
 
 Documentation officielle : [Next.js](https://nextjs.org/docs/app/getting-started/installation), [déploiements Vercel par branche](https://vercel.com/docs/project-configuration/git-configuration).

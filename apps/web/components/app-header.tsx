@@ -8,7 +8,7 @@ import { AtlasLogo } from "@/components/atlas-logo";
 
 const destinations = [
   { href: "/", label: "Outils", Icon: LayoutGrid },
-  { href: "/tools/schematic", label: "Schematic", Icon: Braces },
+  { href: "/tools/athena", label: "Athena", Icon: Braces },
 ] as const;
 
 export function AppHeader() {

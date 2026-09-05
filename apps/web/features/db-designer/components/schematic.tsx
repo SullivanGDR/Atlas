@@ -35,7 +35,7 @@ import { TableNode, type TableFlowNode } from "./table-node";
 import "@xyflow/react/dist/style.css";
 import "./schematic.css";
 const nodeTypes = { table: TableNode };
-export function Schematic() {
+export function Athena() {
   return (
     <ReactFlowProvider>
       <Editor />
@@ -204,7 +204,7 @@ function Editor() {
           ? "Ce fichier ne contient pas un JSON valide."
           : error instanceof Error && error.name !== "ZodError"
             ? error.message
-            : "Format incompatible. Ouvrez un fichier .atlas.json exporté par Schematic (version 1).",
+            : "Format incompatible. Ouvrez un fichier .atlas.json exporté par Athena (version 1).",
       );
     } finally {
       setLoading(false);
@@ -239,7 +239,7 @@ function Editor() {
           </div>
           <div>
             <h1>
-              Schematic <span>V.01</span>
+              Athena <span>V.01</span>
             </h1>
             <p>Vos données prennent forme.</p>
           </div>

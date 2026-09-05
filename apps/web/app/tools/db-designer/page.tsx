@@ -1,4 +1,4 @@
 import { redirect } from "next/navigation";
 export default function Page() {
-  redirect("/tools/schematic");
+  redirect("/tools/athena");
 }

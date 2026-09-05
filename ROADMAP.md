@@ -1,6 +1,6 @@
 # Roadmap — Atlas
 
-> Priorité utilisateur — Schematic : aucun compte ni base de données du site. Projets portables par import/export .atlas.json ; état navigateur en mémoire. Les étapes Prisma/Neon/Auth.js et sauvegarde distante ci-dessous sont abandonnées. Validation locale ciblée, sans vérification GitHub systématique.
+> Priorité utilisateur — Athena : aucun compte ni base de données du site. Projets portables par import/export .atlas.json ; état navigateur en mémoire. Les étapes Prisma/Neon/Auth.js et sauvegarde distante ci-dessous sont abandonnées. Validation locale ciblée, sans vérification GitHub systématique.
 
 > Mise à jour utilisateur du 2026-09-05 : nom définitif Atlas. Développement local et pushes sur development ; promotion volontaire en preprod pour Vercel ; production sur main en fin de grosse fonctionnalité validée. Cette règle remplace toute mention ci-dessous d’un déploiement à chaque push.
 ### Feuille de route technique pour agent IA (Claude Code / Codex / Cursor)

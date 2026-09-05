@@ -26,10 +26,12 @@ export default function Home() {
         <section className="featured-tool" key={tool.id}>
           <div className="featured-copy">
             <div className="featured-category">
-              <Braces size={20} />
               <span>01 / MODÉLISATION</span>
             </div>
-            <h2>{tool.name}</h2>
+            <h2>
+              <Braces size={22} aria-hidden="true" />
+              {tool.name}
+            </h2>
             <p>{tool.description}</p>
             <div className="tool-capabilities">
               <span>Tables & colonnes</span>

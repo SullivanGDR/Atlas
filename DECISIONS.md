@@ -19,9 +19,9 @@
 
 - Direction visuelle précisée par l’utilisateur : sobre, moderne, légère touche futuriste ; aucun rapport au système solaire. Les premières propositions orbitales sont abandonnées et ne sont pas intégrées au dépôt.
 
-## Schematic — première tranche fonctionnelle
+## Athena — première tranche fonctionnelle
 
-- Nom public Schematic ; module interne features/db-designer conservé. Route /tools/schematic ; ancienne route redirigée.
+- Nom public Athena, selon le thème mythologique grec choisi pour les applications Atlas. L’icône `{}` représente son rôle de conception de données. Le module interne features/db-designer est conservé ; route /tools/athena, anciennes routes redirigées.
 - À la demande utilisateur, abandon des comptes et du stockage de projets en base. Aucune installation Prisma/Neon/Auth.js. État Zustand en mémoire, export/import JSON version 1, validation Zod, limite 5 Mo / 200 tables / 100 colonnes par table.
 - Connexions de clé primaire vers colonne, type référencé propagé (SERIAL → INTEGER). Cardinalités 1:1, 1:N, N:N stockées dans le graphe ; transformation MCD/MLD et génération de tables de jointure restent une étape future.
 - Aucun enregistrement automatique : exporter les modifications pour les retrouver après fermeture. Avertissement de fermeture et confirmation avant remplacement d’un projet modifié.
@@ -30,5 +30,5 @@
 ## 2026-09-05 — Shell compact et canvas prioritaire
 
 - La navigation principale passe de la barre latérale à un bandeau horizontal de 54 px. Le canvas dispose ainsi de toute la largeur sur les écrans de portable.
-- La liste des tables de Schematic devient un panneau superposé fermé par défaut. Son ouverture ne redimensionne plus le diagramme et elle se ferme après sélection d’une table, par clic sur le fond ou avec Échap.
+- La liste des tables d’Athena devient un panneau superposé fermé par défaut. Son ouverture ne redimensionne plus le diagramme et elle se ferme après sélection d’une table, par clic sur le fond ou avec Échap.
 - Les commandes de l’éditeur réduisent progressivement leurs libellés et se répartissent sur deux lignes sous 760 px pour conserver des cibles tactiles lisibles.
