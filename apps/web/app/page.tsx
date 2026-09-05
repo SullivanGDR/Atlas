@@ -55,7 +55,6 @@ export default function Home() {
             </span>
             <div className="diagram-table first">
               <header>
-                <span className="diagram-dot" />
                 users <span>03</span>
               </header>
               <p>
@@ -73,7 +72,6 @@ export default function Home() {
             </div>
             <div className="diagram-table second">
               <header>
-                <span className="diagram-dot" />
                 projects <span>03</span>
               </header>
               <p>

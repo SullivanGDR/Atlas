@@ -70,17 +70,6 @@
   background: transparent;
   outline-color: var(--accent);
 }
-.unsaved-dot,
-.saved-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
-}
-.saved-dot {
-  background: var(--muted);
-}
 .file-actions {
   display: flex;
   align-items: center;
@@ -235,16 +224,9 @@
   font: 9px var(--font-mono);
   pointer-events: none;
 }
-.canvas-caption > span:not(.canvas-status-dot) {
+.canvas-caption > span {
   opacity: 0.4;
   padding: 0 3px;
-}
-.canvas-status-dot {
-  display: inline-block;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
 }
 .schema-table {
   width: 342px;

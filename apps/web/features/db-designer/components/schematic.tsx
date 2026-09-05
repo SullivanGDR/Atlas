@@ -252,14 +252,6 @@ function Editor() {
             placeholder="Nom du projet"
             onChange={(e) => editor.rename(e.target.value)}
           />
-          <span
-            className={dirty ? "unsaved-dot" : "saved-dot"}
-            title={
-              dirty
-                ? "Modifications non exportées"
-                : "Aucune modification depuis le chargement ou l’export"
-            }
-          />
         </div>
         <div className="file-actions">
           <Button
@@ -446,8 +438,7 @@ function Editor() {
             <Background gap={24} size={1} color="var(--canvas-dot)" />
             <Panel position="top-left">
               <div className="canvas-caption">
-                <span className="canvas-status-dot" /> SCHÉMA RELATIONNEL{" "}
-                <span>/</span> ESPACE LIBRE
+                SCHÉMA RELATIONNEL <span>/</span> ESPACE LIBRE
               </div>
             </Panel>
             <Controls showInteractive={false} />
@@ -555,10 +546,7 @@ function Editor() {
         </div>
       </div>
       <footer className="schematic-status">
-        <span>
-          <span className="canvas-status-dot" />
-          Local uniquement
-        </span>
+        <span>Local uniquement</span>
         <span>
           {schema.entities.length} tables{" "}
           <span className="status-separator">/</span> {schema.relations.length}{" "}

@@ -108,22 +108,6 @@ button {
   height: 34px;
   padding: 0;
 }
-.local-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-right: 5px;
-  color: var(--muted);
-  font: 10px var(--font-mono);
-  letter-spacing: 0.04em;
-}
-.local-badge i {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #36b37e;
-  box-shadow: 0 0 0 3px color-mix(in srgb, #36b37e 13%, transparent);
-}
 .page-workspace {
   width: min(1120px, 100%);
   margin: 0 auto;
@@ -276,12 +260,6 @@ button {
   color: var(--muted);
   font-size: 8px;
 }
-.diagram-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-}
 .diagram-table p {
   display: flex;
   align-items: center;
@@ -363,8 +341,7 @@ button {
   .app-header {
     padding: 0 10px;
   }
-  .app-header-divider,
-  .local-badge {
+  .app-header-divider {
     display: none;
   }
   .atlas-logo > span,

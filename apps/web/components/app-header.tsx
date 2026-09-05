@@ -40,12 +40,6 @@ export function AppHeader() {
         })}
       </nav>
       <div className="app-header-actions">
-        <span
-          className="local-badge"
-          title="Les projets restent sur cet appareil"
-        >
-          <i /> Local
-        </span>
         <ThemeToggle />
       </div>
     </header>

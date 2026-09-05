@@ -12,6 +12,7 @@
 - Shell responsive : navigation Atlas déplacée dans un bandeau supérieur compact afin de préserver la largeur du canvas.
 - L’explorateur des tables d’Athena est désormais un panneau superposé, fermé par défaut et accessible depuis la barre d’outils.
 - Barre d’outils adaptée aux écrans de portable : libellés secondaires masqués progressivement et actions réparties sur deux lignes sur petit écran.
+- Direction visuelle monochrome : suppression des pastilles colorées et des indicateurs décoratifs sans action.
 
 ## Vérifications de cette tranche
 
