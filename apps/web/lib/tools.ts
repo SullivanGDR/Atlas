@@ -1,6 +1,14 @@
 import type { ToolDefinition } from "@atlas/shared";
 export const tools = [
   {
+    id: "metis",
+    name: "Métis",
+    description:
+      "Transformez vos intentions en consignes claires. Composez des prompts structurés, prêts à copier dans votre assistant.",
+    href: "/tools/metis",
+    status: "available",
+  },
+  {
     id: "themis",
     name: "Thémis",
     description:

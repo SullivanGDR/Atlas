@@ -5,6 +5,7 @@ import {
   FileJson2,
   Network,
   ClipboardList,
+  MessageSquareText,
 } from "lucide-react";
 import { tools } from "@/lib/tools";
 
@@ -299,7 +300,62 @@ function ThemisPreview() {
     </div>
   );
 }
+function MetisPreview() {
+  return (
+    <div className="athena-preview" aria-hidden="true">
+      <div className="preview-toolbar">
+        <span>métis / atelier de prompts</span>
+        <span>Intention · Contexte · Résultat</span>
+      </div>
+      <svg viewBox="0 0 600 340" role="presentation" focusable="false">
+        <rect
+          x="70"
+          y="35"
+          width="460"
+          height="270"
+          rx="10"
+          className="preview-table-body"
+        />
+        <text x="98" y="70" className="preview-type">
+          PROMPT / DÉVELOPPEMENT
+        </text>
+        <path d="M98 86H502" className="preview-divider" />
+        <text x="98" y="118" className="preview-table-name">
+          01 — Objectif
+        </text>
+        <text x="98" y="142" className="preview-field">
+          Concevoir un formulaire accessible.
+        </text>
+        <text x="98" y="182" className="preview-table-name">
+          02 — Contraintes
+        </text>
+        <text x="98" y="206" className="preview-field">
+          Navigation au clavier. Erreurs explicites.
+        </text>
+        <text x="98" y="246" className="preview-table-name">
+          03 — Résultat attendu
+        </text>
+        <text x="98" y="270" className="preview-field">
+          Code, explication et vérifications.
+        </text>
+      </svg>
+      <div className="preview-status">
+        <span>VOS MOTS, BIEN STRUCTURÉS</span>
+        <span>COPIER / MARKDOWN</span>
+      </div>
+    </div>
+  );
+}
 const toolPresentation = {
+  metis: {
+    category: "ATELIER DE PROMPTS",
+    Icon: MessageSquareText,
+    details: [
+      "Rédaction guidée et blocs réutilisables",
+      "Relecture locale, copie et export Markdown",
+    ],
+    Preview: MetisPreview,
+  },
   themis: {
     category: "CAHIER DES CHARGES",
     Icon: ClipboardList,
@@ -341,8 +397,8 @@ export default function Home() {
           </h1>
         </div>
         <p className="home-intro">
-          Cadrez vos besoins avec Thémis, concevez vos données avec Athena et
-          cartographiez votre SI avec Iris.
+          De la première intention au projet concret : rédigez, concevez et
+          structurez votre travail avec les outils Atlas.
         </p>
       </section>
 

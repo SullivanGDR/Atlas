@@ -1,5 +1,12 @@
 # Décisions techniques
 
+## 2026-09-30 — Métis, atelier de prompts
+
+- Nom mythologique associé à l’intelligence et au conseil ; icône de message. Module isolé `features/metis` sans dépendance aux autres outils.
+- Assemblage déterministe des consignes rédigées par l’utilisateur. Les modèles sont des guides et exemples, jamais des contenus imposés. Mode compact sans résumé automatique ni perte de consignes.
+- Réutilisation par blocs sauvegardés dans le projet `atlas-metis` version 1. Aucun compte, API de modèle, base de données ou bibliothèque persistante implicite.
+- Relecture heuristique présentée comme une aide, sans score de qualité ni garantie de résultat. Les extraits de référence sont délimités en Markdown ; cela n’est pas une mesure de sécurité absolue pour les assistants externes.
+
 ## 2026-09-30 — Thémis, rédaction des cahiers des charges
 
 - Thémis, associée aux règles communes, donne son nom à l’outil. Module autonome `features/themis`, quatre trames adaptées aux projets numériques ; sources de conception consignées dans son README.

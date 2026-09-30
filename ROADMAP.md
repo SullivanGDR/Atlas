@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> 2026-09-30 — Métis : atelier local de prompts avec six usages, sept rubriques, aperçu détaillé/compact, relecture heuristique, blocs réutilisables, copie, Markdown/texte et projets JSON portables. Sans IA intégrée ni stockage serveur ; développement uniquement.
+
 > 2026-09-30 — Développement uniquement : aperçus d’accueil Thémis/Iris adaptés au thème clair, exemple Iris redessiné ; liaisons Athena arrondies et fléchées dans le canvas et les exports, cardinalités conservées. `pnpm check` réussi (44 tests).
 
 > 2026-09-30 — Promotion volontaire de `67d323b` en préproduction puis production Vercel : deux déploiements Ready, accueil et trois outils accessibles. Développement local conservé sur `development`.

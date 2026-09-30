@@ -1,5 +1,15 @@
 # État du projet
 
+## Métis — atelier de prompts, 2026-09-30
+
+- Nouvel outil autonome `/tools/metis`, présent dans la navigation et sur l’accueil, avec aperçu SVG adapté aux thèmes.
+- Six usages et sept rubriques guidées, exemples insérés seulement à la demande ; aperçu direct en Markdown, présentation détaillée ou compacte sans suppression du contenu.
+- Relecture locale des manques, marqueurs à compléter, termes vagues et contradictions explicites simples. Aucun appel à une IA, aucun score ou garantie de qualité universelle.
+- Bibliothèque de quatre suggestions et blocs personnels, insertion, suppression annulable ; historique de soixante étapes. Projets `atlas-metis` version 1 importables/exportables, copie et exports Markdown/texte, confirmations intégrées.
+- Vérifié en navigateur : rédaction, aperçu, copie exacte dans le presse-papiers, création d’un bloc et téléchargement JSON retrouvé et relu sur disque. Thèmes clair/sombre inspectés ; vue mobile de 390 px sans débordement horizontal, bascule vers l’aperçu fonctionnelle ; aucune erreur console relevée.
+- Six tests dédiés : modes de composition, séparation des données, import/export et validation, relecture, insertion et limite de longueur, historique. Travail sur `development`, aucune promotion Vercel.
+- `pnpm check` réussi : formatage, lint, types, 50 tests et build Next.js.
+
 ## Accueil clair et liaisons Athena — 2026-09-30
 
 - Aperçus Thémis et Iris : fonds SVG explicitement reliés aux couleurs du thème, suppression des aplats noirs par défaut. Iris redessiné avec une zone, trois services espacés et un parcours portail → API → PostgreSQL ; raccords sur les bords et libellés HTTPS/SQL.

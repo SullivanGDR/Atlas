@@ -1,0 +1,517 @@
+.metis-workspace {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--foreground);
+  font-size: 13px;
+}
+.metis-workspace button,
+.metis-workspace summary,
+.metis-modal button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  font-size: 12px;
+}
+.metis-workspace button:hover,
+.metis-workspace summary:hover,
+.metis-modal button:hover {
+  background: var(--muted-surface);
+}
+.metis-workspace button:disabled,
+.metis-modal button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.metis-workspace :focus-visible,
+.metis-modal :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.metis-workspace input,
+.metis-workspace select,
+.metis-modal input,
+.metis-modal select,
+.metis-modal textarea {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--foreground);
+  border-radius: 5px;
+  padding: 8px;
+  min-width: 0;
+  font: inherit;
+}
+.metis-header {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 8px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.metis-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+.metis-header > input {
+  width: 240px;
+  border: 0;
+  background: transparent;
+}
+.metis-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.metis-menu {
+  position: relative;
+}
+.metis-menu summary {
+  list-style: none;
+}
+.metis-menu summary::-webkit-details-marker {
+  display: none;
+}
+.metis-menu > div {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 20;
+  width: 255px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 8px 30px var(--canvas-shadow);
+  padding: 5px;
+  border-radius: 8px;
+}
+.metis-menu > div button {
+  width: 100%;
+  border: 0;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 10px;
+}
+.metis-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.metis-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.metis-toolbar select {
+  font-size: 12px;
+  padding: 5px 8px;
+}
+.metis-toolbar button span {
+  color: var(--muted);
+}
+.metis-mobile-tabs {
+  display: none;
+}
+.metis-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+}
+.metis-editor {
+  padding: 28px clamp(20px, 3vw, 48px);
+  overflow-y: auto;
+}
+.metis-intro > span,
+.metis-preview-heading span {
+  font: 10px var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.metis-intro h2 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.25;
+  margin: 12px 0;
+  letter-spacing: -0.04em;
+}
+.metis-intro p,
+.metis-hint {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 13px;
+  margin: 8px 0 18px;
+}
+.metis-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 24px 0;
+}
+.metis-fields button {
+  border-color: transparent;
+  padding: 7px 9px;
+}
+.metis-fields button[aria-current] {
+  background: var(--muted-surface);
+  border-color: var(--border);
+}
+.metis-fields button > span {
+  font: 10px var(--font-mono);
+  color: var(--muted);
+}
+.metis-field-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.metis-field-heading label {
+  font-size: 17px;
+  font-weight: 500;
+}
+.metis-field-heading > span {
+  color: var(--muted);
+  font-size: 10px;
+}
+.metis-editor > textarea {
+  display: block;
+  width: 100%;
+  min-height: 230px;
+  resize: vertical;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--foreground);
+  font: 14px/1.8 var(--font-sans);
+}
+.metis-example {
+  margin-top: 14px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+}
+.metis-example summary {
+  border: 0;
+  padding: 4px 0;
+  color: var(--muted);
+  justify-content: flex-start;
+}
+.metis-example p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 12px 0;
+  white-space: pre-wrap;
+}
+.metis-editor-footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.metis-editor-footer button {
+  border: 0;
+  padding: 6px 0;
+}
+.metis-preview {
+  display: flex;
+  flex-direction: column;
+  padding: 28px clamp(20px, 3vw, 48px);
+  min-height: 0;
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+}
+.metis-preview-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.metis-preview-heading h2 {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  margin: 10px 0 0;
+}
+.metis-preview-heading .metis-copy {
+  background: var(--accent);
+  color: var(--accent-foreground);
+  padding: 9px 14px;
+}
+.metis-output-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 24px 0 16px;
+}
+.metis-output-options > span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.metis-output-options > div {
+  display: flex;
+  border: 1px solid var(--border);
+  padding: 3px;
+  border-radius: 7px;
+}
+.metis-output-options button {
+  border: 0;
+  padding: 5px 9px;
+}
+.metis-output-options button[aria-pressed="true"] {
+  background: var(--muted-surface);
+}
+.metis-preview > textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 160px;
+  resize: none;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--foreground);
+  font: 12px/1.85 var(--font-mono);
+}
+.metis-preview-note {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 14px 0 0;
+}
+.metis-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 10px;
+}
+.metis-status > span:last-child {
+  flex-shrink: 0;
+}
+.ui-modal.metis-modal {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  padding: 0;
+  width: min(760px, calc(100vw - 32px));
+  max-height: 85dvh;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--foreground);
+}
+.metis-modal::backdrop {
+  background: #0007;
+  backdrop-filter: blur(3px);
+}
+.metis-modal .modal-body {
+  padding: 24px;
+}
+.metis-modal .modal-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.metis-modal h2 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+.metis-modal p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.metis-template-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+.metis-template-grid button {
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  text-align: left;
+}
+.metis-template-grid button strong {
+  font-size: 15px;
+}
+.metis-template-grid button span {
+  color: var(--muted);
+  line-height: 1.5;
+}
+.metis-issues {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+.metis-issues button {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  width: 100%;
+  justify-content: start;
+  text-align: left;
+  margin: 8px 0;
+  padding: 15px;
+}
+.metis-issues button strong {
+  grid-column: 1;
+}
+.metis-issues button span {
+  grid-column: 1;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.metis-issues button svg {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+.metis-empty {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.metis-modal input[aria-label] {
+  width: 100%;
+  margin: 12px 0;
+}
+.metis-block-list {
+  max-height: 300px;
+  overflow: auto;
+}
+.metis-block-list article {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.metis-block-list small {
+  display: block;
+  margin: 5px 0;
+  color: var(--muted);
+}
+.metis-block-list p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin-bottom: 0;
+}
+.metis-block-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.metis-block-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 25px;
+}
+.metis-block-form h3 {
+  grid-column: 1/-1;
+  font-size: 16px;
+}
+.metis-block-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+}
+.metis-block-content {
+  grid-column: 1/-1;
+}
+.metis-block-content textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+@media (max-width: 950px) {
+  .metis-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .metis-mobile-tabs {
+    display: flex;
+    margin-left: auto;
+  }
+  .metis-mobile-tabs button {
+    border: 0;
+  }
+  .metis-mobile-tabs button[aria-pressed="true"] {
+    background: var(--muted-surface);
+  }
+  .metis-pane-write .metis-preview,
+  .metis-pane-preview .metis-editor {
+    display: none;
+  }
+  .metis-preview {
+    border-left: 0;
+  }
+  .metis-header {
+    gap: 10px;
+    padding: 8px 12px;
+  }
+  .metis-header > input {
+    flex: 1;
+    width: 100px;
+  }
+}
+@media (max-width: 550px) {
+  .metis-header {
+    flex-wrap: wrap;
+  }
+  .metis-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .metis-toolbar {
+    padding: 8px 12px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .metis-editor,
+  .metis-preview {
+    padding: 20px 16px;
+  }
+  .metis-intro h2 {
+    font-size: 21px;
+  }
+  .metis-status > span:last-child {
+    display: none;
+  }
+  .metis-template-grid,
+  .metis-block-form {
+    grid-template-columns: 1fr;
+  }
+  .metis-modal .modal-body {
+    padding: 18px;
+  }
+  .metis-block-list article {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
