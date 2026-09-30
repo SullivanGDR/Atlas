@@ -3,6 +3,8 @@ export { Card } from "./card";
 export { Input } from "./input";
 export { Dialog } from "./dialog";
 export { Modal } from "./modal";
+export { Dropdown } from "./dropdown";
+export { useConfirmation } from "./use-confirmation";
 export { ThemeRoot, ThemeToggle } from "./theme-toggle";
 export { Sidebar } from "./sidebar";
 export { cn } from "./utils";

@@ -1,5 +1,12 @@
 # État du projet
 
+## Menus et confirmations — 2026-09-30
+
+- Menus Projet et Export d’Iris et menu Projet d’Athena : composant partagé, fermeture au clic extérieur, au départ du focus, avec Échap et après une action. Un seul menu ouvert à la fois.
+- Confirmations de remplacement, import et ouverture de partage remplacées par une modale neutre commune, avec annulation par défaut, focus contenu et restauré au bouton d’origine. Les raccourcis des éditeurs sont suspendus pendant les modales.
+- Vérifié en navigateur : clic extérieur dans les deux outils, conservation du projet Iris et remplacement confirmé dans Athena. L’avertissement de fermeture/rechargement d’onglet reste natif (contrainte navigateur).
+- `pnpm check` réussi : formatage, lint, types, 37 tests et build.
+
 ## Iris — catalogue de stacks, 2026-09-30
 
 - 44 entrées réparties en 11 familles : frontend, frameworks backend, bases de données, cache, messagerie, infrastructure, réseau, sécurité, observabilité, stockage et générique.

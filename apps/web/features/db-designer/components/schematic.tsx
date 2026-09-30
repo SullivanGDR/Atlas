@@ -32,7 +32,7 @@ import {
   Table2,
   Undo2,
 } from "lucide-react";
-import { Button, Modal } from "@atlas/ui";
+import { Button, Modal, Dropdown, useConfirmation } from "@atlas/ui";
 import { useEditor } from "../store/editor";
 import { parseProject, serializeProject, type Schema } from "../model/schema";
 import { decodeShare, encodeShare } from "../model/share";
@@ -68,6 +68,7 @@ export function Athena() {
   );
 }
 function Editor() {
+  const { confirm, confirmationDialog } = useConfirmation();
   const editor = useEditor();
   const { schema, dirty, readOnly, notice } = editor;
   const { screenToFlowPosition, fitView, setCenter, getZoom } =
@@ -106,17 +107,20 @@ function Editor() {
   }, [initialized, fitView]);
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
-    const load = (event?: HashChangeEvent) => {
+    let active = true;
+    const load = async (event?: HashChangeEvent) => {
       if (!window.location.hash.startsWith("#athena=")) return;
+      const requestedHash = window.location.hash;
       try {
         const shared = decodeShare(window.location.hash.slice(8));
         if (
           event &&
           useEditor.getState().dirty &&
-          !window.confirm(
-            "Ouvrir ce partage sans exporter les modifications en cours ?",
-          )
+          !(await confirm(
+            "Ce partage remplacera votre schéma et ses modifications non enregistrées. Enregistrez le projet actuel pour le conserver.",
+          ))
         ) {
+          if (!active || window.location.hash !== requestedHash) return;
           window.history.replaceState(
             null,
             "",
@@ -124,6 +128,7 @@ function Editor() {
           );
           return;
         }
+        if (!active || window.location.hash !== requestedHash) return;
         useEditor.getState().replace(shared, true);
         initialFit.current = false;
         timer = setTimeout(
@@ -137,10 +142,11 @@ function Editor() {
     load();
     window.addEventListener("hashchange", load);
     return () => {
+      active = false;
       window.removeEventListener("hashchange", load);
       clearTimeout(timer);
     };
-  }, [fitView]);
+  }, [fitView, confirm]);
   const download = useCallback(() => {
     const s = useEditor.getState();
     try {
@@ -161,6 +167,7 @@ function Editor() {
       }
     };
     const key = (event: KeyboardEvent) => {
+      if (document.querySelector('dialog[open],[role="dialog"]')) return;
       const typing =
         event.target instanceof HTMLElement &&
         (["INPUT", "SELECT", "TEXTAREA"].includes(event.target.tagName) ||
@@ -340,10 +347,10 @@ function Editor() {
     setMenu(null);
     setExplorerOpen(false);
   };
-  const allowReplace = () =>
+  const allowReplace = async () =>
     !useEditor.getState().dirty ||
-    window.confirm(
-      "Remplacer le projet sans exporter les modifications en cours ?",
+    confirm(
+      "Les modifications en cours ne sont pas enregistrées. Enregistrez votre fichier avant de remplacer le schéma pour les conserver.",
     );
   const openSchema = (value: Schema) => {
     editor.replace(value);
@@ -372,7 +379,7 @@ function Editor() {
             file.name.replace(/\.sql$/i, ""),
           )
         : parseProject(JSON.parse(content));
-      if (allowReplace()) openSchema(value);
+      if (await allowReplace()) openSchema(value);
     } catch (error) {
       editor.notify(message(error));
     } finally {
@@ -399,16 +406,13 @@ function Editor() {
       editor.notify(message(error));
     }
   };
-  const closeProjectMenu = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest("button"))
-      e.currentTarget.closest("details")?.removeAttribute("open");
-  };
   const existingRelation =
     inspector?.kind === "relation" && inspector.id
       ? schema.relations.find((r) => r.id === inspector.id)
       : undefined;
   return (
     <div className="schematic">
+      {confirmationDialog}
       <header className="schematic-toolbar">
         <div className="schematic-identity">
           <Braces size={22} />
@@ -444,47 +448,46 @@ function Editor() {
             <Redo2 size={17} />
           </button>
         </div>
-        <details className="toolbar-menu">
-          <summary>
-            <FolderOpen size={16} />
-            <span>Projet</span>
-          </summary>
-          <div onClick={closeProjectMenu}>
-            <button
-              onClick={() => {
-                if (allowReplace())
-                  openSchema({
-                    id: crypto.randomUUID(),
-                    name: "Sans titre",
-                    entities: [],
-                    relations: [],
-                  });
-              }}
-            >
-              <FilePlus2 size={15} />
-              Nouveau projet
-            </button>
-            <button
-              disabled={loading}
-              onClick={() => fileInput.current?.click()}
-            >
-              <ArrowUpFromLine size={15} />
-              Importer JSON / SQL
-            </button>
-            <button onClick={download}>
-              <ArrowDownToLine size={15} />
-              Enregistrer .atlas.json<kbd>Ctrl S</kbd>
-            </button>
-            <button onClick={() => setDialog("history")}>
-              <History size={15} />
-              Versions de session
-            </button>
-            <button onClick={share}>
-              <Share2 size={15} />
-              Partager en lecture seule
-            </button>
-          </div>
-        </details>
+        <Dropdown
+          className="toolbar-menu"
+          trigger={
+            <>
+              <FolderOpen size={16} />
+              <span>Projet</span>
+            </>
+          }
+        >
+          <button
+            onClick={async () => {
+              if (await allowReplace())
+                openSchema({
+                  id: crypto.randomUUID(),
+                  name: "Sans titre",
+                  entities: [],
+                  relations: [],
+                });
+            }}
+          >
+            <FilePlus2 size={15} />
+            Nouveau projet
+          </button>
+          <button disabled={loading} onClick={() => fileInput.current?.click()}>
+            <ArrowUpFromLine size={15} />
+            Importer JSON / SQL
+          </button>
+          <button onClick={download}>
+            <ArrowDownToLine size={15} />
+            Enregistrer .atlas.json<kbd>Ctrl S</kbd>
+          </button>
+          <button onClick={() => setDialog("history")}>
+            <History size={15} />
+            Versions de session
+          </button>
+          <button onClick={share}>
+            <Share2 size={15} />
+            Partager en lecture seule
+          </button>
+        </Dropdown>
         <Button
           variant="outline"
           className="image-export-button"

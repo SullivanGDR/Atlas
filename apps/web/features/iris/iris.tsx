@@ -28,6 +28,7 @@ import {
   Maximize,
   Link2,
 } from "lucide-react";
+import { Dropdown, useConfirmation } from "@atlas/ui";
 import { catalog, categories, catalogGroups } from "./catalog";
 import {
   arrange,
@@ -92,6 +93,7 @@ function TextField({
 }
 
 function Workspace() {
+  const { confirm, confirmationDialog } = useConfirmation();
   const {
     project,
     past,
@@ -161,6 +163,7 @@ function Workspace() {
       if (useIris.getState().dirty) e.preventDefault();
     };
     const keys = (e: KeyboardEvent) => {
+      if (document.querySelector('dialog[open],[role="dialog"]')) return;
       const typing =
         e.target instanceof HTMLElement &&
         !!e.target.closest("input,textarea,select,[contenteditable=true]");
@@ -319,12 +322,12 @@ function Workspace() {
         patch,
       ),
     );
-  const changeProject = (example: boolean) => {
+  const changeProject = async (example: boolean) => {
     if (
       dirty &&
-      !window.confirm(
-        "Remplacer le projet en cours ? Téléchargez-le d’abord pour le conserver.",
-      )
+      !(await confirm(
+        "Les modifications en cours ne sont pas enregistrées. Enregistrez votre fichier avant de changer de cartographie pour les conserver.",
+      ))
     )
       return;
     replace(
@@ -351,6 +354,7 @@ function Workspace() {
   const services = project.nodes.filter((n) => n.kind === "service");
   return (
     <div className="iris-workspace">
+      {confirmationDialog}
       <header className="iris-topbar">
         <div className="iris-brand">
           <Network size={20} />
@@ -388,44 +392,48 @@ function Workspace() {
           >
             <Redo2 size={16} />
           </button>
-          <details className="iris-menu">
-            <summary>
-              <FolderOpen size={16} />
-              <span>Projet</span>
-            </summary>
-            <div>
-              <button onClick={save}>Enregistrer .atlas.json</button>
-              <button onClick={() => input.current?.click()}>
-                Importer un projet
-              </button>
-              <button onClick={() => changeProject(false)}>
-                Nouvelle cartographie
-              </button>
-              <button onClick={() => changeProject(true)}>
-                Charger l’exemple
-              </button>
-            </div>
-          </details>
-          <details className="iris-menu">
-            <summary>
-              <Download size={16} />
-              <span>Export</span>
-            </summary>
-            <div>
-              <button
-                disabled={busy || !project.nodes.length}
-                onClick={() => void image("svg")}
-              >
-                Image SVG
-              </button>
-              <button
-                disabled={busy || !project.nodes.length}
-                onClick={() => void image("png")}
-              >
-                Image PNG
-              </button>
-            </div>
-          </details>
+          <Dropdown
+            className="iris-menu"
+            trigger={
+              <>
+                <FolderOpen size={16} />
+                <span>Projet</span>
+              </>
+            }
+          >
+            <button onClick={save}>Enregistrer .atlas.json</button>
+            <button onClick={() => input.current?.click()}>
+              Importer un projet
+            </button>
+            <button onClick={() => changeProject(false)}>
+              Nouvelle cartographie
+            </button>
+            <button onClick={() => changeProject(true)}>
+              Charger l’exemple
+            </button>
+          </Dropdown>
+          <Dropdown
+            className="iris-menu"
+            trigger={
+              <>
+                <Download size={16} />
+                <span>Export</span>
+              </>
+            }
+          >
+            <button
+              disabled={busy || !project.nodes.length}
+              onClick={() => void image("svg")}
+            >
+              Image SVG
+            </button>
+            <button
+              disabled={busy || !project.nodes.length}
+              onClick={() => void image("png")}
+            >
+              Image PNG
+            </button>
+          </Dropdown>
         </div>
         <input
           ref={input}
@@ -442,7 +450,9 @@ function Workspace() {
               const imported = parseProject(JSON.parse(await file.text()));
               if (
                 dirty &&
-                !window.confirm("Remplacer le projet en cours par ce fichier ?")
+                !(await confirm(
+                  "L’import remplacera votre cartographie et ses modifications non enregistrées. Enregistrez le projet actuel si vous souhaitez le conserver.",
+                ))
               )
                 return;
               replace(imported);
