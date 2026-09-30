@@ -1,5 +1,12 @@
 # État du projet
 
+## Iris — catalogue de stacks, 2026-09-30
+
+- 44 entrées réparties en 11 familles : frontend, frameworks backend, bases de données, cache, messagerie, infrastructure, réseau, sécurité, observabilité, stockage et générique.
+- Ajout de 22 technologies avec logos locaux via Devicon, notamment React, Next.js, Nuxt, Angular, Vue, Svelte, FastAPI, Django, MySQL, MariaDB, MongoDB, SQLite et Redis. 31 entrées possèdent un logo de marque ; sources et licence conservées.
+- Catalogue organisé en sections avec compteurs ; filtre de famille, recherche tolérant accents/points/espaces, état vide explicite. Sélecteur des propriétés regroupé par famille. Les identifiants existants restent compatibles avec les projets enregistrés.
+- `pnpm check` réussi : formatage, lint, types, 37 tests et build. Présence et autonomie des SVG, classement, recherche et compatibilité des anciens fichiers vérifiés par les tests.
+
 ## Iris — première version de cartographie SI, 2026-09-30
 
 - Onglet Outils retiré. Navigation directe Iris / Athena ; accueil accessible par le logo Atlas. Iris enregistré et présenté sur l’accueil.

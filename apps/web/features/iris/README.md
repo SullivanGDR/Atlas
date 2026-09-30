@@ -10,4 +10,4 @@ Déplacement d’une zone par son titre, redimensionnement par ses poignées. Gl
 
 PNG et SVG partagent un rendu vectoriel local, avec les logos embarqués. Le fichier exporté est indépendant du zoom du canvas ; les exports PNG sont plafonnés à 8 192 px par côté et 24 mégapixels. Les noms très longs sont tronqués dans l’image, conservés intégralement dans le JSON. Le routage orthogonal n’évite pas encore tous les obstacles sur des cartes denses.
 
-Catalogue initial : composants génériques et neuf logos issus des éditeurs, attributions dans `public/iris/logos/README.md`. Aucun import depuis les internals d’Athena.
+Catalogue : 44 entrées dans 11 familles, dont 31 logos de marque (neuf issus des éditeurs et 22 distribués par Devicon), attributions dans `public/iris/logos/README.md`. Aucun import depuis les internals d’Athena.

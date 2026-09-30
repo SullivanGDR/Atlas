@@ -28,7 +28,7 @@ import {
   Maximize,
   Link2,
 } from "lucide-react";
-import { catalog } from "./catalog";
+import { catalog, categories, catalogGroups } from "./catalog";
 import {
   arrange,
   descendants,
@@ -658,36 +658,49 @@ function Workspace() {
               onChange={(e) => setCategory(e.target.value)}
             >
               <option value="">Toutes les catégories</option>
-              {[...new Set(catalog.map((s) => s.category))].map((c) => (
+              {categories.map((c) => (
                 <option key={c}>{c}</option>
               ))}
             </select>
             <div className="iris-catalog-list">
-              {catalog
-                .filter(
-                  (s) =>
-                    (!category || s.category === category) &&
-                    `${s.name} ${s.description}`
-                      .toLocaleLowerCase()
-                      .includes(query.toLocaleLowerCase()),
-                )
-                .map((s) => (
-                  <button
-                    key={s.id}
-                    draggable
-                    onDragStart={(e) =>
-                      e.dataTransfer.setData("application/atlas-service", s.id)
-                    }
-                    onClick={() => add(s.id)}
-                  >
-                    <ServiceIcon service={s.id} />
-                    <span>
-                      <strong>{s.name}</strong>
-                      <small>{s.description}</small>
-                    </span>
-                    <Plus size={14} />
-                  </button>
-                ))}
+              {catalogGroups(query, category).map((group) => (
+                <section
+                  key={group.name}
+                  className="iris-catalog-group"
+                  aria-label={group.name}
+                >
+                  <h3>
+                    {group.name}
+                    <span>{group.services.length}</span>
+                  </h3>
+                  {group.services.map((s) => (
+                    <button
+                      key={s.id}
+                      draggable
+                      onDragStart={(e) =>
+                        e.dataTransfer.setData(
+                          "application/atlas-service",
+                          s.id,
+                        )
+                      }
+                      onClick={() => add(s.id)}
+                    >
+                      <ServiceIcon service={s.id} />
+                      <span>
+                        <strong>{s.name}</strong>
+                        <small>{s.description}</small>
+                      </span>
+                      <Plus size={14} />
+                    </button>
+                  ))}
+                </section>
+              ))}
+              {catalogGroups(query, category).length === 0 && (
+                <p className="iris-panel-note">
+                  Aucune technologie trouvée. Essayez un autre nom ou une autre
+                  catégorie.
+                </p>
+              )}
             </div>
             <p className="iris-panel-note">
               Cliquez ou glissez sur le canvas. Les logos des éditeurs sont
@@ -736,10 +749,14 @@ function Workspace() {
                       value={node.service}
                       onChange={(e) => patchNode({ service: e.target.value })}
                     >
-                      {catalog.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.name}
-                        </option>
+                      {catalogGroups().map((group) => (
+                        <optgroup key={group.name} label={group.name}>
+                          {group.services.map((s) => (
+                            <option key={s.id} value={s.id}>
+                              {s.name}
+                            </option>
+                          ))}
+                        </optgroup>
                       ))}
                     </select>
                   </label>

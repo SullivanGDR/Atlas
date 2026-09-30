@@ -1,0 +1,112 @@
+[
+  {
+    "id": "react",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/react/react-original.svg"
+  },
+  {
+    "id": "nextjs",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/nextjs/nextjs-original.svg"
+  },
+  {
+    "id": "nuxtjs",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/nuxtjs/nuxtjs-original.svg"
+  },
+  {
+    "id": "angular",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/angular/angular-original.svg"
+  },
+  {
+    "id": "vuejs",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/vuejs/vuejs-original.svg"
+  },
+  {
+    "id": "svelte",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/svelte/svelte-original.svg"
+  },
+  {
+    "id": "mysql",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/mysql/mysql-original.svg"
+  },
+  {
+    "id": "mariadb",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/mariadb/mariadb-original.svg"
+  },
+  {
+    "id": "mongodb",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/mongodb/mongodb-original.svg"
+  },
+  {
+    "id": "redis",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/redis/redis-original.svg"
+  },
+  {
+    "id": "sqlite",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/sqlite/sqlite-original.svg"
+  },
+  {
+    "id": "fastapi",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/fastapi/fastapi-original.svg"
+  },
+  {
+    "id": "django",
+    "variant": "plain",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/django/django-plain.svg"
+  },
+  {
+    "id": "spring",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/spring/spring-original.svg"
+  },
+  {
+    "id": "nestjs",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/nestjs/nestjs-original.svg"
+  },
+  {
+    "id": "laravel",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/laravel/laravel-original.svg"
+  },
+  {
+    "id": "express",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/express/express-original.svg"
+  },
+  {
+    "id": "nodejs",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/nodejs/nodejs-original.svg"
+  },
+  {
+    "id": "docker",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/docker/docker-original.svg"
+  },
+  {
+    "id": "rabbitmq",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/rabbitmq/rabbitmq-original.svg"
+  },
+  {
+    "id": "apachekafka",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/apachekafka/apachekafka-original.svg"
+  },
+  {
+    "id": "nginx",
+    "variant": "original",
+    "source": "https://raw.githubusercontent.com/devicons/devicon/7330accdbc47e2dc0c19789a48533c4a3c50fe58/icons/nginx/nginx-original.svg"
+  }
+]
