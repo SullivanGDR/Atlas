@@ -33,7 +33,7 @@ describe("image exports", () => {
     expect(await blob.text()).toBe(output.svg);
     expect(blob.type).toContain("image/svg+xml");
   });
-  it("keeps four-table geometry stable with readable fields and direct vertical conceptual links", () => {
+  it("shrinks MCD cards to visible fields while retaining columns and direct vertical links", () => {
     const schema = exampleSchema();
     schema.entities[1]!.attributes.find((a) => a.id === "title")!.type = "UUID";
     schema.entities.push({
@@ -82,7 +82,15 @@ describe("image exports", () => {
     });
     const mcd = renderDiagramImage(schema, "mcd", palette);
     const mld = renderDiagramImage(schema, "mld", palette);
-    expect(mcd.layout).toEqual(mld.layout);
+    expect(mcd.layout.map(({ id, x }) => ({ id, x }))).toEqual(
+      mld.layout.map(({ id, x }) => ({ id, x })),
+    );
+    expect(mcd.layout.find((table) => table.id === "projects")!.height).toBe(
+      mld.layout.find((table) => table.id === "projects")!.height - 84,
+    );
+    expect(mcd.layout.find((table) => table.id === "users")!.height).toBe(
+      mld.layout.find((table) => table.id === "users")!.height,
+    );
     expect(mcd.height).toBe(mld.height);
     const routes = [
       ...mcd.svg.matchAll(/data-relation="[^"]+" d="([^"]+)"/g),

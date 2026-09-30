@@ -319,6 +319,7 @@
   background: var(--canvas-background);
 }
 .schema-table {
+  position: relative;
   width: 360px;
   background: var(--surface);
   border: 1px solid var(--border);

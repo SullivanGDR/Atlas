@@ -37,6 +37,7 @@ import { useEditor } from "../store/editor";
 import { parseProject, serializeProject, type Schema } from "../model/schema";
 import { decodeShare, encodeShare } from "../model/share";
 import { mcdToMld } from "../transforms/mcd-to-mld";
+import { arrangeProjection, conceptualConnections } from "../model/view-layout";
 import { downloadFile, filename } from "../generators/download";
 import { TableNode, type TableFlowNode } from "./table-node";
 import { RelationEditor } from "./relation-editor";
@@ -80,6 +81,10 @@ function Editor() {
   const [explorerOpen, setExplorerOpen] = useState(false);
   const [inspector, setInspector] = useState<Inspector>(null);
   const [view, setView] = useState<View>("editor");
+  const [arrangedViews, setArrangedViews] = useState({
+    mcd: false,
+    mld: false,
+  });
   const [dialog, setDialog] = useState<
     "export" | "image" | "history" | "share" | null
   >(null);
@@ -221,7 +226,14 @@ function Editor() {
       return { schema, error: message(error) };
     }
   }, [schema, view]);
-  const graph = projection.schema;
+  const graph = useMemo(
+    () =>
+      view !== "editor" && arrangedViews[view]
+        ? arrangeProjection(projection.schema)
+        : projection.schema,
+    [projection.schema, view, arrangedViews],
+  );
+  const conceptual = useMemo(() => conceptualConnections(graph), [graph]);
   const openTable = useCallback((id: string, column?: string) => {
     setInspector({ kind: "table", id, column });
     selectTable(id);
@@ -241,6 +253,7 @@ function Editor() {
           entity,
           readOnly: locked,
           conceptual: view === "mcd",
+          conceptualPorts: conceptual.ports[entity.id],
           onEdit: openTable,
           foreignColumns:
             view === "mcd"
@@ -258,7 +271,7 @@ function Editor() {
                   ),
         },
       })),
-    [graph, locked, openTable, selectedTable, view],
+    [graph, locked, openTable, selectedTable, view, conceptual],
   );
   const edges = useMemo<Edge[]>(
     () =>
@@ -267,9 +280,13 @@ function Editor() {
         source: r.sourceEntityId,
         target: r.targetEntityId,
         sourceHandle:
-          view === "mcd" ? "entity:right" : r.sourceColumnId + ":right",
+          view === "mcd"
+            ? conceptual.handles[r.id]?.source
+            : r.sourceColumnId + ":right",
         targetHandle:
-          view === "mcd" ? "entity:left" : r.targetColumnId + ":left",
+          view === "mcd"
+            ? conceptual.handles[r.id]?.target
+            : r.targetColumnId + ":left",
         type: "smoothstep",
         label:
           (r.name ? r.name + " · " : "") + r.cardinality.replace("-", " : "),
@@ -291,7 +308,7 @@ function Editor() {
         labelBgPadding: [8, 5],
         labelBgBorderRadius: 4,
       })),
-    [graph.relations, locked, selectedRelation, view],
+    [graph.relations, locked, selectedRelation, view, conceptual],
   );
   const connect = (c: Connection, replaceId?: string) => {
     if (!c.sourceHandle || !c.targetHandle || locked) return;
@@ -527,11 +544,12 @@ function Editor() {
         </button>
         <button
           className="icon-button arrange-button"
-          disabled={locked}
+          disabled={!graph.entities.length || (view === "editor" && readOnly)}
           title="Organiser les tables"
           aria-label="Organiser les tables"
           onClick={() => {
-            editor.arrange();
+            if (view === "editor") editor.arrange();
+            else setArrangedViews((current) => ({ ...current, [view]: true }));
             setTimeout(
               () => void fitView({ padding: 0.18, maxZoom: 1, duration: 250 }),
               80,

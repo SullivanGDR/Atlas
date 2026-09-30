@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> 2026-09-30 — Organisation disponible dans les projections MCD/MLD sans modifier l’Éditeur ; points de liaison MCD distincts dans le canvas. Export MCD compacté aux attributs visibles, sans réserver la hauteur des FK masquées. `pnpm check` réussi (29 tests), organisation MCD vérifiée en navigateur.
+
 > 2026-09-30 — Lisibilité MCD : champs agrandis, aperçu à la largeur avec option 100 %, cardinalités aux extrémités et liaisons verticales directes. Rendu de quatre entités inspecté.
 
 > 2026-09-30 — Finitions des exports : barre compacte et boutons neutres, géométrie MCD/MLD commune, liaisons MCD à points distincts et angles arrondis, légende ID/PK/FK espacée. Rendus à trois tables inspectés ; `pnpm check` réussi (27 tests).

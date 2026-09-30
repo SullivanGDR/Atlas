@@ -65,3 +65,9 @@
 - Suppression de la contrainte qui réduisait tout le document à 340 px de hauteur dans l’aperçu. Ajustement à la largeur par défaut, zoom 100 % et défilement sans modifier le fichier exporté.
 - Champs à 17 px, clés à 13 px et titres de tables à 20 px. Les retours à la ligne et les hauteurs partagées sont recalculés.
 - En MCD, cardinalités 1/N portées aux extrémités plutôt que dans des pastilles centrales ; liaison directe entre bords haut/bas de deux entités verticalement voisines, sans traverser une entité intermédiaire.
+
+## 2026-09-30 — Organisation des projections et compaction MCD
+
+- La nouvelle préférence remplace la réserve de hauteur commune aux exports MCD/MLD : chaque carte MCD utilise uniquement ses champs visibles. Les cartes sont alignées en haut des rangées.
+- Organiser les tables agit sur une projection locale en MCD/MLD, sans modifier les données, positions ou historique du schéma éditable. L’organisation de l’Éditeur conserve son comportement.
+- Le canvas MCD utilise une poignée par extrémité de relation, répartie sur le corps de la carte. Les poignées sont recalculées quand leurs côtés ou offsets changent ; les relations ne convergent plus toutes sur l’en-tête.

@@ -122,18 +122,6 @@ export function renderDiagramImage(
   const graph = projectDiagram(schema, model);
   if (!graph.entities.length)
     throw new Error("Ajoutez une table avant d’exporter une image.");
-  // Shared geometry keeps existing entities in place when switching MCD/MLD.
-  let reference = model === "mld" ? graph : schema;
-  if (model === "mcd") {
-    try {
-      reference = mcdToMld(schema);
-    } catch {
-      /* Conceptual export stays available if logical validation fails. */
-    }
-  }
-  const referenceEntities = new Map(
-    reference.entities.map((entity) => [entity.id, entity]),
-  );
   const columnCount = Math.min(4, Math.ceil(Math.sqrt(schema.entities.length)));
   const boxWidth = 380,
     gapX = 220,
@@ -154,17 +142,7 @@ export function renderDiagramImage(
       x: 0,
       y: 0,
       width: boxWidth,
-      height: Math.max(
-        y + 14,
-        headerHeight +
-          26 +
-          (
-            referenceEntities.get(entity.id)?.attributes ?? entity.attributes
-          ).reduce(
-            (sum, a) => sum + Math.max(42, lines(a.name, 18).length * 23 + 16),
-            0,
-          ),
-      ),
+      height: y + 14,
       headerHeight,
       rows,
     };
@@ -175,7 +153,7 @@ export function renderDiagramImage(
     const rowHeight = Math.max(...row.map((b) => b.height));
     row.forEach((box, col) => {
       box.x = col * (boxWidth + gapX);
-      box.y = diagramHeight + (rowHeight - box.height) / 2;
+      box.y = diagramHeight;
     });
     diagramHeight += rowHeight + (i + columnCount < boxes.length ? gapY : 0);
   }

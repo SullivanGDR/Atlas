@@ -17,19 +17,28 @@ import {
 } from "lucide-react";
 import { columnTypes, type Entity } from "../model/schema";
 import { useEditor } from "../store/editor";
+import type { ConceptualPort } from "../model/view-layout";
 export type TableFlowNode = Node<
   {
     entity: Entity;
     foreignColumns: string[];
     readOnly?: boolean;
     conceptual?: boolean;
+    conceptualPorts?: ConceptualPort[];
     onEdit?: (tableId: string, columnId?: string) => void;
   },
   "table"
 >;
 
 export function TableNode({ id, data, selected }: NodeProps<TableFlowNode>) {
-  const { entity, foreignColumns, readOnly, conceptual, onEdit } = data;
+  const {
+    entity,
+    foreignColumns,
+    readOnly,
+    conceptual,
+    conceptualPorts,
+    onEdit,
+  } = data;
   const update = useUpdateNodeInternals();
   const editor = useEditor();
   const shape = entity.attributes
@@ -37,26 +46,41 @@ export function TableNode({ id, data, selected }: NodeProps<TableFlowNode>) {
       (a) => a.id + ":" + a.isPrimaryKey + ":" + foreignColumns.includes(a.id),
     )
     .join("|");
+  const portShape = conceptualPorts
+    ?.map((port) => `${port.id}:${port.side}:${port.offset}`)
+    .join("|");
   useEffect(() => {
     update(id);
-  }, [id, shape, update, conceptual]);
+  }, [id, shape, update, conceptual, portShape]);
   return (
     <section
       className={"schema-table" + (selected ? " is-selected" : "")}
       aria-label={"Table " + (entity.name || "sans nom")}
     >
+      {conceptual &&
+        conceptualPorts?.map((port) => (
+          <Handle
+            key={port.id}
+            type="source"
+            position={
+              {
+                left: Position.Left,
+                right: Position.Right,
+                top: Position.Top,
+                bottom: Position.Bottom,
+              }[port.side]
+            }
+            id={port.id}
+            style={
+              port.side === "top" || port.side === "bottom"
+                ? { left: `${port.offset}%` }
+                : { top: `${port.offset}%` }
+            }
+            isConnectable={false}
+            className="entity-port"
+          />
+        ))}
       <header className="table-drag">
-        {conceptual &&
-          [Position.Left, Position.Right].map((side) => (
-            <Handle
-              key={side}
-              type="source"
-              position={side}
-              id={"entity:" + side}
-              isConnectable={false}
-              className="entity-port"
-            />
-          ))}
         {readOnly ? (
           <Table2 size={15} />
         ) : (
