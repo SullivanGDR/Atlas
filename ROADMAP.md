@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> 2026-09-30 — Accueil retravaillé : aperçu Athena vectoriel avec relation alignée sur les clés, composition plus sobre et polices IBM Plex auto-hébergées. Palette monochrome conservée. Contrôle visuel local sur largeurs portable et mobile ; `pnpm check` réussi.
+
 > Athena, tranche complète du 2026-09-05 : contraintes, relations réparées, MCD/MLD, exports FastAPI/SQL/PNG/SVG, import SQL, historique, versions et partage par URL sans stockage serveur implémentés. Voir STATUS.md pour les limites et validations effectives. Les noms des outils suivent la mythologie grecque.
 
 > Priorité utilisateur — Athena : aucun compte ni base de données du site. Projets portables par import/export .atlas.json ; état navigateur en mémoire. Les étapes Prisma/Neon/Auth.js et sauvegarde distante ci-dessous sont abandonnées. Validation locale ciblée, sans vérification GitHub systématique.

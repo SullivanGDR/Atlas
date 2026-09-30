@@ -1,5 +1,12 @@
 # État du projet
 
+## Accueil et identité — 2026-09-30
+
+- Aperçu Athena redessiné en SVG responsive : le lien 1:N rejoint précisément `users.id` et `projects.owner_id`, sans coordonnées CSS dépendantes de la taille de la carte.
+- Accueil simplifié : hiérarchie éditoriale, détails utiles à la place des pastilles, navigation active soulignée. Palette gris clair/sombre conservée.
+- Typographie IBM Plex Sans et IBM Plex Mono auto-hébergée ; aucun chargement de police depuis un service tiers au runtime.
+- Vérifié en navigateur local à 1280 px et 390 px, en thèmes sombre et clair. `pnpm check` réussi : formatage, lint, types, 22 tests métier et build Next.js.
+
 ## Athena — éditeur et génération de backend
 
 - Route : /tools/athena ; anciennes routes redirigées. Navigation alimentée par le registre d’outils.
