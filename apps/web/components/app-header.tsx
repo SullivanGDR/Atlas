@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Braces, Network } from "lucide-react";
+import { Braces, Network, ClipboardList } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle, cn } from "@atlas/ui";
 import { AtlasLogo } from "@/components/atlas-logo";
@@ -13,7 +13,12 @@ const destinations = [
     .map((tool) => ({
       href: tool.href,
       label: tool.name,
-      Icon: tool.id === "iris" ? Network : Braces,
+      Icon:
+        tool.id === "themis"
+          ? ClipboardList
+          : tool.id === "iris"
+            ? Network
+            : Braces,
     })),
 ] as const;
 

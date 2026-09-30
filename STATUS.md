@@ -1,5 +1,17 @@
 # État du projet
 
+## Thémis — cahier des charges, 2026-09-30
+
+- Nouvel outil autonome `/tools/themis`, présent sur l’accueil et dans la navigation. Interface neutre, plan escamotable, rédaction, exigences, relecture et aperçu.
+- Quatre trames (projet général, application web, site vitrine, infrastructure SI), quinze rubriques guidées, sections personnalisées, ordre et inclusion configurables. Questions et exemples séparés du contenu exporté.
+- Exigences numérotées durablement, priorités, types, responsable, justification, statut et critères de recette. Relecture déterministe des oublis, marqueurs à compléter et formulations vagues, sans certification automatique.
+- Historique de session, import/export `.atlas.json` versionné et validé. Aucun compte, base de données ou transfert du contenu à un service tiers.
+- Export Word éditable : garde facultative, sommaire cliquable, titres et listes natifs, tableaux et pagination, Letter ou A4. Aperçu web structurel ; pas de pagination simulée.
+- Google Docs : téléchargement du DOCX accompagné des instructions d’import/conversion. Pas de création directe dans Google Drive ; conversion Google non testée, pagination susceptible de varier. Sommaire exporté statique et sans numéros de page.
+- Vérifié en navigateur : rédaction, ajout d’exigence, aide aux critères de recette, relecture et téléchargement Word effectif ; aucune erreur console relevée. Document représentatif ouvert et rendu par Microsoft Word, cinq pages inspectées visuellement ; structure XML et absence de décorations incompatibles du titre contrôlées.
+- Tests métier : aller-retour JSON, validation, exclusions, historique, relecture, structure DOCX, caractères XML et document long.
+- `pnpm check` réussi : formatage, lint, types, 44 tests et build Next.js.
+
 ## Menus et confirmations — 2026-09-30
 
 - Menus Projet et Export d’Iris et menu Projet d’Athena : composant partagé, fermeture au clic extérieur, au départ du focus, avec Échap et après une action. Un seul menu ouvert à la fois.

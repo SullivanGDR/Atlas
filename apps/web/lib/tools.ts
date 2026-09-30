@@ -1,6 +1,14 @@
 import type { ToolDefinition } from "@atlas/shared";
 export const tools = [
   {
+    id: "themis",
+    name: "Thémis",
+    description:
+      "Cadrez vos projets. Rédigez un cahier des charges structuré, des premières intentions aux critères de recette.",
+    href: "/tools/themis",
+    status: "available",
+  },
+  {
     id: "iris",
     name: "Iris",
     description:

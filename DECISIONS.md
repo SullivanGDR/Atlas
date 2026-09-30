@@ -1,5 +1,13 @@
 # Décisions techniques
 
+## 2026-09-30 — Thémis, rédaction des cahiers des charges
+
+- Thémis, associée aux règles communes, donne son nom à l’outil. Module autonome `features/themis`, quatre trames adaptées aux projets numériques ; sources de conception consignées dans son README.
+- Contenu saisi explicitement par l’utilisateur, questions et exemples distincts du livrable. Relecture locale déterministe des champs manquants et ambiguïtés, sans génération par IA ni certification de conformité.
+- Format portable `atlas-themis` version 1 ; projets en mémoire, exigences à identifiants stables et historique local. Aucun compte ni stockage serveur.
+- DOCX OOXML natif via la dépendance existante `fflate`, avec styles et tableaux éditables plutôt qu’une capture ou du HTML incorporé. Sommaire cliquable statique, options de garde et de papier.
+- Google Docs passe par l’import du DOCX et une procédure visible dans l’outil. Aucun OAuth ou transfert implicite ; la conversion peut modifier la pagination. Le JSON reste le format de reprise dans Thémis.
+
 ## 2026-09-05 — Initialisation
 
 - Next.js 16.3.4 et React 19.2.8 : versions stables disponibles lors de l’initialisation, compatibles avec le choix Next.js 14+ de la roadmap. Le détail « Next.js 14 » de la checklist est interprété comme la version minimale, pas un verrou sur une ancienne majeure.

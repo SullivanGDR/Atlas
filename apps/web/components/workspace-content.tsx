@@ -2,7 +2,9 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 export function WorkspaceContent({ children }: { children: ReactNode }) {
-  const isCanvas = ["/tools/athena", "/tools/iris"].includes(usePathname());
+  const isCanvas = ["/tools/athena", "/tools/iris", "/tools/themis"].includes(
+    usePathname(),
+  );
   return (
     <main
       id="main"

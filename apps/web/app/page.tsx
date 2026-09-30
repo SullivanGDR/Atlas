@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { ArrowUpRight, Braces, FileJson2, Network } from "lucide-react";
+import {
+  ArrowUpRight,
+  Braces,
+  FileJson2,
+  Network,
+  ClipboardList,
+} from "lucide-react";
 import { tools } from "@/lib/tools";
 
 function AthenaPreview() {
@@ -203,6 +209,89 @@ function IrisPreview() {
     </div>
   );
 }
+function ThemisPreview() {
+  return (
+    <div className="athena-preview" aria-hidden="true">
+      <div className="preview-toolbar">
+        <span>thémis / cahier des charges</span>
+        <span>Besoin · Exigences · Recette</span>
+      </div>
+      <svg viewBox="0 0 600 340" role="presentation" focusable="false">
+        <rect
+          x="110"
+          y="25"
+          width="380"
+          height="290"
+          rx="5"
+          className="preview-table"
+        />
+        <text x="140" y="61" className="preview-type">
+          CAHIER DES CHARGES
+        </text>
+        <text x="140" y="96" className="preview-table-name">
+          Un cadre clair pour construire.
+        </text>
+        <path d="M140 118H458" className="preview-divider" />
+        <text x="140" y="149" className="preview-field">
+          01 Contexte et objectifs
+        </text>
+        <text x="140" y="183" className="preview-field">
+          02 Périmètre et exigences
+        </text>
+        <rect
+          x="140"
+          y="205"
+          width="318"
+          height="64"
+          rx="4"
+          className="preview-table-head"
+        />
+        <text x="153" y="229" className="preview-type">
+          REQ-001 · INDISPENSABLE
+        </text>
+        <text x="153" y="251" className="preview-field">
+          Un résultat précis et vérifiable.
+        </text>
+        <text x="458" y="293" textAnchor="end" className="preview-type">
+          Version 0.1 · En relecture
+        </text>
+      </svg>
+      <div className="preview-status">
+        <span>RÉDACTION GUIDÉE</span>
+        <span>WORD / GOOGLE DOCS</span>
+      </div>
+    </div>
+  );
+}
+const toolPresentation = {
+  themis: {
+    category: "CAHIER DES CHARGES",
+    Icon: ClipboardList,
+    details: [
+      "Trames guidées, exigences et critères de recette",
+      "Relecture et export Word compatible Google Docs",
+    ],
+    Preview: ThemisPreview,
+  },
+  iris: {
+    category: "CARTOGRAPHIE DU SI",
+    Icon: Network,
+    details: [
+      "Services, logos et zones imbriquées",
+      "Flux documentés et exports PNG / SVG",
+    ],
+    Preview: IrisPreview,
+  },
+  athena: {
+    category: "CONCEPTION DE DONNÉES",
+    Icon: Braces,
+    details: [
+      "Modélisation visuelle MCD / MLD",
+      "Export SQL, image et projet FastAPI",
+    ],
+    Preview: AthenaPreview,
+  },
+};
 export default function Home() {
   return (
     <div className="atlas-home">
@@ -216,60 +305,48 @@ export default function Home() {
           </h1>
         </div>
         <p className="home-intro">
-          Du schéma de données à l’architecture de votre SI. Concevez avec
-          Athena, prenez de la hauteur avec Iris.
+          Cadrez vos besoins avec Thémis, concevez vos données avec Athena et
+          cartographiez votre SI avec Iris.
         </p>
       </section>
 
       <div className="home-section-label">
         <h2>Les outils</h2>
-        <span>02 / DISPONIBLES</span>
+        <span>{String(tools.length).padStart(2, "0")} / DISPONIBLES</span>
       </div>
-      {tools.map((tool) => (
-        <section
-          className="featured-tool"
-          key={tool.id}
-          aria-labelledby={`${tool.id}-title`}
-        >
-          <div className="featured-copy">
-            <p className="featured-category">
-              {tool.id === "iris"
-                ? "CARTOGRAPHIE DU SI"
-                : "CONCEPTION DE DONNÉES"}
-            </p>
-            <h3 id={`${tool.id}-title`}>
-              {tool.id === "iris" ? (
-                <Network size={28} strokeWidth={1.7} aria-hidden="true" />
-              ) : (
-                <Braces size={28} strokeWidth={1.7} aria-hidden="true" />
-              )}
-              {tool.name}
-            </h3>
-            <p className="featured-description">{tool.description}</p>
-            <ul className="featured-details">
-              <li>
-                {tool.id === "iris"
-                  ? "Services, logos officiels et zones imbriquées"
-                  : "Modélisation visuelle MCD / MLD"}
-              </li>
-              <li>
-                {tool.id === "iris"
-                  ? "Flux documentés et exports PNG / SVG"
-                  : "Export SQL, image et projet FastAPI"}
-              </li>
-            </ul>
-            <Link className="featured-link" href={tool.href}>
-              Ouvrir {tool.name}
-              <ArrowUpRight size={17} aria-hidden="true" />
-            </Link>
-            <p className="file-promise">
-              <FileJson2 size={15} aria-hidden="true" />
-              Projets enregistrés dans vos fichiers .atlas.json
-            </p>
-          </div>
-          {tool.id === "iris" ? <IrisPreview /> : <AthenaPreview />}
-        </section>
-      ))}
+      {tools.map((tool) => {
+        const { category, Icon, details, Preview } = toolPresentation[tool.id];
+        return (
+          <section
+            className="featured-tool"
+            key={tool.id}
+            aria-labelledby={`${tool.id}-title`}
+          >
+            <div className="featured-copy">
+              <p className="featured-category">{category}</p>
+              <h3 id={`${tool.id}-title`}>
+                <Icon size={28} strokeWidth={1.7} aria-hidden="true" />
+                {tool.name}
+              </h3>
+              <p className="featured-description">{tool.description}</p>
+              <ul className="featured-details">
+                {details.map((detail) => (
+                  <li key={detail}>{detail}</li>
+                ))}
+              </ul>
+              <Link className="featured-link" href={tool.href}>
+                Ouvrir {tool.name}
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </Link>
+              <p className="file-promise">
+                <FileJson2 size={15} aria-hidden="true" />
+                Projets enregistrés dans vos fichiers .atlas.json
+              </p>
+            </div>
+            <Preview />
+          </section>
+        );
+      })}
       <p className="home-note">
         Atlas s’enrichira d’autres outils au fil du temps.
       </p>
