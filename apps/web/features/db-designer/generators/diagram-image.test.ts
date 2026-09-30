@@ -33,7 +33,7 @@ describe("image exports", () => {
     expect(await blob.text()).toBe(output.svg);
     expect(blob.type).toContain("image/svg+xml");
   });
-  it("keeps three-table geometry stable and separates conceptual relation ports and legend entries", () => {
+  it("keeps four-table geometry stable with readable fields and direct vertical conceptual links", () => {
     const schema = exampleSchema();
     schema.entities[1]!.attributes.find((a) => a.id === "title")!.type = "UUID";
     schema.entities.push({
@@ -58,16 +58,49 @@ describe("image exports", () => {
       targetColumnId: "title",
       cardinality: "1-N",
     });
+    schema.entities.push({
+      id: "fourth",
+      name: "table_2",
+      position: { x: 600, y: 400 },
+      attributes: [
+        {
+          id: "fourth-id",
+          name: "id",
+          type: "UUID",
+          isPrimaryKey: true,
+          nullable: false,
+        },
+      ],
+    });
+    schema.relations.push({
+      id: "project-fourth",
+      sourceEntityId: "projects",
+      sourceColumnId: "project-id",
+      targetEntityId: "fourth",
+      targetColumnId: "fourth-id",
+      cardinality: "1-N",
+    });
     const mcd = renderDiagramImage(schema, "mcd", palette);
     const mld = renderDiagramImage(schema, "mld", palette);
     expect(mcd.layout).toEqual(mld.layout);
-    expect(mcd.width).toBe(mld.width);
     expect(mcd.height).toBe(mld.height);
     const routes = [
       ...mcd.svg.matchAll(/data-relation="[^"]+" d="([^"]+)"/g),
     ].map((match) => match[1]!);
-    expect(routes).toHaveLength(2);
-    expect(routes.every((route) => route.includes(" Q"))).toBe(true);
+    expect(routes).toHaveLength(3);
+    expect(routes.slice(0, 2).every((route) => route.includes(" Q"))).toBe(
+      true,
+    );
+    const vertical = routes[2]!.match(
+      /^M([\d.]+) ([\d.]+) L([\d.]+) ([\d.]+)$/,
+    )!;
+    expect(vertical).not.toBeNull();
+    expect(vertical[1]).toBe(vertical[3]);
+    expect(Number(vertical[4])).toBeGreaterThan(Number(vertical[2]));
+    expect(mcd.svg).not.toContain(">1 : N</text>");
+    expect(mcd.svg).toContain(
+      'font-size="17" font-family="monospace">email</text>',
+    );
     expect(routes[0]!.split(" L").at(-1)).not.toBe(
       routes[1]!.split(" L").at(-1),
     );

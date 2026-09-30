@@ -140,11 +140,11 @@ export function renderDiagramImage(
     gapY = 130,
     margin = 64;
   const boxes: Box[] = graph.entities.map((entity) => {
-    const headerHeight = 30 + lines(entity.name, 20).length * 22;
+    const headerHeight = 30 + lines(entity.name, 17).length * 22;
     let y = headerHeight + 12;
     const rows = entity.attributes.map((a) => {
-      const name = lines(a.name, 21);
-      const height = Math.max(34, name.length * 18 + 14);
+      const name = lines(a.name, 18);
+      const height = Math.max(42, name.length * 23 + 16);
       const row = { a, y, height, name };
       y += height;
       return row;
@@ -161,7 +161,7 @@ export function renderDiagramImage(
           (
             referenceEntities.get(entity.id)?.attributes ?? entity.attributes
           ).reduce(
-            (sum, a) => sum + Math.max(34, lines(a.name, 21).length * 18 + 14),
+            (sum, a) => sum + Math.max(42, lines(a.name, 18).length * 23 + 16),
             0,
           ),
       ),
@@ -243,6 +243,31 @@ export function renderDiagramImage(
         { x: source.x + boxWidth / 2, y: source.y },
       ];
       ly = source.y - 38;
+    } else if (
+      sameColumn &&
+      model === "mcd" &&
+      !boxes.some(
+        (box) =>
+          box !== source &&
+          box !== target &&
+          box.x === source.x &&
+          box.y > Math.min(source.y, target.y) &&
+          box.y < Math.max(source.y, target.y),
+      )
+    ) {
+      // Facing borders avoid the unnecessary loop around vertically adjacent entities.
+      const downward = target.y > source.y;
+      const start = {
+        x: source.x + boxWidth / 2,
+        y: source.y + (downward ? source.height : 0),
+      };
+      const end = {
+        x: target.x + boxWidth / 2,
+        y: target.y + (downward ? 0 : target.height),
+      };
+      route = [start, end];
+      lx = start.x;
+      ly = (start.y + end.y) / 2;
     } else if (sameColumn) {
       lx = sx + 48 + lane;
       ly = (sy + ty) / 2;
@@ -270,9 +295,33 @@ export function renderDiagramImage(
     maxX = Math.max(maxX, lx + 30);
     minY = Math.min(minY, ly - 13);
     maxY = Math.max(maxY, ly + 13);
-    relationLabels.push(
-      `<rect x="${lx - 29}" y="${ly - 12}" width="58" height="24" rx="4" fill="${palette.paper}" stroke="${palette.line}"/>${text(lx, ly + 4, label, 11, 'text-anchor="middle"')}`,
-    );
+    if (model === "mcd") {
+      const cardinalities = r.cardinality.split("-");
+      const endpoint = (point: Point, neighbor: Point, value: string) => {
+        const horizontal = point.y === neighbor.y;
+        const x = horizontal
+          ? point.x + Math.sign(neighbor.x - point.x) * 22
+          : point.x + 14;
+        const y = horizontal
+          ? point.y - 10
+          : point.y + Math.sign(neighbor.y - point.y) * 22 + 5;
+        return text(
+          x,
+          y,
+          value,
+          15,
+          `font-weight="600" text-anchor="${horizontal ? "middle" : "start"}" paint-order="stroke" stroke="${palette.paper}" stroke-width="5" stroke-linejoin="round"`,
+        );
+      };
+      relationLabels.push(
+        endpoint(route[0]!, route[1]!, cardinalities[0]!),
+        endpoint(route.at(-1)!, route.at(-2)!, cardinalities[1]!),
+      );
+    } else {
+      relationLabels.push(
+        `<rect x="${lx - 29}" y="${ly - 12}" width="58" height="24" rx="4" fill="${palette.paper}" stroke="${palette.line}"/>${text(lx, ly + 4, label, 13, 'text-anchor="middle"')}`,
+      );
+    }
     if (r.name?.trim()) {
       const name = lines(r.name, 18);
       minX = Math.min(minX, lx - 76);
@@ -315,8 +364,8 @@ export function renderDiagramImage(
       `<rect width="${boxWidth}" height="${box.height}" rx="6" fill="${palette.paper}" stroke="${palette.line}"/>`,
       `<path d="M6 0 H${boxWidth - 6} Q${boxWidth} 0 ${boxWidth} 6 V${box.headerHeight} H0 V6 Q0 0 6 0 Z" fill="${palette.header}"/>`,
       `<path d="M0 ${box.headerHeight} H${boxWidth}" stroke="${palette.line}"/>`,
-      ...lines(box.entity.name, 20).map((line, i) =>
-        text(20, 31 + i * 22, line, 17, 'font-weight="600"'),
+      ...lines(box.entity.name, 17).map((line, i) =>
+        text(20, 31 + i * 22, line, 20, 'font-weight="600"'),
       ),
     ];
     for (const row of box.rows) {
@@ -326,19 +375,19 @@ export function renderDiagramImage(
       ]
         .filter(Boolean)
         .join("/");
-      content.push(text(16, row.y + 22, key, 10, muted));
+      content.push(text(16, row.y + 27, key, 13, 'font-weight="600"'));
       row.name.forEach((line, i) =>
         content.push(
-          text(61, row.y + 22 + i * 18, line, 13, 'font-family="monospace"'),
+          text(61, row.y + 27 + i * 23, line, 17, 'font-family="monospace"'),
         ),
       );
       if (model !== "mcd")
         content.push(
           text(
             boxWidth - 16,
-            row.y + 22,
+            row.y + 27,
             typeLabel(row.a),
-            11,
+            13,
             `text-anchor="end" ${muted}`,
           ),
         );

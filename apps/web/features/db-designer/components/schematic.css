@@ -70,20 +70,33 @@
   color: var(--muted);
   font-size: 12px;
   margin-bottom: 8px;
+  align-items: center;
+  gap: 12px;
+}
+.image-preview-zoom {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+.image-preview-zoom button {
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.image-preview-zoom button[aria-pressed="true"] {
+  background: var(--muted-surface);
+  color: var(--foreground);
 }
 .image-preview-sheet {
   background: var(--export-paper);
   border: 1px solid var(--border);
   border-radius: 6px;
   overflow: auto;
-  max-height: 360px;
+  max-height: min(52dvh, 540px);
 }
 .image-preview img {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 340px;
-  object-fit: contain;
 }
 .image-export-footer {
   display: flex;

@@ -19,6 +19,7 @@ export function ImageExportPanel({ schema }: { schema: Schema }) {
   const [format, setFormat] = useState<ImageFormat>("png");
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
+  const [actualSize, setActualSize] = useState(false);
   const [palette] = useState<ImagePalette>(() => {
     const style = getComputedStyle(document.documentElement);
     const color = (name: string) =>
@@ -140,6 +141,26 @@ export function ImageExportPanel({ schema }: { schema: Schema }) {
           <div className="image-preview">
             <div className="image-preview-caption">
               <span>Aperçu du document</span>
+              <div
+                className="image-preview-zoom"
+                role="group"
+                aria-label="Zoom de l’aperçu"
+              >
+                <button
+                  type="button"
+                  aria-pressed={!actualSize}
+                  onClick={() => setActualSize(false)}
+                >
+                  Largeur
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={actualSize}
+                  onClick={() => setActualSize(true)}
+                >
+                  100 %
+                </button>
+              </div>
               <span>
                 {result.document.tableCount}{" "}
                 {model === "mcd" ? "entités" : "tables"}
@@ -149,6 +170,11 @@ export function ImageExportPanel({ schema }: { schema: Schema }) {
               {/* Native SVG data URI: no external source, optimization or network request. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
+                style={
+                  actualSize
+                    ? { width: result.document.width, maxWidth: "none" }
+                    : undefined
+                }
                 src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(result.document.svg)}`}
                 width={result.document.width}
                 height={result.document.height}

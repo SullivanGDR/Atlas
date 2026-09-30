@@ -7,9 +7,10 @@
 - Fond gris perle, texte gris foncé, titre centré « MODÈLE — Nom du projet », tables réorganisées et centrées, signature « Made on Atlas by Athena » en bas à droite. Noms longs répartis sur plusieurs lignes ; bornes étendues aux relations et à leurs libellés.
 - Barre principale compacte (50 px), boutons Export/Générer de 32 px sans aplat blanc. Options et bouton de téléchargement allégés.
 - Géométrie commune MCD/MLD pour les entités existantes, points de connexion MCD répartis par côté, tracés arrondis et légende avec repères ID/PK/FK positionnés séparément. Les tables de jointure supplémentaires restent propres au MLD.
+- Lisibilité : noms de champs à 17 px, titres de tables à 20 px, lignes espacées. Aperçu ajusté à la largeur sans réduction forcée à 340 px de haut, défilement et bouton 100 %. En MCD, cardinalités aux extrémités sans pastille centrale ; liaisons verticales directes entre voisins alignés.
 - MCD sans clés étrangères ni types physiques ; MLD avec clés étrangères et tables de jointure ; ERD fidèle aux tables du schéma de travail. Aucune modification du projet lors de l’export.
-- `pnpm check` réussi : formatage, lint, types, 27 tests et build. Tests dédiés : échappement XML, types réels, projections, centrage des auto-relations, indépendance des positions, table de 80 colonnes, projet vide, stabilité MCD/MLD et séparation des liaisons sur trois tables.
-- Barre compacte inspectée en navigateur sombre ; exports MCD/MLD à trois tables rendus en PNG et inspectés, avec positions identiques et légende espacée. Génération PNG et SVG arrivée à son état de succès lors de la tranche précédente. L’outil navigateur n’a pas retourné les fichiers téléchargés : leur réception sur disque n’a pas été confirmée dans cette tranche.
+- `pnpm check` réussi : formatage, lint, types, 27 tests et build. Tests dédiés : échappement XML, types réels, projections, centrage des auto-relations, indépendance des positions, table de 80 colonnes, projet vide, stabilité MCD/MLD et séparation des liaisons, raccord vertical direct et taille des champs sur quatre tables.
+- Barre compacte inspectée en navigateur sombre ; exports MCD/MLD à quatre tables rendus en PNG et inspectés, avec positions identiques et légende espacée. Génération PNG et SVG arrivée à son état de succès lors de la tranche précédente. L’outil navigateur n’a pas retourné les fichiers téléchargés : leur réception sur disque n’a pas été confirmée dans cette tranche.
 
 ## Accueil et identité — 2026-09-30
 

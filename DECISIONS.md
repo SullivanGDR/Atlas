@@ -59,3 +59,9 @@
 - La géométrie réserve les hauteurs du modèle logique pour les entités présentes dans les deux vues. Les FK restent absentes du contenu MCD, sans déplacer ni rétrécir les tables ; les jointures ajoutées apparaissent uniquement en MLD.
 - Les liaisons conceptuelles disposent de points distincts par côté, triés selon la position des entités voisines. Courbes quadratiques aux angles des tracés orthogonaux.
 - Chaque entrée de légende est un groupe SVG positionné séparément : aucune dépendance aux espaces multiples, que SVG fusionne par défaut.
+
+## 2026-09-30 — Lisibilité du MCD
+
+- Suppression de la contrainte qui réduisait tout le document à 340 px de hauteur dans l’aperçu. Ajustement à la largeur par défaut, zoom 100 % et défilement sans modifier le fichier exporté.
+- Champs à 17 px, clés à 13 px et titres de tables à 20 px. Les retours à la ligne et les hauteurs partagées sont recalculés.
+- En MCD, cardinalités 1/N portées aux extrémités plutôt que dans des pastilles centrales ; liaison directe entre bords haut/bas de deux entités verticalement voisines, sans traverser une entité intermédiaire.
