@@ -1,5 +1,11 @@
 # État du projet
 
+## Export d’images Athena — 2026-09-30
+
+- PNG et SVG cadrent désormais toutes les tables grâce aux bornes mesurées par React Flow, y compris quand elles dépassent la zone visible du canvas.
+- Les types des colonnes sont rendus comme texte dans l’image exportée : les listes déroulantes ne retombent plus sur leur première option (`UUID`).
+- Vérification en navigateur avec le schéma d’exemple à deux tables reliées : PNG inspecté, SVG téléchargé et affiché, types `VARCHAR` et `TIMESTAMP` contrôlés. `pnpm check` réussi (formatage, lint, types, 22 tests, build).
+
 ## Accueil et identité — 2026-09-30
 
 - Aperçu Athena redessiné en SVG responsive : le lien 1:N rejoint précisément `users.id` et `projects.owner_id`, sans coordonnées CSS dépendantes de la taille de la carte.
@@ -42,6 +48,6 @@ L’export ZIP est calculé dans une route Next.js sans conservation du projet. 
 - Génération avec noms snake_case non réservés, défauts SQL littéraux et fonctions usuelles autorisées. Le MLD est un aperçu ; les changements se font dans l’Éditeur.
 - Le lien contient les données du schéma et représente une copie figée. Pour les grands projets, partager le JSON.
 - Le CRUD généré est une base de développement sans authentification ni règles métier spécifiques.
-- Les exports image sont implémentés ; le rendu graphique n’a pas fait l’objet d’une QA navigateur dans cette tranche.
+- Les exports image ont été contrôlés en navigateur sur le schéma d’exemple à deux tables ; les très grands diagrammes n’ont pas été vérifiés visuellement.
 
 Travail sur development. Aucune promotion préproduction/production incluse.

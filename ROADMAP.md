@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> 2026-09-30 — Export Athena PNG/SVG corrigé : le cadrage utilise les dimensions réelles des nœuds React Flow et les types des colonnes restent fidèles au modèle. Les deux formats ont été exportés et contrôlés sur le schéma d’exemple ; `pnpm check` réussi.
+
 > 2026-09-30 — Accueil retravaillé : aperçu Athena vectoriel avec relation alignée sur les clés, composition plus sobre et polices IBM Plex auto-hébergées. Palette monochrome conservée. Contrôle visuel local sur largeurs portable et mobile ; `pnpm check` réussi.
 
 > Athena, tranche complète du 2026-09-05 : contraintes, relations réparées, MCD/MLD, exports FastAPI/SQL/PNG/SVG, import SQL, historique, versions et partage par URL sans stockage serveur implémentés. Voir STATUS.md pour les limites et validations effectives. Les noms des outils suivent la mythologie grecque.

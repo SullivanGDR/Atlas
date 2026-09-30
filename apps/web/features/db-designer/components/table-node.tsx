@@ -157,21 +157,26 @@ export function TableNode({ id, data, selected }: NodeProps<TableFlowNode>) {
               </span>
             )}
           </div>
-          <select
-            className="nodrag nopan nowheel field-type"
-            aria-label={"Type de " + a.name}
-            value={a.type}
-            disabled={readOnly || foreignColumns.includes(a.id)}
-            onChange={(e) =>
-              editor.patchColumn(id, a.id, {
-                type: e.target.value as typeof a.type,
-              })
-            }
-          >
-            {columnTypes.map((t) => (
-              <option key={t}>{t}</option>
-            ))}
-          </select>
+          <div className="field-type-cell">
+            <select
+              className="nodrag nopan nowheel field-type"
+              aria-label={"Type de " + a.name}
+              value={a.type}
+              disabled={readOnly || foreignColumns.includes(a.id)}
+              onChange={(e) =>
+                editor.patchColumn(id, a.id, {
+                  type: e.target.value as typeof a.type,
+                })
+              }
+            >
+              {columnTypes.map((t) => (
+                <option key={t}>{t}</option>
+              ))}
+            </select>
+            <span className="field-type-export" aria-hidden="true">
+              {a.type}
+            </span>
+          </div>
           {!readOnly && (
             <button
               className="nodrag nopan icon-action column-settings export-hidden"

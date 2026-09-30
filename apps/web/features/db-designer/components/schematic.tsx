@@ -10,7 +10,6 @@ import {
   ConnectionMode,
   useReactFlow,
   useNodesInitialized,
-  getNodesBounds,
   getViewportForBounds,
   type Edge,
   type Connection,
@@ -70,8 +69,14 @@ export function Athena() {
 function Editor() {
   const editor = useEditor();
   const { schema, dirty, readOnly, notice } = editor;
-  const { screenToFlowPosition, fitView, setCenter, getZoom, getNodes } =
-    useReactFlow<TableFlowNode>();
+  const {
+    screenToFlowPosition,
+    fitView,
+    setCenter,
+    getZoom,
+    getNodes,
+    getNodesBounds,
+  } = useReactFlow<TableFlowNode>();
   const initialized = useNodesInitialized();
   const initialFit = useRef(false);
   const canvas = useRef<HTMLDivElement>(null);
@@ -396,30 +401,36 @@ function Editor() {
       const backgroundColor = getComputedStyle(document.documentElement)
         .getPropertyValue("--canvas-background")
         .trim();
-      const url = await (format === "png" ? toPng : toSvg)(viewport, {
-        width,
-        height,
-        backgroundColor,
-        pixelRatio: 1.5,
-        style: {
-          width: width + "px",
-          height: height + "px",
-          transform:
-            "translate(" +
-            transform.x +
-            "px, " +
-            transform.y +
-            "px) scale(" +
-            transform.zoom +
-            ")",
-        },
-        filter: (node) =>
-          !(
-            node instanceof HTMLElement &&
-            (node.classList.contains("export-hidden") ||
-              node.classList.contains("react-flow__handle"))
-          ),
-      });
+      viewport.classList.add("exporting-image");
+      let url: string;
+      try {
+        url = await (format === "png" ? toPng : toSvg)(viewport, {
+          width,
+          height,
+          backgroundColor,
+          pixelRatio: 1.5,
+          style: {
+            width: width + "px",
+            height: height + "px",
+            transform:
+              "translate(" +
+              transform.x +
+              "px, " +
+              transform.y +
+              "px) scale(" +
+              transform.zoom +
+              ")",
+          },
+          filter: (node) =>
+            !(
+              node instanceof HTMLElement &&
+              (node.classList.contains("export-hidden") ||
+                node.classList.contains("react-flow__handle"))
+            ),
+        });
+      } finally {
+        viewport.classList.remove("exporting-image");
+      }
       downloadFile(
         await (await fetch(url)).blob(),
         filename(schema.name) + "-" + view + "." + format,

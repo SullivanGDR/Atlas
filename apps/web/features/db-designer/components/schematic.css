@@ -291,13 +291,26 @@
   color: var(--muted);
   padding: 0 4px;
 }
-.field-type {
+.field-type-cell {
+  min-width: 0;
+}
+.field-type,
+.field-type-export {
   width: 100%;
   min-width: 0;
   padding: 5px 0;
   color: var(--muted);
   font: 10px var(--font-mono);
   background: transparent;
+}
+.field-type-export {
+  display: none;
+}
+.react-flow__viewport.exporting-image .field-type {
+  display: none;
+}
+.react-flow__viewport.exporting-image .field-type-export {
+  display: block;
 }
 .field-type:disabled {
   appearance: none;
