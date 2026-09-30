@@ -86,6 +86,33 @@ type Box = {
   rows: { a: Attribute; y: number; height: number; name: string[] }[];
 };
 
+type Point = { x: number; y: number };
+function roundedPath(points: Point[]) {
+  const route = points.filter(
+    (p, i) => !i || p.x !== points[i - 1]!.x || p.y !== points[i - 1]!.y,
+  );
+  let path = `M${route[0]!.x} ${route[0]!.y}`;
+  for (let i = 1; i < route.length - 1; i++) {
+    const previous = route[i - 1]!,
+      corner = route[i]!,
+      next = route[i + 1]!;
+    const before = Math.hypot(corner.x - previous.x, corner.y - previous.y);
+    const after = Math.hypot(next.x - corner.x, next.y - corner.y);
+    const radius = Math.min(10, before / 2, after / 2);
+    const start = {
+      x: corner.x + ((previous.x - corner.x) * radius) / before,
+      y: corner.y + ((previous.y - corner.y) * radius) / before,
+    };
+    const end = {
+      x: corner.x + ((next.x - corner.x) * radius) / after,
+      y: corner.y + ((next.y - corner.y) * radius) / after,
+    };
+    path += ` L${start.x} ${start.y} Q${corner.x} ${corner.y} ${end.x} ${end.y}`;
+  }
+  const last = route[route.length - 1]!;
+  return path + ` L${last.x} ${last.y}`;
+}
+
 /** Native SVG: independent of the viewport, HTML controls and the editor theme. */
 export function renderDiagramImage(
   schema: Schema,
@@ -95,16 +122,28 @@ export function renderDiagramImage(
   const graph = projectDiagram(schema, model);
   if (!graph.entities.length)
     throw new Error("Ajoutez une table avant d’exporter une image.");
-  const columnCount = Math.min(4, Math.ceil(Math.sqrt(graph.entities.length)));
+  // Shared geometry keeps existing entities in place when switching MCD/MLD.
+  let reference = model === "mld" ? graph : schema;
+  if (model === "mcd") {
+    try {
+      reference = mcdToMld(schema);
+    } catch {
+      /* Conceptual export stays available if logical validation fails. */
+    }
+  }
+  const referenceEntities = new Map(
+    reference.entities.map((entity) => [entity.id, entity]),
+  );
+  const columnCount = Math.min(4, Math.ceil(Math.sqrt(schema.entities.length)));
   const boxWidth = 380,
-    gapX = 190,
+    gapX = 220,
     gapY = 130,
     margin = 64;
   const boxes: Box[] = graph.entities.map((entity) => {
     const headerHeight = 30 + lines(entity.name, 20).length * 22;
     let y = headerHeight + 12;
     const rows = entity.attributes.map((a) => {
-      const name = lines(a.name, model === "mcd" ? 34 : 21);
+      const name = lines(a.name, 21);
       const height = Math.max(34, name.length * 18 + 14);
       const row = { a, y, height, name };
       y += height;
@@ -115,7 +154,17 @@ export function renderDiagramImage(
       x: 0,
       y: 0,
       width: boxWidth,
-      height: y + 14,
+      height: Math.max(
+        y + 14,
+        headerHeight +
+          26 +
+          (
+            referenceEntities.get(entity.id)?.attributes ?? entity.attributes
+          ).reduce(
+            (sum, a) => sum + Math.max(34, lines(a.name, 21).length * 18 + 14),
+            0,
+          ),
+      ),
       headerHeight,
       rows,
     };
@@ -141,40 +190,80 @@ export function renderDiagramImage(
   const muted = `fill="${palette.muted}"`;
   const connections: string[] = [];
   const relationLabels: string[] = [];
+  const side = (box: Box, other: Box) => (other.x >= box.x ? "right" : "left");
+  const conceptualPort = (box: Box, other: Box, relationId: string) => {
+    const peers = graph.relations
+      .flatMap((relation) => {
+        const peerId =
+          relation.sourceEntityId === box.entity.id
+            ? relation.targetEntityId
+            : relation.targetEntityId === box.entity.id
+              ? relation.sourceEntityId
+              : null;
+        const peer = peerId ? byId.get(peerId) : undefined;
+        return peer && side(box, peer) === side(box, other)
+          ? [{ id: relation.id, y: peer.y, x: peer.x }]
+          : [];
+      })
+      .sort((a, b) => a.y - b.y || a.x - b.x || a.id.localeCompare(b.id));
+    const rank = peers.findIndex((peer) => peer.id === relationId);
+    return (
+      box.y +
+      box.headerHeight +
+      ((box.height - box.headerHeight) * (rank + 1)) / (peers.length + 1)
+    );
+  };
   graph.relations.forEach((r, index) => {
     const source = byId.get(r.sourceEntityId),
       target = byId.get(r.targetEntityId);
     if (!source || !target) return;
-    const rowY = (box: Box, id: string) => {
+    const rowY = (box: Box, other: Box, id: string) => {
+      if (model === "mcd") return conceptualPort(box, other, r.id);
       const row = box.rows.find((row) => row.a.id === id);
-      return model === "mcd" || !row
+      return !row
         ? box.y + box.headerHeight / 2
         : box.y + row.y + row.height / 2;
     };
-    const sy = rowY(source, r.sourceColumnId),
-      ty = rowY(target, r.targetColumnId);
+    const sy = rowY(source, target, r.sourceColumnId),
+      ty = rowY(target, source, r.targetColumnId);
     const forward = target.x > source.x;
     const sameColumn = source.x === target.x;
     const sx = source.x + (forward || sameColumn ? boxWidth : 0);
     const tx = target.x + (forward ? 0 : boxWidth);
-    const lane = (index % 5) * 8;
-    let path: string, lx: number, ly: number;
+    const lane = (index % 4) * 16;
+    let route: Point[], lx: number, ly: number;
     if (source === target) {
       lx = sx + 38 + lane;
       ly = sy - 30;
-      path = `M${sx} ${sy} H${lx} V${source.y - 30} H${source.x + boxWidth / 2} V${source.y}`;
+      route = [
+        { x: sx, y: sy },
+        { x: lx, y: sy },
+        { x: lx, y: source.y - 30 },
+        { x: source.x + boxWidth / 2, y: source.y - 30 },
+        { x: source.x + boxWidth / 2, y: source.y },
+      ];
       ly = source.y - 38;
     } else if (sameColumn) {
       lx = sx + 48 + lane;
       ly = (sy + ty) / 2;
-      path = `M${sx} ${sy} H${lx} V${ty} H${tx}`;
+      route = [
+        { x: sx, y: sy },
+        { x: lx, y: sy },
+        { x: lx, y: ty },
+        { x: tx, y: ty },
+      ];
     } else {
-      lx = (sx + tx) / 2 + lane;
+      lx = (sx + tx) / 2 + lane - 24;
       ly = (sy + ty) / 2;
-      path = `M${sx} ${sy} H${lx} V${ty} H${tx}`;
+      route = [
+        { x: sx, y: sy },
+        { x: lx, y: sy },
+        { x: lx, y: ty },
+        { x: tx, y: ty },
+      ];
     }
     connections.push(
-      `<path d="${path}" fill="none" stroke="${palette.muted}" stroke-width="1.4" stroke-linejoin="round"/>`,
+      `<path data-relation="${escape(r.id)}" d="${roundedPath(route)}" fill="none" stroke="${palette.muted}" stroke-width="1.4" stroke-linejoin="round"/>`,
     );
     const label = r.cardinality.replace("-", " : ");
     minX = Math.min(minX, lx - 30);
@@ -207,10 +296,10 @@ export function renderDiagramImage(
     Math.floor((width - 2 * margin) / 30),
   );
   const headerHeight = 68 + titleLines.length * 40;
-  const height = Math.max(560, headerHeight + contentHeight + 192);
+  const height = Math.max(560, headerHeight + contentHeight + 208);
   const offsetX = (width - contentWidth) / 2 - minX;
   const offsetY =
-    headerHeight + (height - headerHeight - 64 - contentHeight) / 2 - minY;
+    headerHeight + (height - headerHeight - 80 - contentHeight) / 2 - minY;
   const tables = boxes.map((box) => {
     const foreign = new Set(
       graph.relations
@@ -267,10 +356,13 @@ export function renderDiagramImage(
       ),
     )
     .join("");
+  const legendItem = (x: number, key: string, label: string) =>
+    `<g transform="translate(${x} ${height - 48})"><rect width="30" height="22" rx="4" fill="${palette.header}"/>${text(15, 15, key, 11, 'text-anchor="middle" font-weight="600"')}${text(40, 15, label, 13, muted)}</g>`;
   const legend =
     model === "mcd"
-      ? "ID · Identifiant"
-      : "PK · Clé primaire    FK · Clé étrangère";
+      ? legendItem(margin, "ID", "Identifiant")
+      : legendItem(margin, "PK", "Clé primaire") +
+        legendItem(margin + 170, "FK", "Clé étrangère");
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img">
     <title>${escape(model.toUpperCase() + " — " + schema.name)}</title>
     <desc>${escape(diagramModels.find((m) => m.id === model)!.description)}</desc>
@@ -279,9 +371,9 @@ export function renderDiagramImage(
       ${title}
       <path d="M${margin} ${headerHeight} H${width - margin}" stroke="${palette.line}"/>
       <g transform="translate(${offsetX} ${offsetY})">${connections.join("")}${tables.join("")}${relationLabels.join("")}</g>
-      <path d="M${margin} ${height - 64} H${width - margin}" stroke="${palette.line}"/>
-      ${text(margin, height - 32, legend, 11, muted)}
-      ${text(width - margin, height - 32, "Made on Atlas by Athena", 12, `text-anchor="end" ${muted}`)}
+      <path d="M${margin} ${height - 80} H${width - margin}" stroke="${palette.line}"/>
+      ${legend}
+      ${text(width - margin, height - 33, "Made on Atlas by Athena", 13, `text-anchor="end" ${muted}`)}
     </g>
   </svg>`;
   return {
@@ -289,6 +381,13 @@ export function renderDiagramImage(
     width,
     height,
     tableCount: boxes.length,
+    layout: boxes.map(({ entity, x, y, width, height }) => ({
+      id: entity.id,
+      x,
+      y,
+      width,
+      height,
+    })),
     contentBounds: {
       x: offsetX + minX,
       y: offsetY + minY,

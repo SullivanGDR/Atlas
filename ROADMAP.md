@@ -1,6 +1,8 @@
 # Roadmap — Atlas
 
-> 2026-09-30 — Export image Athena refondu : bouton Export, choix MCD/MLD/ERD puis PNG/SVG, aperçu, composition blanche indépendante du canvas avec titre et signature. SVG natif et rasterisation locale ; html-to-image supprimé. `pnpm check` réussi (26 tests). Voir STATUS.md pour les limites de vérification navigateur.
+> 2026-09-30 — Finitions des exports : barre compacte et boutons neutres, géométrie MCD/MLD commune, liaisons MCD à points distincts et angles arrondis, légende ID/PK/FK espacée. Rendus à trois tables inspectés ; `pnpm check` réussi (27 tests).
+
+> 2026-09-30 — Export image Athena refondu : bouton Export, choix MCD/MLD/ERD puis PNG/SVG, aperçu, composition gris perle indépendante du canvas avec titre et signature. SVG natif et rasterisation locale ; html-to-image supprimé. `pnpm check` réussi (26 tests). Voir STATUS.md pour les limites de vérification navigateur.
 
 > 2026-09-30 — Accueil retravaillé : aperçu Athena vectoriel avec relation alignée sur les clés, composition plus sobre et polices IBM Plex auto-hébergées. Palette monochrome conservée. Contrôle visuel local sur largeurs portable et mobile ; `pnpm check` réussi.
 

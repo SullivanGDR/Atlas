@@ -469,13 +469,18 @@ function Editor() {
           </div>
         </details>
         <Button
+          variant="outline"
           className="image-export-button"
           onClick={() => setDialog("image")}
         >
           <ImageDown size={16} />
           Export
         </Button>
-        <Button className="generate-button" onClick={() => setDialog("export")}>
+        <Button
+          variant="ghost"
+          className="generate-button"
+          onClick={() => setDialog("export")}
+        >
           <Code2 size={16} />
           <span>Générer</span>
         </Button>

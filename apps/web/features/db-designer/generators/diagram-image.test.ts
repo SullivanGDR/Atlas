@@ -1,4 +1,6 @@
 import { describe, it, expect } from "vitest";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { exampleSchema } from "../model/schema";
 import {
   projectDiagram,
@@ -7,22 +9,22 @@ import {
 } from "./diagram-image";
 
 const palette = {
-  paper: "#ffffff",
+  paper: "#f0f0ef",
   ink: "#292929",
   muted: "#666666",
   line: "#d5d5d5",
-  header: "#f5f5f5",
+  header: "#e6e6e4",
 };
 
 describe("image exports", () => {
-  it("exports a white standalone vector document with escaped title and real column types", async () => {
+  it("exports a standalone vector document with escaped title and real column types", async () => {
     const schema = exampleSchema();
     schema.name = 'Étude <script> & "Clients"';
     const output = renderDiagramImage(schema, "erd", palette);
     expect(output.svg).toContain(
       "ERD — Étude &lt;script&gt; &amp; &quot;Clients&quot;",
     );
-    expect(output.svg).toContain('fill="#ffffff"');
+    expect(output.svg).toContain('fill="#f0f0ef"');
     expect(output.svg).toContain(">VARCHAR</text>");
     expect(output.svg).toContain(">TIMESTAMP</text>");
     expect(output.svg).toContain("Made on Atlas by Athena");
@@ -30,6 +32,52 @@ describe("image exports", () => {
     const blob = await diagramImageBlob(output, "svg");
     expect(await blob.text()).toBe(output.svg);
     expect(blob.type).toContain("image/svg+xml");
+  });
+  it("keeps three-table geometry stable and separates conceptual relation ports and legend entries", () => {
+    const schema = exampleSchema();
+    schema.entities[1]!.attributes.find((a) => a.id === "title")!.type = "UUID";
+    schema.entities.push({
+      id: "third",
+      name: "table_1",
+      position: { x: 0, y: 400 },
+      attributes: [
+        {
+          id: "third-id",
+          name: "id",
+          type: "UUID",
+          isPrimaryKey: true,
+          nullable: false,
+        },
+      ],
+    });
+    schema.relations.push({
+      id: "third-project",
+      sourceEntityId: "third",
+      sourceColumnId: "third-id",
+      targetEntityId: "projects",
+      targetColumnId: "title",
+      cardinality: "1-N",
+    });
+    const mcd = renderDiagramImage(schema, "mcd", palette);
+    const mld = renderDiagramImage(schema, "mld", palette);
+    expect(mcd.layout).toEqual(mld.layout);
+    expect(mcd.width).toBe(mld.width);
+    expect(mcd.height).toBe(mld.height);
+    const routes = [
+      ...mcd.svg.matchAll(/data-relation="[^"]+" d="([^"]+)"/g),
+    ].map((match) => match[1]!);
+    expect(routes).toHaveLength(2);
+    expect(routes.every((route) => route.includes(" Q"))).toBe(true);
+    expect(routes[0]!.split(" L").at(-1)).not.toBe(
+      routes[1]!.split(" L").at(-1),
+    );
+    expect(mld.svg).toContain(">Clé primaire</text>");
+    expect(mld.svg).toContain(">Clé étrangère</text>");
+    expect(mld.svg).not.toContain("Clé primaire    FK");
+    const directory = resolve("test-results/image-exports");
+    mkdirSync(directory, { recursive: true });
+    writeFileSync(resolve(directory, "mcd.svg"), mcd.svg);
+    writeFileSync(resolve(directory, "mld.svg"), mld.svg);
   });
   it("projects conceptual attributes and logical join tables without changing the project", () => {
     const schema = exampleSchema();

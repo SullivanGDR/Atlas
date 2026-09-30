@@ -52,3 +52,10 @@
 - Mise en page automatique dédiée, indépendante des positions d’édition : grille de tables, relations orthogonales, bornes incluant les libellés, titre et signature. Palette papier permanente définie dans les tokens du thème.
 - MCD : projection conceptuelle existante, sans FK ni types SQL ; MLD : transformation existante avec jointures ; ERD : représentation du schéma édité. Les cardinalités disponibles restent 1:1, 1:N et N:N ; aucune cardinalité minimale non renseignée n’est inventée.
 - Le PNG est plafonné à 8192 px par côté et 24 millions de pixels pour limiter la mémoire. Le SVG conserve sa définition vectorielle pour les grands projets.
+
+## 2026-09-30 — Finitions de la présentation Athena
+
+- La dernière préférence utilisateur remplace le fond blanc par un gris perle doux, toujours indépendant du thème de l’éditeur. Les boutons de la barre deviennent compacts et neutres.
+- La géométrie réserve les hauteurs du modèle logique pour les entités présentes dans les deux vues. Les FK restent absentes du contenu MCD, sans déplacer ni rétrécir les tables ; les jointures ajoutées apparaissent uniquement en MLD.
+- Les liaisons conceptuelles disposent de points distincts par côté, triés selon la position des entités voisines. Courbes quadratiques aux angles des tracés orthogonaux.
+- Chaque entrée de légende est un groupe SVG positionné séparément : aucune dépendance aux espaces multiples, que SVG fusionne par défaut.

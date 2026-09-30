@@ -160,11 +160,12 @@ export function ImageExportPanel({ schema }: { schema: Schema }) {
       )}
       <div className="image-export-footer">
         <p className="form-hint">
-          Fond blanc · Titre du projet · Signature Atlas
+          Fond gris perle · Titre du projet · Signature Atlas
           <br />
           Pour un grand schéma, privilégiez le SVG.
         </p>
         <Button
+          variant="outline"
           disabled={busy || !result.document}
           onClick={() => void download()}
         >
