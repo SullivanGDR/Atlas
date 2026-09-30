@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Braces, FileJson2 } from "lucide-react";
+import { ArrowUpRight, Braces, FileJson2, Network } from "lucide-react";
 import { tools } from "@/lib/tools";
 
 function AthenaPreview() {
@@ -147,6 +147,62 @@ function AthenaPreview() {
   );
 }
 
+function IrisPreview() {
+  return (
+    <div className="athena-preview" aria-hidden="true">
+      <div className="preview-toolbar">
+        <span>iris / architecture</span>
+        <span>Services · Zones · Flux</span>
+      </div>
+      <svg viewBox="0 0 600 340" role="presentation" focusable="false">
+        <rect
+          x="30"
+          y="45"
+          width="340"
+          height="250"
+          rx="8"
+          className="preview-table"
+          strokeDasharray="5 5"
+        />
+        <text x="50" y="73" className="preview-type">
+          PLATEFORME APPLICATIVE
+        </text>
+        <path
+          d="M190 152 H255 V232 H435 V162"
+          className="preview-divider"
+          fill="none"
+        />
+        <path d="M255 152 H430" className="preview-divider" fill="none" />
+        {[
+          { x: 55, y: 110, name: "Portail web", detail: "Application" },
+          { x: 220, y: 190, name: "API métier", detail: "HTTPS / REST" },
+          { x: 410, y: 110, name: "PostgreSQL", detail: "Données privées" },
+        ].map((n) => (
+          <g key={n.name}>
+            <rect
+              x={n.x}
+              y={n.y}
+              width="145"
+              height="80"
+              rx="7"
+              className="preview-table"
+            />
+            <text x={n.x + 14} y={n.y + 32} className="preview-table-name">
+              {n.name}
+            </text>
+            <text x={n.x + 14} y={n.y + 56} className="preview-type">
+              {n.detail}
+            </text>
+          </g>
+        ))}
+      </svg>
+      <div className="preview-status">
+        <span>CARTOGRAPHIE DU SI</span>
+        <span>VUE D’ENSEMBLE</span>
+      </div>
+    </div>
+  );
+}
 export default function Home() {
   return (
     <div className="atlas-home">
@@ -160,14 +216,14 @@ export default function Home() {
           </h1>
         </div>
         <p className="home-intro">
-          Atlas réunit des outils de conception. Commencez par dessiner votre
-          schéma de données avec Athena.
+          Du schéma de données à l’architecture de votre SI. Concevez avec
+          Athena, prenez de la hauteur avec Iris.
         </p>
       </section>
 
       <div className="home-section-label">
         <h2>Les outils</h2>
-        <span>01 / DISPONIBLE</span>
+        <span>02 / DISPONIBLES</span>
       </div>
       {tools.map((tool) => (
         <section
@@ -176,18 +232,31 @@ export default function Home() {
           aria-labelledby={`${tool.id}-title`}
         >
           <div className="featured-copy">
-            <p className="featured-category">01 — CONCEPTION DE DONNÉES</p>
+            <p className="featured-category">
+              {tool.id === "iris"
+                ? "CARTOGRAPHIE DU SI"
+                : "CONCEPTION DE DONNÉES"}
+            </p>
             <h3 id={`${tool.id}-title`}>
-              <Braces size={28} strokeWidth={1.7} aria-hidden="true" />
+              {tool.id === "iris" ? (
+                <Network size={28} strokeWidth={1.7} aria-hidden="true" />
+              ) : (
+                <Braces size={28} strokeWidth={1.7} aria-hidden="true" />
+              )}
               {tool.name}
             </h3>
-            <p className="featured-description">
-              Dessinez vos tables, reliez leurs clés et passez du schéma à un
-              backend FastAPI prêt à adapter.
-            </p>
+            <p className="featured-description">{tool.description}</p>
             <ul className="featured-details">
-              <li>Modélisation visuelle MCD / MLD</li>
-              <li>Export SQL, image et projet FastAPI</li>
+              <li>
+                {tool.id === "iris"
+                  ? "Services, logos officiels et zones imbriquées"
+                  : "Modélisation visuelle MCD / MLD"}
+              </li>
+              <li>
+                {tool.id === "iris"
+                  ? "Flux documentés et exports PNG / SVG"
+                  : "Export SQL, image et projet FastAPI"}
+              </li>
             </ul>
             <Link className="featured-link" href={tool.href}>
               Ouvrir {tool.name}
@@ -198,7 +267,7 @@ export default function Home() {
               Projets enregistrés dans vos fichiers .atlas.json
             </p>
           </div>
-          <AthenaPreview />
+          {tool.id === "iris" ? <IrisPreview /> : <AthenaPreview />}
         </section>
       ))}
       <p className="home-note">

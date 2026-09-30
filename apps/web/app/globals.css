@@ -196,7 +196,13 @@ button {
   letter-spacing: 0.07em;
 }
 
+.canvas-workspace {
+  height: calc(100dvh - 54px);
+  min-height: 380px;
+  overflow: hidden;
+}
 .featured-tool {
+  margin-bottom: 20px;
   display: grid;
   grid-template-columns: minmax(0, 42%) minmax(0, 58%);
   overflow: hidden;

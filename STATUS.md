@@ -1,5 +1,16 @@
 # État du projet
 
+## Iris — première version de cartographie SI, 2026-09-30
+
+- Onglet Outils retiré. Navigation directe Iris / Athena ; accueil accessible par le logo Atlas. Iris enregistré et présenté sur l’accueil.
+- Canvas pleine largeur, catalogue et propriétés escamotables, palette neutre. 22 entrées dont neuf logos officiels embarqués localement ; recherche et catégories.
+- Services par bouton, clic droit ou glisser depuis le catalogue ; zones imbriquées, regroupement automatique des services déposés à l’intérieur, déplacement groupé, redimensionnement et dissolution sans supprimer le contenu.
+- Flux dirigés, reconnexion, création par poignées ou formulaire, nom, protocole, synchrone/asynchrone et bidirectionnel. Métadonnées : description, responsable, technologie, environnement, criticité.
+- Organisation récursive, duplication de services, annuler/rétablir sur 60 étapes. Import/export `.atlas.json` versionné et validé ; données en mémoire navigateur, aucun compte ou stockage serveur.
+- PNG et SVG autonomes, titre et signature Iris, logos incorporés, indépendants du zoom. Fichiers PNG et SVG téléchargés retrouvés sur disque ; rendu SVG rasterisé et inspecté.
+- Vérifié dans le navigateur local : ajout Kubernetes, changement de zone, responsable, création d’un flux, organisation, déplacement de zone avec ses services et annulation. Contrôle complet `pnpm check` réussi : formatage, lint sans avertissement, types, 35 tests et build Next.js.
+- Première tranche : cartographie manuelle, sans découverte automatique ni synchronisation cloud. Catalogue extensible ; le routage n’évite pas tous les obstacles sur des cartes denses. Les noms longs sont tronqués dans les cartes/images et restent intégraux dans le fichier projet.
+
 ## Export d’images Athena — 2026-09-30
 
 - Bouton **Export** visible dans la barre d’Athena ; choix MCD / MLD / ERD, puis PNG / SVG, avec aperçu avant téléchargement.

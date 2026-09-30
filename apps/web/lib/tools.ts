@@ -1,6 +1,14 @@
 import type { ToolDefinition } from "@atlas/shared";
 export const tools = [
   {
+    id: "iris",
+    name: "Iris",
+    description:
+      "Cartographiez votre SI. Regroupez vos services et rendez leurs connexions lisibles.",
+    href: "/tools/iris",
+    status: "available",
+  },
+  {
     id: "athena",
     name: "Athena",
     description:

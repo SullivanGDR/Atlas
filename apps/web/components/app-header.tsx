@@ -1,17 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { Braces, LayoutGrid } from "lucide-react";
+import { Braces, Network } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle, cn } from "@atlas/ui";
 import { AtlasLogo } from "@/components/atlas-logo";
 import { tools } from "@/lib/tools";
 
 const destinations = [
-  { href: "/", label: "Outils", Icon: LayoutGrid },
   ...tools
     .filter((tool) => tool.status === "available")
-    .map((tool) => ({ href: tool.href, label: tool.name, Icon: Braces })),
+    .map((tool) => ({
+      href: tool.href,
+      label: tool.name,
+      Icon: tool.id === "iris" ? Network : Braces,
+    })),
 ] as const;
 
 export function AppHeader() {
@@ -26,8 +29,7 @@ export function AppHeader() {
       <span className="app-header-divider" aria-hidden="true" />
       <nav className="app-nav" aria-label="Navigation principale">
         {destinations.map(({ href, label, Icon }) => {
-          const active =
-            href === "/" ? pathname === href : pathname.startsWith(href);
+          const active = pathname.startsWith(href);
           return (
             <Link
               key={href}

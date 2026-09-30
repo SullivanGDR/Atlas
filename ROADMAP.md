@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> 2026-09-30 — Iris : première cartographie SI manuelle, catalogue de services et logos officiels, zones imbriquées, flux documentés, organisation, historique, JSON portable et exports PNG/SVG. Onglet Outils supprimé. `pnpm check` réussi (35 tests) ; détails et limites dans STATUS.md.
+
 > 2026-09-30 — Organisation disponible dans les projections MCD/MLD sans modifier l’Éditeur ; points de liaison MCD distincts dans le canvas. Export MCD compacté aux attributs visibles, sans réserver la hauteur des FK masquées. `pnpm check` réussi (29 tests), organisation MCD vérifiée en navigateur.
 
 > 2026-09-30 — Lisibilité MCD : champs agrandis, aperçu à la largeur avec option 100 %, cardinalités aux extrémités et liaisons verticales directes. Rendu de quatre entités inspecté.
