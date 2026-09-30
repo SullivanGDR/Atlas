@@ -1,5 +1,13 @@
 # État du projet
 
+## Promotion Vercel — 2026-09-30
+
+- À la demande explicite de l’utilisateur, version `67d323b` promue de `development` vers `preprod`, puis de `preprod` vers `main`, sans divergence.
+- Préproduction Vercel `J78wkucBGwwVgptYq3NPmCiGuJgV` : Ready, création manuelle depuis la branche après sa première publication ; accueil avec les trois outils vérifié.
+- Production Vercel `9GtDUHw1aASo7wV5GtimMKiX1p91` : Ready, build déclenché automatiquement par le push sur `main`. Domaine : https://atlas-ten-cyan.vercel.app/.
+- Accueil et routes Athena, Iris, Thémis : HTTP 200 ; présence des trois outils vérifiée dans le navigateur en production. Le code déployé est celui validé par les 44 tests et `pnpm check` de la tranche précédente.
+- Le checkout local reste sur `development`. Aucun réglage payant modifié.
+
 ## Thémis — cahier des charges, 2026-09-30
 
 - Nouvel outil autonome `/tools/themis`, présent sur l’accueil et dans la navigation. Interface neutre, plan escamotable, rédaction, exigences, relecture et aperçu.

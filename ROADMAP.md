@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> 2026-09-30 — Promotion volontaire de `67d323b` en préproduction puis production Vercel : deux déploiements Ready, accueil et trois outils accessibles. Développement local conservé sur `development`.
+
 > 2026-09-30 — Thémis : rédaction guidée de cahiers des charges, quatre trames et quinze rubriques, exigences priorisées avec critères de recette, relecture, aperçu, projets JSON portables et export Word natif. Import Google Docs documenté à partir du DOCX ; conversion non automatisée. Rendu représentatif de cinq pages contrôlé dans Microsoft Word. Voir STATUS.md pour les validations et limites.
 
 > 2026-09-30 — Menus des deux outils refermés automatiquement au clic extérieur et modales intégrées pour les confirmations de remplacement/import/partage. `pnpm check` réussi (37 tests).
