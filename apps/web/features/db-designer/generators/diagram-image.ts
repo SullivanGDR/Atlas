@@ -98,7 +98,7 @@ function roundedPath(points: Point[]) {
       next = route[i + 1]!;
     const before = Math.hypot(corner.x - previous.x, corner.y - previous.y);
     const after = Math.hypot(next.x - corner.x, next.y - corner.y);
-    const radius = Math.min(10, before / 2, after / 2);
+    const radius = Math.min(12, before / 2, after / 2);
     const start = {
       x: corner.x + ((previous.x - corner.x) * radius) / before,
       y: corner.y + ((previous.y - corner.y) * radius) / before,
@@ -266,7 +266,7 @@ export function renderDiagramImage(
       ];
     }
     connections.push(
-      `<path data-relation="${escape(r.id)}" d="${roundedPath(route)}" fill="none" stroke="${palette.muted}" stroke-width="1.4" stroke-linejoin="round"/>`,
+      `<path data-relation="${escape(r.id)}" d="${roundedPath(route)}" fill="none" stroke="${palette.muted}" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#relation-arrow)"/>`,
     );
     const label = r.cardinality.replace("-", " : ");
     minX = Math.min(minX, lx - 30);
@@ -392,6 +392,7 @@ export function renderDiagramImage(
         legendItem(margin + 170, "FK", "Clé étrangère");
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img">
     <title>${escape(model.toUpperCase() + " — " + schema.name)}</title>
+    <defs><marker id="relation-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="${palette.muted}"/></marker></defs>
     <desc>${escape(diagramModels.find((m) => m.id === model)!.description)}</desc>
     <rect width="${width}" height="${height}" fill="${palette.paper}"/>
     <g fill="${palette.ink}" font-family="Arial, Helvetica, sans-serif">

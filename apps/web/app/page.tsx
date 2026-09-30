@@ -161,46 +161,82 @@ function IrisPreview() {
         <span>Services · Zones · Flux</span>
       </div>
       <svg viewBox="0 0 600 340" role="presentation" focusable="false">
+        <defs>
+          <marker
+            id="iris-preview-arrow"
+            viewBox="0 0 10 10"
+            refX="9"
+            refY="5"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto-start-reverse"
+          >
+            <path d="M0 0 L10 5 L0 10 Z" className="preview-arrow" />
+          </marker>
+        </defs>
         <rect
-          x="30"
-          y="45"
-          width="340"
-          height="250"
-          rx="8"
-          className="preview-table"
-          strokeDasharray="5 5"
+          x="24"
+          y="32"
+          width="552"
+          height="276"
+          rx="12"
+          className="preview-zone"
         />
-        <text x="50" y="73" className="preview-type">
+        <text x="44" y="61" className="preview-type">
           PLATEFORME APPLICATIVE
         </text>
         <path
-          d="M190 152 H255 V232 H435 V162"
-          className="preview-divider"
-          fill="none"
+          d="M220 130 H264 Q274 130 274 140 V250 Q274 260 284 260 H350"
+          className="preview-connection iris-preview-link"
+          markerEnd="url(#iris-preview-arrow)"
         />
-        <path d="M255 152 H430" className="preview-divider" fill="none" />
+        <path
+          d="M438 220 V150"
+          className="preview-connection iris-preview-link"
+          markerEnd="url(#iris-preview-arrow)"
+        />
+        <text x="287" y="184" className="preview-type">
+          HTTPS
+        </text>
+        <text x="450" y="190" className="preview-type">
+          SQL
+        </text>
         {[
-          { x: 55, y: 110, name: "Portail web", detail: "Application" },
-          { x: 220, y: 190, name: "API métier", detail: "HTTPS / REST" },
-          { x: 410, y: 110, name: "PostgreSQL", detail: "Données privées" },
+          {
+            x: 44,
+            y: 90,
+            name: "Portail web",
+            detail: "Interface utilisateur",
+          },
+          {
+            x: 350,
+            y: 220,
+            name: "API métier",
+            detail: "Règles et traitements",
+          },
+          { x: 350, y: 70, name: "PostgreSQL", detail: "Base de données" },
         ].map((n) => (
           <g key={n.name}>
             <rect
               x={n.x}
               y={n.y}
-              width="145"
+              width="176"
               height="80"
-              rx="7"
-              className="preview-table"
+              rx="10"
+              className="preview-table-body"
             />
-            <text x={n.x + 14} y={n.y + 32} className="preview-table-name">
+            <text x={n.x + 16} y={n.y + 32} className="preview-table-name">
               {n.name}
             </text>
-            <text x={n.x + 14} y={n.y + 56} className="preview-type">
+            <text x={n.x + 16} y={n.y + 56} className="preview-type">
               {n.detail}
             </text>
           </g>
         ))}
+        <circle cx="220" cy="130" r="4" className="preview-port" />
+        <circle cx="350" cy="260" r="4" className="preview-port" />
+        <circle cx="438" cy="220" r="4" className="preview-port" />
+        <circle cx="438" cy="150" r="4" className="preview-port" />
       </svg>
       <div className="preview-status">
         <span>CARTOGRAPHIE DU SI</span>
@@ -223,7 +259,7 @@ function ThemisPreview() {
           width="380"
           height="290"
           rx="5"
-          className="preview-table"
+          className="preview-table-body"
         />
         <text x="140" y="61" className="preview-type">
           CAHIER DES CHARGES

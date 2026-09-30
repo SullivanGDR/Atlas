@@ -473,3 +473,15 @@ button {
     font-size: 9px;
   }
 }
+
+.preview-zone {
+  fill: var(--muted-surface);
+  stroke: var(--border);
+  stroke-dasharray: 5 5;
+}
+.iris-preview-link {
+  stroke: var(--muted);
+}
+.preview-arrow {
+  fill: var(--muted);
+}

@@ -1,5 +1,13 @@
 # État du projet
 
+## Accueil clair et liaisons Athena — 2026-09-30
+
+- Aperçus Thémis et Iris : fonds SVG explicitement reliés aux couleurs du thème, suppression des aplats noirs par défaut. Iris redessiné avec une zone, trois services espacés et un parcours portail → API → PostgreSQL ; raccords sur les bords et libellés HTTPS/SQL.
+- Athena : liaisons grises, angles arrondis à 12 px et flèche discrète inspirés d’Iris, en Éditeur/MCD/MLD. Texte, position et présentation des cardinalités conservés.
+- Même arrondi et marqueur dans le SVG d’export, commun aux téléchargements SVG et PNG en MCD/MLD/ERD.
+- Accueil inspecté en navigateur en clair et sombre ; raccords de l’exemple Iris corrigés après contrôle visuel. `pnpm check` réussi : formatage, lint, types, 44 tests et build.
+- Changements sur `development` uniquement ; aucune promotion ni déploiement Vercel.
+
 ## Promotion Vercel — 2026-09-30
 
 - À la demande explicite de l’utilisateur, version `67d323b` promue de `development` vers `preprod`, puis de `preprod` vers `main`, sans divergence.

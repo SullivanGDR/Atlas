@@ -8,6 +8,7 @@ import {
   MiniMap,
   Panel,
   ConnectionMode,
+  MarkerType,
   useReactFlow,
   useNodesInitialized,
   type Edge,
@@ -295,6 +296,13 @@ function Editor() {
             ? conceptual.handles[r.id]?.target
             : r.targetColumnId + ":left",
         type: "smoothstep",
+        pathOptions: { borderRadius: 12, offset: 24 },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 16,
+          height: 16,
+          color: "var(--muted)",
+        },
         label:
           (r.name ? r.name + " · " : "") + r.cardinality.replace("-", " : "),
         selected: selectedRelation === r.id,
@@ -303,7 +311,7 @@ function Editor() {
         interactionWidth: 24,
         style: {
           strokeWidth: selectedRelation === r.id ? 2 : 1.4,
-          stroke: "var(--accent)",
+          stroke: "var(--muted)",
           strokeDasharray: r.cardinality === "N-N" ? "5 4" : undefined,
         },
         labelStyle: {
