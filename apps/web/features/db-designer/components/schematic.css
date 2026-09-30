@@ -3,6 +3,107 @@
   min-height: 380px;
   overflow: hidden;
 }
+.image-export-button {
+  flex-shrink: 0;
+}
+.ui-modal.image-export-modal {
+  width: min(920px, calc(100vw - 32px));
+}
+.image-export {
+  display: grid;
+  gap: 22px;
+  padding: 22px;
+}
+.image-export fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.image-export legend {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.image-model-options,
+.image-format-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.image-format-options {
+  grid-template-columns: repeat(2, 1fr);
+}
+.image-export label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+}
+.image-export label:has(input:checked) {
+  border-color: var(--foreground);
+  background: var(--muted-surface);
+}
+.image-export input {
+  accent-color: var(--foreground);
+  margin-top: 4px;
+}
+.image-export strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+}
+.image-export small {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.image-preview {
+  min-width: 0;
+}
+.image-preview-caption {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.image-preview-sheet {
+  background: var(--export-paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: auto;
+  max-height: 360px;
+}
+.image-preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: contain;
+}
+.image-export-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+@media (max-width: 600px) {
+  .image-export {
+    padding: 16px;
+    gap: 18px;
+  }
+  .image-model-options {
+    grid-template-columns: 1fr;
+  }
+  .image-export-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
 .schematic {
   height: 100%;
   display: flex;
@@ -294,23 +395,13 @@
 .field-type-cell {
   min-width: 0;
 }
-.field-type,
-.field-type-export {
+.field-type {
   width: 100%;
   min-width: 0;
   padding: 5px 0;
   color: var(--muted);
   font: 10px var(--font-mono);
   background: transparent;
-}
-.field-type-export {
-  display: none;
-}
-.react-flow__viewport.exporting-image .field-type {
-  display: none;
-}
-.react-flow__viewport.exporting-image .field-type-export {
-  display: block;
 }
 .field-type:disabled {
   appearance: none;

@@ -173,9 +173,6 @@ export function TableNode({ id, data, selected }: NodeProps<TableFlowNode>) {
                 <option key={t}>{t}</option>
               ))}
             </select>
-            <span className="field-type-export" aria-hidden="true">
-              {a.type}
-            </span>
           </div>
           {!readOnly && (
             <button

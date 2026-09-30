@@ -10,7 +10,6 @@ import {
   ConnectionMode,
   useReactFlow,
   useNodesInitialized,
-  getViewportForBounds,
   type Edge,
   type Connection,
 } from "@xyflow/react";
@@ -42,6 +41,7 @@ import { downloadFile, filename } from "../generators/download";
 import { TableNode, type TableFlowNode } from "./table-node";
 import { RelationEditor } from "./relation-editor";
 import { ColumnEditor } from "./column-editor";
+import { ImageExportPanel } from "./image-export-panel";
 import { ExportPanel } from "./export-panel";
 import "@xyflow/react/dist/style.css";
 import "./schematic.css";
@@ -69,14 +69,8 @@ export function Athena() {
 function Editor() {
   const editor = useEditor();
   const { schema, dirty, readOnly, notice } = editor;
-  const {
-    screenToFlowPosition,
-    fitView,
-    setCenter,
-    getZoom,
-    getNodes,
-    getNodesBounds,
-  } = useReactFlow<TableFlowNode>();
+  const { screenToFlowPosition, fitView, setCenter, getZoom } =
+    useReactFlow<TableFlowNode>();
   const initialized = useNodesInitialized();
   const initialFit = useRef(false);
   const canvas = useRef<HTMLDivElement>(null);
@@ -86,9 +80,9 @@ function Editor() {
   const [explorerOpen, setExplorerOpen] = useState(false);
   const [inspector, setInspector] = useState<Inspector>(null);
   const [view, setView] = useState<View>("editor");
-  const [dialog, setDialog] = useState<"export" | "history" | "share" | null>(
-    null,
-  );
+  const [dialog, setDialog] = useState<
+    "export" | "image" | "history" | "share" | null
+  >(null);
   const [shareLink, setShareLink] = useState("");
   const [snapshotName, setSnapshotName] = useState("");
   const [search, setSearch] = useState("");
@@ -378,70 +372,6 @@ function Editor() {
       80,
     );
   };
-  const exportImage = async (format: "png" | "svg") => {
-    setLoading(true);
-    try {
-      const viewport = canvas.current?.querySelector<HTMLElement>(
-        ".react-flow__viewport",
-      );
-      if (!viewport || !getNodes().length)
-        throw new Error("Ajoutez une table avant l’export.");
-      const bounds = getNodesBounds(getNodes());
-      const width = Math.min(4096, Math.max(800, bounds.width + 120)),
-        height = Math.min(4096, Math.max(500, bounds.height + 120));
-      const transform = getViewportForBounds(
-        bounds,
-        width,
-        height,
-        0.01,
-        2,
-        0.12,
-      );
-      const { toPng, toSvg } = await import("html-to-image");
-      const backgroundColor = getComputedStyle(document.documentElement)
-        .getPropertyValue("--canvas-background")
-        .trim();
-      viewport.classList.add("exporting-image");
-      let url: string;
-      try {
-        url = await (format === "png" ? toPng : toSvg)(viewport, {
-          width,
-          height,
-          backgroundColor,
-          pixelRatio: 1.5,
-          style: {
-            width: width + "px",
-            height: height + "px",
-            transform:
-              "translate(" +
-              transform.x +
-              "px, " +
-              transform.y +
-              "px) scale(" +
-              transform.zoom +
-              ")",
-          },
-          filter: (node) =>
-            !(
-              node instanceof HTMLElement &&
-              (node.classList.contains("export-hidden") ||
-                node.classList.contains("react-flow__handle"))
-            ),
-        });
-      } finally {
-        viewport.classList.remove("exporting-image");
-      }
-      downloadFile(
-        await (await fetch(url)).blob(),
-        filename(schema.name) + "-" + view + "." + format,
-      );
-      editor.notify("Diagramme exporté.");
-    } catch (error) {
-      editor.notify(message(error));
-    } finally {
-      setLoading(false);
-    }
-  };
   const share = () => {
     try {
       setShareLink(
@@ -536,17 +466,15 @@ function Editor() {
               <Share2 size={15} />
               Partager en lecture seule
             </button>
-            <hr />
-            <button disabled={loading} onClick={() => void exportImage("png")}>
-              <ImageDown size={15} />
-              Exporter en PNG
-            </button>
-            <button disabled={loading} onClick={() => void exportImage("svg")}>
-              <ImageDown size={15} />
-              Exporter en SVG
-            </button>
           </div>
         </details>
+        <Button
+          className="image-export-button"
+          onClick={() => setDialog("image")}
+        >
+          <ImageDown size={16} />
+          Export
+        </Button>
         <Button className="generate-button" onClick={() => setDialog("export")}>
           <Code2 size={16} />
           <span>Générer</span>
@@ -854,6 +782,14 @@ function Editor() {
         </p>
         {dirty && <span>Modifications à enregistrer</span>}
       </footer>
+      <Modal
+        open={dialog === "image"}
+        onClose={() => setDialog(null)}
+        title="Exporter une image"
+        className="image-export-modal"
+      >
+        {dialog === "image" && <ImageExportPanel schema={schema} />}
+      </Modal>
       <Modal
         open={dialog === "export"}
         onClose={() => setDialog(null)}

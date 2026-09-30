@@ -44,3 +44,11 @@
 - Import SQL via pgsql-ast-parser ; syntaxe non représentable refusée explicitement. L’alternative SQL de la roadmap est retenue ; pas d’import Prisma.
 - Export PNG/SVG via html-to-image, cadré sur l’ensemble des nœuds. Aucune dépendance à un service d’images.
 - PostgreSQL temporaire utilisé uniquement pour vérifier le backend généré. Ce n’est pas une base du site Atlas. Docker Desktop étant indisponible sur la machine, les tests PostgreSQL ont utilisé les binaires officiels portables dans test-results.
+
+## 2026-09-30 — Planche d’export image dédiée
+
+- Remplace la capture HTML via html-to-image : SVG natif depuis le modèle, puis rasterisation de ce même document dans un canvas pour PNG. Aucun contrôle HTML, aucune police ou image distante, aucune donnée envoyée au serveur.
+- Un bouton Export dans la barre principale ouvre les choix MCD / MLD / ERD et PNG / SVG. La génération backend conserve son bouton Générer.
+- Mise en page automatique dédiée, indépendante des positions d’édition : grille de tables, relations orthogonales, bornes incluant les libellés, titre et signature. Palette papier permanente définie dans les tokens du thème.
+- MCD : projection conceptuelle existante, sans FK ni types SQL ; MLD : transformation existante avec jointures ; ERD : représentation du schéma édité. Les cardinalités disponibles restent 1:1, 1:N et N:N ; aucune cardinalité minimale non renseignée n’est inventée.
+- Le PNG est plafonné à 8192 px par côté et 24 millions de pixels pour limiter la mémoire. Le SVG conserve sa définition vectorielle pour les grands projets.

@@ -1,4 +1,9 @@
 :root {
+  --export-paper: #ffffff;
+  --export-ink: #292929;
+  --export-muted: #666666;
+  --export-line: #d5d5d5;
+  --export-header: #f5f5f5;
   --background: #f6f6f6;
   --foreground: #202020;
   --surface: #ffffff;

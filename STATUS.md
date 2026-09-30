@@ -2,9 +2,12 @@
 
 ## Export d’images Athena — 2026-09-30
 
-- PNG et SVG cadrent désormais toutes les tables grâce aux bornes mesurées par React Flow, y compris quand elles dépassent la zone visible du canvas.
-- Les types des colonnes sont rendus comme texte dans l’image exportée : les listes déroulantes ne retombent plus sur leur première option (`UUID`).
-- Vérification en navigateur avec le schéma d’exemple à deux tables reliées : PNG inspecté, SVG téléchargé et affiché, types `VARCHAR` et `TIMESTAMP` contrôlés. `pnpm check` réussi (formatage, lint, types, 22 tests, build).
+- Bouton **Export** visible dans la barre d’Athena ; choix MCD / MLD / ERD, puis PNG / SVG, avec aperçu avant téléchargement.
+- Rendu SVG natif généré depuis les données, indépendant du canvas, du zoom et du thème. Le PNG utilise exactement ce SVG, avec résolution doublée dans la limite de 8192 px par côté et 24 millions de pixels.
+- Fond blanc, texte gris foncé, titre centré « MODÈLE — Nom du projet », tables réorganisées et centrées, signature « Made on Atlas by Athena » en bas à droite. Noms longs répartis sur plusieurs lignes ; bornes étendues aux relations et à leurs libellés.
+- MCD sans clés étrangères ni types physiques ; MLD avec clés étrangères et tables de jointure ; ERD fidèle aux tables du schéma de travail. Aucune modification du projet lors de l’export.
+- `pnpm check` réussi : formatage, lint, types, 26 tests et build. Tests dédiés : échappement XML, types réels, projections, centrage des auto-relations, indépendance des positions, table de 80 colonnes et projet vide.
+- Aperçu MCD/MLD inspecté en navigateur sombre, génération PNG et SVG arrivée à son état de succès. L’outil navigateur n’a pas retourné les fichiers téléchargés : leur réception sur disque n’a pas été confirmée dans cette tranche.
 
 ## Accueil et identité — 2026-09-30
 
@@ -48,6 +51,6 @@ L’export ZIP est calculé dans une route Next.js sans conservation du projet. 
 - Génération avec noms snake_case non réservés, défauts SQL littéraux et fonctions usuelles autorisées. Le MLD est un aperçu ; les changements se font dans l’Éditeur.
 - Le lien contient les données du schéma et représente une copie figée. Pour les grands projets, partager le JSON.
 - Le CRUD généré est une base de développement sans authentification ni règles métier spécifiques.
-- Les exports image ont été contrôlés en navigateur sur le schéma d’exemple à deux tables ; les très grands diagrammes n’ont pas été vérifiés visuellement.
+- Le nouveau rendu image a été inspecté sur le schéma d’exemple à deux tables. Les très grands diagrammes et les croisements de nombreuses relations restent à vérifier visuellement ; privilégier SVG pour conserver la netteté.
 
 Travail sur development. Aucune promotion préproduction/production incluse.
