@@ -39,7 +39,7 @@ describe("Métis", () => {
     expect(parseProject(JSON.parse(serializeProject(p)))).toEqual(p);
     const file = JSON.parse(serializeProject(p));
     expect(() => parseProject({ ...file, format: "atlas-iris" })).toThrow();
-    expect(() => parseProject({ ...file, version: 2 })).toThrow();
+    expect(() => parseProject({ ...file, version: 3 })).toThrow();
     p.blocks.push(p.blocks[0]!);
     expect(() => serializeProject(p)).toThrow();
   });
@@ -69,6 +69,56 @@ describe("Métis", () => {
     expect(() =>
       insertBlock(p, { target: "context", content: "x".repeat(30000) }),
     ).toThrow();
+  });
+  it("migrates legacy projects without adding execution instructions", () => {
+    const p = createProject();
+    p.values.objective = "Corrige le formulaire avec les contraintes données";
+    const { execution, ...old } = p;
+    void execution;
+    const { scope, examples, ...oldValues } = old.values;
+    void scope;
+    void examples;
+    const migrated = parseProject({
+      format: "atlas-metis",
+      version: 1,
+      project: { ...old, values: oldValues },
+    });
+    expect(migrated.execution.enabled).toBe(false);
+    expect(migrated.values.scope).toBe("");
+    expect(composePrompt(migrated)).not.toContain("Consignes de réalisation");
+    expect(JSON.parse(serializeProject(migrated)).version).toBe(2);
+  });
+  it("builds execution instructions for the selected capability and respects custom uncertainty", () => {
+    const p = createProject("code");
+    p.values.objective = "Corrige le formulaire avec les contraintes données";
+    expect(composePrompt(p)).toContain(
+      "outils et accès effectivement disponibles",
+    );
+    expect(composePrompt(p)).toContain("contrôles réalisés");
+    p.values.uncertainty =
+      "Pose au maximum trois questions avant de commencer.";
+    expect(composePrompt(p)).not.toContain("Pose des questions ciblées");
+    p.execution.approach = "plan";
+    expect(composePrompt(p)).toContain("Attends un accord explicite");
+    expect(composePrompt(p)).not.toContain("Ne t’arrête pas à une proposition");
+    expect(
+      reviewPrompt(p).some((i) => i.message.includes("seulement un plan")),
+    ).toBe(true);
+    p.execution.enabled = false;
+    expect(composePrompt(p)).not.toContain("Consignes de réalisation");
+  });
+  it("keeps examples and scope through exports and detects code context omissions", () => {
+    const p = createProject("code");
+    p.values.scope = "Formulaire uniquement";
+    p.values.examples = "Entrée : ```\nSortie : erreur claire";
+    p.values.objective = "Corrige le formulaire avec les contraintes données";
+    const result = composePrompt(p);
+    expect(result).toContain("Formulaire uniquement");
+    expect(result).toContain("````text");
+    expect(reviewPrompt(p).some((i) => i.field === "context")).toBe(true);
+    expect(parseProject(JSON.parse(serializeProject(p))).execution).toEqual(
+      p.execution,
+    );
   });
   it("groups typing and restores prompts and blocks with undo", () => {
     const store = useMetis;

@@ -515,3 +515,95 @@
     gap: 8px;
   }
 }
+
+.metis-completion {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.metis-completion button {
+  border: 0;
+  padding: 4px 0;
+  color: var(--muted);
+}
+.metis-suggestions {
+  margin-top: 16px;
+}
+.metis-suggestions p {
+  font-size: 11px;
+  color: var(--muted);
+}
+.metis-suggestions button {
+  width: 100%;
+  text-align: left;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 4px 0;
+  padding: 10px 12px;
+  line-height: 1.6;
+}
+.metis-suggestions svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.metis-preview .metis-review-hint {
+  justify-content: space-between;
+  text-align: left;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.metis-execution {
+  border: 0;
+  padding: 0;
+  margin: 20px 0;
+  display: grid;
+  gap: 16px;
+}
+.metis-execution > label:not(.metis-check) {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+}
+.metis-execution small {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.metis-modal .metis-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.metis-modal .metis-check input {
+  margin-top: 4px;
+  accent-color: var(--accent);
+}
+.metis-execution:disabled {
+  opacity: 0.5;
+}
+.metis-instructions {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  padding: 16px;
+}
+.metis-instructions h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+.metis-instructions ul {
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.metis-instructions li + li {
+  margin-top: 10px;
+}

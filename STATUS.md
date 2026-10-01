@@ -1,5 +1,14 @@
 # État du projet
 
+## Métis — consignes de réalisation, 2026-10-01
+
+- Les neuf rubriques comprennent maintenant le périmètre et les exemples attendus, conservés dans les prompts détaillés/compacts et dans les projets exportés.
+- Le panneau « Consignes de réalisation » permet de produire un livrable ou un plan, de cibler un assistant ou un agent, de traiter les informations manquantes, d’adapter la méthode à l’usage, de demander des vérifications réalisables et de structurer le compte rendu final. Il reste entièrement local et désactivable.
+- Le mode agent décrit les capacités réellement disponibles sans inventer d’accès ; le mode plan attend un accord avant exécution. Les contradictions, champs code incomplets et données d’analyse/recherche absentes sont signalés par la relecture locale.
+- Format `atlas-metis` version 2. Les fichiers version 1 sont migrés sans activer les nouvelles consignes ; les limites Zod, blocs dupliqués et import de 8 Mo restent appliqués.
+- 53 tests prévus après cette tranche, dont migration, consignes selon la cible, plan seul, clôtures de code et export des nouveaux champs. Le contrôle complet `pnpm check` reste à exécuter avant livraison.
+- Travail sur `development` uniquement ; aucune promotion Vercel.
+
 ## Métis — atelier de prompts, 2026-09-30
 
 - Nouvel outil autonome `/tools/metis`, présent dans la navigation et sur l’accueil, avec aperçu SVG adapté aux thèmes.

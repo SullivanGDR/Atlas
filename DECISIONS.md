@@ -94,3 +94,10 @@
 - La nouvelle préférence remplace la réserve de hauteur commune aux exports MCD/MLD : chaque carte MCD utilise uniquement ses champs visibles. Les cartes sont alignées en haut des rangées.
 - Organiser les tables agit sur une projection locale en MCD/MLD, sans modifier les données, positions ou historique du schéma éditable. L’organisation de l’Éditeur conserve son comportement.
 - Le canvas MCD utilise une poignée par extrémité de relation, répartie sur le corps de la carte. Les poignées sont recalculées quand leurs côtés ou offsets changent ; les relations ne convergent plus toutes sur l’en-tête.
+
+## 2026-10-01 — Métis : consignes de réalisation locales
+
+- Métis reste un atelier déterministe sans appel à une IA. Les recommandations générales sur le contexte, les exemples, les formats de sortie et les critères de réussite sont traduites en champs et instructions explicites, sans score d’optimalité.
+- Le périmètre et les exemples attendus sont des champs distincts afin de séparer les limites de modification et les résultats de référence. Les blocs de code sont clôturés avec une fence Markdown adaptée à leur contenu.
+- Les consignes d’exécution sont un réglage explicite du projet : cible assistant/agent, livrable/plan, clarification/hypothèses, méthode, vérification et compte rendu. Un projet version 1 les désactive lors de la migration afin de préserver son texte exporté.
+- Les contrôles demandés restent formulés comme des actions possibles et des résultats à rapporter ; aucune réussite, source, donnée ou capacité n’est inventée. Les consignes personnalisées du champ Incertitudes prévalent sur le réglage générique.

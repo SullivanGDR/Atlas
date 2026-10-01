@@ -24,6 +24,9 @@ import {
   serializeProject,
   starterBlocks,
   insertBlock,
+  suggestions,
+  executionInstructions,
+  type Execution,
   type FieldId,
   type TemplateId,
   type Block,
@@ -47,9 +50,9 @@ export function Metis() {
     useMetis();
   const [active, setActive] = useState<FieldId>("objective");
   const [pane, setPane] = useState<"write" | "preview">("write");
-  const [modal, setModal] = useState<"templates" | "blocks" | "review" | null>(
-    null,
-  );
+  const [modal, setModal] = useState<
+    "templates" | "blocks" | "review" | "execution" | null
+  >(null);
   const [notice, setNotice] = useState("");
   const [blockName, setBlockName] = useState("");
   const [blockContent, setBlockContent] = useState("");
@@ -71,6 +74,8 @@ export function Metis() {
         : active === "constraints"
           ? template.constraints
           : guide.example;
+  const fieldSuggestions = suggestions(project, active);
+  const filled = fields.filter((f) => project.values[f.id].trim()).length;
   const words = prompt.trim() ? prompt.trim().split(/\s+/).length : 0;
   const blocks = [
     ...starterBlocks.map((b, i) => ({
@@ -86,6 +91,9 @@ export function Metis() {
   );
   function changeField(id: FieldId, text: string) {
     edit({ ...project, values: { ...project.values, [id]: text } }, id);
+  }
+  function configure(patch: Partial<Execution>) {
+    edit({ ...project, execution: { ...project.execution, ...patch } });
   }
   function save() {
     try {
@@ -344,6 +352,7 @@ export function Metis() {
         <button onClick={() => setModal("blocks")}>
           <Library size={15} /> Blocs
         </button>
+        <button onClick={() => setModal("execution")}>Consignes IA</button>
         <button onClick={() => setModal("review")}>
           Relecture <span>{issues.length}</span>
         </button>
@@ -371,6 +380,17 @@ export function Metis() {
               Précisez ce qui compte. Métis assemble vos mots, sans IA et sans
               envoi de vos données.
             </p>
+          </div>
+          <div className="metis-completion">
+            <span>
+              {filled} / {fields.length} rubriques renseignées
+            </span>
+            <button onClick={() => setModal("execution")}>
+              {project.execution.enabled
+                ? "Consignes de réalisation incluses"
+                : "Ajouter des consignes de réalisation"}{" "}
+              <ArrowUpRight size={13} />
+            </button>
           </div>
           <nav className="metis-fields" aria-label="Rubriques du prompt">
             {fields.map((f, i) => (
@@ -414,6 +434,20 @@ export function Metis() {
               <Plus size={14} /> Insérer cet exemple
             </button>
           </details>
+          {fieldSuggestions.length > 0 && (
+            <div className="metis-suggestions">
+              <p>Suggestions à adapter à votre projet</p>
+              {fieldSuggestions.map((text) => (
+                <button
+                  key={text}
+                  onClick={() => applyBlock({ target: active, content: text })}
+                >
+                  <Plus size={13} />
+                  <span>{text}</span>
+                </button>
+              ))}
+            </div>
+          )}
           <div className="metis-editor-footer">
             <button
               disabled={!project.values[active].trim()}
@@ -444,7 +478,7 @@ export function Metis() {
           <div className="metis-preview-heading">
             <div>
               <span>VOTRE PROMPT</span>
-              <h2>Prêt à transmettre.</h2>
+              <h2>Votre prompt de réalisation.</h2>
             </div>
             <button
               className="metis-copy"
@@ -473,6 +507,15 @@ export function Metis() {
               {words} mots · {prompt.length.toLocaleString("fr-FR")} caractères
             </span>
           </div>
+          {prompt && issues.length > 0 && (
+            <button
+              className="metis-review-hint"
+              onClick={() => setModal("review")}
+            >
+              {issues.length} point{issues.length > 1 ? "s" : ""} à relire avant
+              utilisation <ArrowUpRight size={14} />
+            </button>
+          )}
           <textarea
             ref={preview}
             readOnly
@@ -650,6 +693,118 @@ export function Metis() {
             Enregistrer le bloc
           </button>
         </form>
+      </Modal>
+      <Modal
+        open={modal === "execution"}
+        onClose={() => setModal(null)}
+        title="Consignes de réalisation"
+        className="metis-modal"
+      >
+        <p>
+          Ces consignes complètent vos rubriques pour guider le travail jusqu’au
+          livrable. Ajustez-les à l’IA et aux accès dont elle dispose.
+        </p>
+        <label className="metis-check">
+          <input
+            type="checkbox"
+            checked={project.execution.enabled}
+            onChange={(e) => configure({ enabled: e.target.checked })}
+          />{" "}
+          Inclure les consignes dans le prompt final
+        </label>
+        <fieldset
+          className="metis-execution"
+          disabled={!project.execution.enabled}
+        >
+          <label>
+            Destination
+            <select
+              value={project.execution.target}
+              onChange={(e) =>
+                configure({ target: e.target.value as Execution["target"] })
+              }
+            >
+              <option value="assistant">Assistant conversationnel</option>
+              <option value="agent">
+                Agent avec outils et accès au projet
+              </option>
+            </select>
+            <small>Précisez les accès réels dans le contexte.</small>
+          </label>
+          <label>
+            Travail attendu
+            <select
+              value={project.execution.approach}
+              onChange={(e) =>
+                configure({ approach: e.target.value as Execution["approach"] })
+              }
+            >
+              <option value="deliver">Réaliser et livrer le résultat</option>
+              <option value="plan">
+                Proposer un plan, attendre validation
+              </option>
+            </select>
+          </label>
+          <label>
+            Informations manquantes
+            <select
+              disabled={!!project.values.uncertainty.trim()}
+              value={project.execution.uncertainty}
+              onChange={(e) =>
+                configure({
+                  uncertainty: e.target.value as Execution["uncertainty"],
+                })
+              }
+            >
+              <option value="clarify">
+                Questions ciblées si une information bloque
+              </option>
+              <option value="assume">Hypothèses explicites pour avancer</option>
+            </select>
+            <small>
+              {project.values.uncertainty.trim()
+                ? "Votre rubrique Incertitudes remplace cette consigne par défaut."
+                : "Les contradictions et décisions qui changent le périmètre nécessitent une clarification."}
+            </small>
+          </label>
+          <label className="metis-check">
+            <input
+              type="checkbox"
+              checked={project.execution.method}
+              onChange={(e) => configure({ method: e.target.checked })}
+            />{" "}
+            Méthode adaptée à l’usage {template.name.toLowerCase()}
+          </label>
+          <label className="metis-check">
+            <input
+              type="checkbox"
+              checked={project.execution.verification}
+              onChange={(e) => configure({ verification: e.target.checked })}
+            />{" "}
+            Contrôler les critères et décrire les vérifications réellement
+            effectuées
+          </label>
+          <label className="metis-check">
+            <input
+              type="checkbox"
+              checked={project.execution.report}
+              onChange={(e) => configure({ report: e.target.checked })}
+            />{" "}
+            Livrer un bilan utile : résultat, contrôles et limites
+          </label>
+        </fieldset>
+        <div className="metis-instructions">
+          <h3>Texte ajouté à votre prompt</h3>
+          {project.execution.enabled ? (
+            <ul>
+              {executionInstructions(project).map((text) => (
+                <li key={text}>{text}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>Seules les rubriques que vous avez rédigées seront exportées.</p>
+          )}
+        </div>
       </Modal>
       {confirmationDialog}
     </div>
