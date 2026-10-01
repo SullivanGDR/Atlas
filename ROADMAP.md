@@ -1,5 +1,7 @@
 # Roadmap — Atlas
 
+> 2026-10-01 — Hestia enrichi : 12 palettes, 5 directions, harmonies et nuances, rôles personnalisables par thème, aperçus composants/page/fondations, bibliothèque escamotable, exports CSS/JSON/HTML et projets version 2 compatibles version 1. `pnpm check` réussi (61 tests). Validation détaillée dans STATUS.md ; développement uniquement.
+
 > 2026-09-30 — Métis : atelier local de prompts avec six usages, sept rubriques, aperçu détaillé/compact, relecture heuristique, blocs réutilisables, copie, Markdown/texte et projets JSON portables. Sans IA intégrée ni stockage serveur ; développement uniquement.
 
 > 2026-10-01 — Métis : neuf rubriques avec périmètre et exemples attendus, panneau de consignes de réalisation (assistant/agent, livrable/plan, informations manquantes, méthode, vérifications et compte rendu), relecture enrichie et migration `atlas-metis` version 1 vers version 2. Contrôle complet à confirmer avant livraison ; développement uniquement.

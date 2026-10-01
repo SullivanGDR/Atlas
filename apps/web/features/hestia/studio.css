@@ -1,0 +1,391 @@
+.hestia-workspace.studio {
+  --h-background: var(--background);
+  --h-surface: var(--surface);
+  --h-foreground: var(--foreground);
+  --h-muted: var(--muted);
+  --h-border: var(--border);
+  --h-brand: var(--accent);
+  --h-brand-foreground: var(--accent-foreground);
+  height: 100%;
+  min-height: 0;
+}
+.studio .hestia-body {
+  overflow: hidden;
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+.studio.is-collapsed .hestia-body {
+  grid-template-columns: minmax(0, 1fr);
+}
+.studio.is-collapsed .hestia-library {
+  display: none;
+}
+.studio .hestia-library-content {
+  flex: 1;
+  padding-bottom: 24px;
+}
+.studio .hestia-library-title {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.studio .hestia-library-title button {
+  padding: 5px;
+}
+.studio .hestia-sections {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.hestia-direction {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.direction-art {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 70px;
+  background: var(--muted-surface);
+  padding: 12px;
+  color: var(--foreground);
+}
+.direction-art b {
+  font-size: 32px;
+  margin-right: auto;
+}
+.direction-art i {
+  width: 28px;
+  height: 28px;
+  background: var(--accent);
+  border: 1px solid var(--border);
+}
+.direction-art i:last-child {
+  background: var(--surface);
+}
+.direction-soft i {
+  border-radius: 12px;
+}
+.direction-product i {
+  border-radius: 6px;
+}
+.direction-brutalist i {
+  border: 2px solid var(--foreground);
+  box-shadow: 3px 3px 0 var(--foreground);
+}
+.hestia-search {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  border-radius: 5px;
+}
+.hestia-harmony {
+  margin: 12px 0;
+}
+.hestia-harmony small {
+  color: var(--muted);
+}
+.hestia-harmony > div {
+  display: flex;
+  margin-top: 6px;
+}
+.hestia-harmony button {
+  flex: 1;
+  font: 9px var(--font-mono);
+  padding: 15px 3px;
+  border: 0;
+  border-radius: 0;
+}
+.hestia-token-field {
+  display: grid;
+  grid-template-columns: 1fr 28px 62px;
+  align-items: center;
+  gap: 7px;
+  margin: 15px 0;
+  font: 10px var(--font-mono);
+}
+.hestia-token-field input {
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  background: transparent;
+}
+.hestia-token-field span {
+  color: var(--muted);
+}
+.hestia-menu {
+  position: relative;
+}
+.hestia-menu summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  list-style: none;
+}
+.hestia-menu summary::-webkit-details-marker {
+  display: none;
+}
+.hestia-menu > div {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 7px);
+  width: 255px;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 12px 32px #0002;
+  z-index: 30;
+}
+.hestia-menu > div button {
+  width: 100%;
+  border: 0;
+  padding: 10px;
+  text-align: left;
+  justify-content: start;
+}
+.hestia-views {
+  display: flex;
+  gap: 5px;
+  margin: 0 clamp(20px, 4vw, 58px) 15px;
+}
+.hestia-views button {
+  border: 0;
+  color: var(--muted);
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.hestia-views button[aria-pressed="true"] {
+  color: var(--foreground);
+  background: var(--muted-surface);
+}
+.studio .hestia-board {
+  background: var(--h-background);
+  color: var(--h-foreground);
+  font-size: var(--h-text);
+  border-radius: var(--hestia-radius);
+  border-width: var(--h-stroke);
+  padding: calc(var(--h-spacing) * 5);
+}
+.studio .hestia-board h3 {
+  font-size: calc(var(--h-heading) * 1.5);
+  letter-spacing: -0.04em;
+  line-height: 1.12;
+}
+.studio .hestia-board h4 {
+  font-size: var(--h-heading);
+}
+.studio .hestia-card {
+  padding: calc(var(--h-spacing) * 3);
+  gap: calc(var(--h-spacing) * 1.5);
+  border-width: var(--h-stroke);
+  min-width: 0;
+  min-height: 0;
+}
+.studio .hestia-preview-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: calc(var(--h-spacing) * 2);
+}
+.studio .hestia-board button {
+  padding: calc(var(--h-spacing) * 1.7) calc(var(--h-spacing) * 2.5);
+  border-radius: var(--hestia-radius);
+  font-size: var(--h-text);
+  border-width: var(--h-stroke);
+}
+.studio .hestia-board .demo-primary {
+  background: var(--h-brand);
+  color: var(--h-brand-foreground);
+  border-color: var(--h-brand);
+}
+.studio .hestia-board .demo-primary:hover {
+  filter: brightness(0.92);
+  background: var(--h-brand);
+}
+.studio .hestia-board input {
+  padding: calc(var(--h-spacing) * 1.7);
+  font-size: var(--h-text);
+  accent-color: var(--h-brand);
+}
+.studio .hestia-board :focus-visible {
+  outline: 2px solid var(--h-focus);
+}
+.studio .hestia-board-head {
+  padding-bottom: calc(var(--h-spacing) * 5);
+  flex-wrap: wrap;
+}
+.studio .hestia-board-head > div {
+  flex: 1 1 320px;
+}
+.studio .hestia-board-head > button {
+  white-space: normal;
+}
+.hestia-component-extra {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: calc(var(--h-spacing) * 2);
+  margin-top: calc(var(--h-spacing) * 2);
+}
+.hestia-demo-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.hestia-board progress {
+  accent-color: var(--h-brand);
+  width: 100%;
+  margin-top: 12px;
+}
+.hestia-demo-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: calc(var(--h-spacing) * 8);
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--h-border);
+}
+.hestia-demo-nav span {
+  color: var(--h-muted);
+  font-size: 12px;
+}
+.hestia-ramp {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(55px, 1fr));
+  gap: 6px;
+  margin: 28px 0;
+}
+.hestia-ramp > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font: 10px var(--font-mono);
+}
+.hestia-ramp i {
+  height: 65px;
+  border-radius: var(--hestia-radius);
+  border: 1px solid var(--h-border);
+}
+.hestia-ramp small {
+  color: var(--h-muted);
+  font-size: 9px;
+}
+.hestia-spacing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 22px 0;
+}
+.hestia-spacing > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font: 11px var(--font-mono);
+}
+.hestia-spacing i {
+  height: 24px;
+  background: var(--h-brand);
+  border-radius: 2px;
+}
+.hestia-audit-note {
+  margin: 0 clamp(20px, 4vw, 58px) 30px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 11px;
+}
+.studio .hestia-audit-list > div {
+  grid-template-columns: minmax(0, 1fr) 65px 75px;
+}
+.studio .hestia-audit-list .is-pass,
+.studio .hestia-audit-list .is-fail {
+  color: var(--foreground);
+  background: var(--muted-surface);
+}
+.hestia-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 8px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 10px;
+  color: var(--muted);
+}
+.hestia-code-modal {
+  max-width: 850px;
+}
+.hestia-code-modal textarea {
+  width: 100%;
+  height: 55vh;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  padding: 15px;
+  font: 12px/1.7 var(--font-mono);
+  resize: vertical;
+}
+.hestia-code-modal button {
+  padding: 8px 12px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+@media (max-width: 1000px) {
+  .studio .hestia-body {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+  .studio .hestia-mainbar {
+    padding: 20px;
+  }
+}
+@media (max-width: 640px) {
+  .studio .hestia-body {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  .studio .hestia-library {
+    flex: none;
+  }
+  .studio .hestia-library-content {
+    max-height: 260px;
+    flex: none;
+  }
+  .studio .hestia-main {
+    overflow: visible;
+    flex: none;
+  }
+  .studio .hestia-header {
+    flex-wrap: wrap;
+  }
+  .studio .hestia-actions {
+    margin-left: auto;
+  }
+  .studio .hestia-header > input {
+    flex: 1;
+    max-width: 150px;
+  }
+  .studio .hestia-actions button {
+    display: inline-flex;
+  }
+  .studio .hestia-actions > button {
+    display: none;
+  }
+  .studio .hestia-board h3 {
+    font-size: calc(var(--h-heading) * 1.15);
+  }
+  .studio .hestia-mainbar {
+    gap: 8px;
+  }
+  .hestia-status span {
+    display: none;
+  }
+  .hestia-demo-nav span {
+    display: none;
+  }
+}

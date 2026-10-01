@@ -108,3 +108,10 @@
 - Les palettes sont enregistrées par rôles sémantiques plutôt que par usages de composants. Cette séparation permet de basculer entre thèmes clair et sombre et de conserver une identité cohérente.
 - Les palettes proposées sont des compositions Atlas originales ; leurs principes de tokens, couches et contraste suivent les recommandations publiques d’USWDS et Carbon, sans recopier leurs composants ou leurs marques.
 - L’audit de contraste utilise le seuil AA de 4,5:1 pour le texte courant. Il signale une paire, mais ne certifie pas une page entière ni les états d’interaction non affichés.
+
+## 2026-10-01 — Hestia : styles et export cohérents
+
+- Les directions appliquent une combinaison explicite de palette, fonte, densité et géométrie. La marque reste confinée à l’aperçu ; l’atelier utilise le thème neutre Atlas.
+- Les rôles personnalisés sont séparés en clair/sombre et conservés dans le projet version 2. Le modèle accepte la version 1 avec valeurs nouvelles par défaut ; les palettes inconnues et les couleurs non hexadécimales sont refusées.
+- La même fonction de fondations alimente les paramètres d’aperçu et d’export. Gammes sRGB calculées localement ; les harmonies HSL sont des suggestions à contrôler selon leur usage.
+- JSON de tokens Hestia distinct du projet, sans revendication DTCG. HTML autonome de démarrage avec composants exemples et échappement du nom ; les familles de polices sont déclarées sans téléchargement distant.

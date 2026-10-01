@@ -1,5 +1,15 @@
 # État du projet
 
+## Hestia — atelier enrichi, 2026-10-01
+
+- Reprise de la première version : 12 palettes recherchables, 5 directions visuelles complètes, harmonies analogue/complémentaire/triadique et gamme 50–950. Les interpolations sRGB ne garantissent pas une uniformité perceptuelle.
+- Typographies distinctes, densité/tailles/espacements réellement appliqués aux composants et partagés avec les exports. Géométrie et ombres suivent le style ; interface Atlas neutre, couleurs limitées à la planche.
+- Accent sombre réparé, 11 rôles personnalisables séparément par thème ; huit couples de contraste contrôlés, dont liens, focus et retours utilisateur. Les échecs restent signalés.
+- Trois vues : composants et états, page exemple, fondations avec gamme, tailles et espacements. Bibliothèque escamotable ; mobile 390 px sans débordement horizontal.
+- Menus Projet/Export intégrés avec fermeture automatique, enregistrement visible, import limité à 1 Mo, confirmation avant remplacement et avertissement à la fermeture. Projet version 2 avec migration version 1, exports CSS, JSON de tokens et HTML autonome.
+- Vérification navigateur : direction Éditorial, thèmes, vues, rôles, bibliothèque escamotable et notification d’enregistrement. La copie signale son succès, mais le presse-papiers de session n’a pas permis de relire son contenu ; récupération du fichier téléchargé non confirmée. Générateurs et aller-retour validés par les tests métier.
+- Huit tests dédiés ; `pnpm check` réussi : formatage, lint, types, 61 tests et build Next.js. Développement uniquement.
+
 ## Hestia — atelier de design system, 2026-10-01
 
 - Nouvel outil autonome `/tools/hestia`, ajouté à la navigation et à l’accueil. Il reste local, sans IA, compte ni stockage serveur.
