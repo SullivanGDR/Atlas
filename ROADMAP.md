@@ -4,6 +4,8 @@
 
 > 2026-10-01 — Métis : neuf rubriques avec périmètre et exemples attendus, panneau de consignes de réalisation (assistant/agent, livrable/plan, informations manquantes, méthode, vérifications et compte rendu), relecture enrichie et migration `atlas-metis` version 1 vers version 2. Contrôle complet à confirmer avant livraison ; développement uniquement.
 
+> 2026-10-01 — Hestia : atelier local de design system avec bibliothèques de palettes, tokens sémantiques clairs/sombres, typographies, géométrie, aperçu de composants, audit de contraste et export CSS/JSON. Vérification complète à confirmer ; développement uniquement.
+
 > 2026-09-30 — Développement uniquement : aperçus d’accueil Thémis/Iris adaptés au thème clair, exemple Iris redessiné ; liaisons Athena arrondies et fléchées dans le canvas et les exports, cardinalités conservées. `pnpm check` réussi (44 tests).
 
 > 2026-09-30 — Promotion volontaire de `67d323b` en préproduction puis production Vercel : deux déploiements Ready, accueil et trois outils accessibles. Développement local conservé sur `development`.

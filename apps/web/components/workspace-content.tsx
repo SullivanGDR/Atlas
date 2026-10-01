@@ -7,6 +7,7 @@ export function WorkspaceContent({ children }: { children: ReactNode }) {
     "/tools/iris",
     "/tools/themis",
     "/tools/metis",
+    "/tools/hestia",
   ].includes(usePathname());
   return (
     <main

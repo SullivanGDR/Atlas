@@ -482,6 +482,29 @@ button {
 .iris-preview-link {
   stroke: var(--muted);
 }
+.hestia-preview-swatch-one {
+  fill: #f4f5f4;
+  stroke: #d7dbd8;
+}
+.hestia-preview-swatch-two {
+  fill: #2f6f58;
+  stroke: #2f6f58;
+}
+.hestia-preview-swatch-three {
+  fill: #d7dbd8;
+  stroke: #d7dbd8;
+}
+.hestia-preview-button {
+  fill: #2f6f58;
+}
+.hestia-preview-button-text {
+  fill: #ffffff;
+  font: 12px var(--font-sans);
+}
+.hestia-preview-input {
+  fill: none;
+  stroke: var(--preview-line);
+}
 .preview-arrow {
   fill: var(--muted);
 }

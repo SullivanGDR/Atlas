@@ -101,3 +101,10 @@
 - Le périmètre et les exemples attendus sont des champs distincts afin de séparer les limites de modification et les résultats de référence. Les blocs de code sont clôturés avec une fence Markdown adaptée à leur contenu.
 - Les consignes d’exécution sont un réglage explicite du projet : cible assistant/agent, livrable/plan, clarification/hypothèses, méthode, vérification et compte rendu. Un projet version 1 les désactive lors de la migration afin de préserver son texte exporté.
 - Les contrôles demandés restent formulés comme des actions possibles et des résultats à rapporter ; aucune réussite, source, donnée ou capacité n’est inventée. Les consignes personnalisées du champ Incertitudes prévalent sur le réglage générique.
+
+## 2026-10-01 — Hestia : fondations de design system
+
+- Hestia est un outil local de fondations visuelles, séparé des internals des autres outils. Il ne tente pas de remplacer Figma ni d’imposer une bibliothèque de composants complète.
+- Les palettes sont enregistrées par rôles sémantiques plutôt que par usages de composants. Cette séparation permet de basculer entre thèmes clair et sombre et de conserver une identité cohérente.
+- Les palettes proposées sont des compositions Atlas originales ; leurs principes de tokens, couches et contraste suivent les recommandations publiques d’USWDS et Carbon, sans recopier leurs composants ou leurs marques.
+- L’audit de contraste utilise le seuil AA de 4,5:1 pour le texte courant. Il signale une paire, mais ne certifie pas une page entière ni les états d’interaction non affichés.

@@ -9,6 +9,14 @@ export const tools = [
     status: "available",
   },
   {
+    id: "hestia",
+    name: "Hestia",
+    description:
+      "Construisez votre design system. Choisissez des palettes, une typographie et des composants cohérents.",
+    href: "/tools/hestia",
+    status: "available",
+  },
+  {
     id: "themis",
     name: "Thémis",
     description:

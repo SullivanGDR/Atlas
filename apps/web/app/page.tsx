@@ -6,6 +6,7 @@ import {
   Network,
   ClipboardList,
   MessageSquareText,
+  Palette,
 } from "lucide-react";
 import { tools } from "@/lib/tools";
 
@@ -346,6 +347,83 @@ function MetisPreview() {
     </div>
   );
 }
+function HestiaPreview() {
+  return (
+    <div className="athena-preview" aria-hidden="true">
+      <div className="preview-toolbar">
+        <span>hestia / design system</span>
+        <span>Couleurs · Type · Composants</span>
+      </div>
+      <svg viewBox="0 0 600 340" role="presentation" focusable="false">
+        <rect
+          x="38"
+          y="38"
+          width="524"
+          height="264"
+          rx="10"
+          className="preview-table-body"
+        />
+        <text x="68" y="72" className="preview-type">
+          SYSTEM / FOUNDATION
+        </text>
+        <text x="68" y="110" className="preview-table-name">
+          Une base cohérente.
+        </text>
+        <text x="68" y="135" className="preview-field">
+          Palette, typographie et composants.
+        </text>
+        <path d="M68 157H532" className="preview-divider" />
+        <circle cx="88" cy="198" r="18" className="hestia-preview-swatch-one" />
+        <circle
+          cx="134"
+          cy="198"
+          r="18"
+          className="hestia-preview-swatch-two"
+        />
+        <circle
+          cx="180"
+          cy="198"
+          r="18"
+          className="hestia-preview-swatch-three"
+        />
+        <rect
+          x="250"
+          y="177"
+          width="116"
+          height="42"
+          rx="7"
+          className="hestia-preview-button"
+        />
+        <text
+          x="308"
+          y="203"
+          textAnchor="middle"
+          className="hestia-preview-button-text"
+        >
+          Action
+        </text>
+        <rect
+          x="390"
+          y="177"
+          width="128"
+          height="42"
+          rx="7"
+          className="hestia-preview-input"
+        />
+        <text x="406" y="203" className="preview-type">
+          Champ texte
+        </text>
+        <text x="68" y="263" className="preview-type">
+          AA · Tokens sémantiques · Export CSS
+        </text>
+      </svg>
+      <div className="preview-status">
+        <span>UNE IDENTITÉ, PARTOUT</span>
+        <span>CSS / JSON</span>
+      </div>
+    </div>
+  );
+}
 const toolPresentation = {
   metis: {
     category: "ATELIER DE PROMPTS",
@@ -355,6 +433,15 @@ const toolPresentation = {
       "Relecture locale, copie et export Markdown",
     ],
     Preview: MetisPreview,
+  },
+  hestia: {
+    category: "DESIGN SYSTEM",
+    Icon: Palette,
+    details: [
+      "Palettes harmonieuses et contraste contrôlé",
+      "Typographie, géométrie et export CSS / JSON",
+    ],
+    Preview: HestiaPreview,
   },
   themis: {
     category: "CAHIER DES CHARGES",

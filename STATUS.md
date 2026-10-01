@@ -1,5 +1,13 @@
 # État du projet
 
+## Hestia — atelier de design system, 2026-10-01
+
+- Nouvel outil autonome `/tools/hestia`, ajouté à la navigation et à l’accueil. Il reste local, sans IA, compte ni stockage serveur.
+- Quatre bibliothèques de palettes, couleur de marque personnalisable, trois choix typographiques, échelle, arrondis et ombres. La planche de style montre des composants cohérents en thème clair ou sombre.
+- Contrôle local de contraste pour les couples principaux, secondaires et action ; export CSS des tokens clairs/sombres et export/import JSON `atlas-hestia` version 1.
+- Quatre tests métier dédiés : lisibilité par défaut, tokens des deux thèmes, aller-retour JSON/CSS et rejet d’un format étranger. Vérification navigateur et `pnpm check` restent à effectuer avant livraison.
+- Travail sur `development` uniquement ; aucune promotion Vercel.
+
 ## Métis — consignes de réalisation, 2026-10-01
 
 - Les neuf rubriques comprennent maintenant le périmètre et les exemples attendus, conservés dans les prompts détaillés/compacts et dans les projets exportés.

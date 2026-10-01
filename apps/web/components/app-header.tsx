@@ -6,6 +6,7 @@ import {
   Network,
   ClipboardList,
   MessageSquareText,
+  Palette,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle, cn } from "@atlas/ui";
@@ -21,11 +22,13 @@ const destinations = [
       Icon:
         tool.id === "metis"
           ? MessageSquareText
-          : tool.id === "themis"
-            ? ClipboardList
-            : tool.id === "iris"
-              ? Network
-              : Braces,
+          : tool.id === "hestia"
+            ? Palette
+            : tool.id === "themis"
+              ? ClipboardList
+              : tool.id === "iris"
+                ? Network
+                : Braces,
     })),
 ] as const;
 
